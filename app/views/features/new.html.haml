@@ -1,0 +1,17 @@
+= form_for @feature do |f|
+  - if @feature.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@feature.errors.count, "error")
+        prohibited this feature from being saved:
+
+      %ul
+        - @feature.errors.full_messages.each do |message|
+          %li
+            = message
+  #field
+    = f.label :geojson
+    = f.text_field :geojson
+  #actions
+    =f.submit
+
