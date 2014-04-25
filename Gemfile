@@ -23,6 +23,8 @@ gem 'activerecord-postgis-adapter', github: 'barelyknown/activerecord-postgis-ad
 gem 'rgeo'
 gem 'rgeo-geojson'
 
+gem 'hstore_accessor'
+
 group :development do
   gem 'pry-rails'
 end

@@ -50,6 +50,8 @@ GEM
     haml (4.0.5)
       tilt
     hike (1.2.3)
+    hstore_accessor (0.5.7)
+      activesupport (>= 3.2.0)
     i18n (0.6.9)
     jbuilder (2.0.6)
       activesupport (>= 3.0.0, < 5)
@@ -142,6 +144,7 @@ DEPENDENCIES
   activerecord-postgis-adapter!
   coffee-rails (~> 4.0.0)
   haml
+  hstore_accessor
   jbuilder (~> 2.0)
   jquery-rails
   pg
