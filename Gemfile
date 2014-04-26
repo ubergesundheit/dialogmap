@@ -12,6 +12,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
 
 gem 'angularjs-rails'
+gem 'angularjs-rails-resource'
 
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'

@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
+//= require angularjs/rails/resource
 //= require mapbox1.6.2
 //= require angular-leaflet-directive
 //= require leaflet.draw0.2.2
