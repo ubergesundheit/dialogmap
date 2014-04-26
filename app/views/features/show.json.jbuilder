@@ -1,1 +1,1 @@
-json.extract! @feature, :geojson_string
+json.type @feature.geom.geometry_type.to_s

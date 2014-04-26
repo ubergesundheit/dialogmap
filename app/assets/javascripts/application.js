@@ -12,5 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
-//= require_tree .
+//= require angular
+//= require mapbox1.6.2
+//= require angular-leaflet-directive
+//= require leaflet.draw0.2.2
+//= require_tree ./angular

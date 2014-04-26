@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'https://rails-assets.org'
 
 ruby '2.1.1'
 gem 'rails', '4.1.0'
@@ -10,8 +11,9 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
 
+gem 'angularjs-rails'
+
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 
 gem 'sdoc', '~> 0.4.0',          group: :doc
@@ -23,7 +25,7 @@ gem 'activerecord-postgis-adapter', github: 'barelyknown/activerecord-postgis-ad
 gem 'rgeo'
 gem 'rgeo-geojson'
 
-gem 'hstore_accessor'
+gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
 
 group :development do
   gem 'pry-rails'
@@ -40,4 +42,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
