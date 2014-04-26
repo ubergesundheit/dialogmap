@@ -11,15 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418190245) do
+ActiveRecord::Schema.define(version: 20140426140149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "hstore"
 
+  create_table "contributions", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "features", force: true do |t|
-    t.spatial  "geom",       limit: {:srid=>4326, :type=>"geometry", :geographic=>true}, null: false
+    t.integer  "contribution_id"
+    t.spatial  "geom",            limit: {:srid=>4326, :type=>"geometry", :geographic=>true}, null: false
     t.hstore   "properties"
     t.datetime "created_at"
     t.datetime "updated_at"

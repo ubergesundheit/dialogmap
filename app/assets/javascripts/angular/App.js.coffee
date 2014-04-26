@@ -1,1 +1,1 @@
-@App = angular.module "nachhaltigkeitsapp", ["leaflet-directive"]
+angular.module "SustainabilityApp", ["leaflet-directive", "rails"]

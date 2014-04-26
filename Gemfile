@@ -13,6 +13,7 @@ gem 'haml'
 
 gem 'angularjs-rails'
 gem 'angularjs-rails-resource'
+gem 'angular_rails_csrf'
 
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'

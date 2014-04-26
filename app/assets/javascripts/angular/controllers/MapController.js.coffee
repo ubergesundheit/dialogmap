@@ -1,4 +1,4 @@
-App.controller "MapController", [
+angular.module("SustainabilityApp").controller "MapController", [
   "$scope"
   "leafletData"
   "Contribution"
@@ -16,13 +16,19 @@ App.controller "MapController", [
               polyline: false
               circle: false
             edit: false
-
+      newContribution:
+        submit: ->
+          new Contribution(@).create()
+        features_attributes: []
+        addFeature: (feature) ->
+          @features_attributes.push { geojson: feature }
+          return
     leafletData.getMap("map_main").then (map) ->
       window.map = map
       map.addControl($scope.drawControl)
       map.on "draw:created", (e) ->
-        Contribution.addFeature e.layer.toGeoJSON()
-        Contribution.setTitle "#{Contribution.title} hallo"
+        $scope.newContribution.addFeature e.layer.toGeoJSON()
+        #Contribution.setTitle "#{Contribution.title} hallo"
         return
       return
     return

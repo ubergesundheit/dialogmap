@@ -1,12 +1,13 @@
-#map{ :ng_controller => "MapController" }
-  %leaflet{ id: "map_main", center: "muenster", controls: "controls" }
-#sidebar{ :ng_controller => "SidebarController" }
-  %input{ :placeholder => "title", :ng_model => "ct.title" }
-  %textarea{ :ng_model => "ct.description" }
-    Text
-  %button{ :ng_click => "start_contribution()" } Start
-  %pre
-    {{ jottsn }}
-  %pre
-    {{ ct.title }} {{ ct.description }}
+%div{ :ng_controller => "MapController" }
+  #map
+    %leaflet{ id: "map_main", center: "muenster", controls: "controls" }
+  #sidebar
+    %input{ :placeholder => "title", :ng_model => "newContribution.title" }
+    %textarea{ :ng_model => "newContribution.description" }
+      Text
+    %button{ :ng_click => "newContribution.submit()" } Start
+    %pre
+      {{ newContribution.features_attributes }}
+    %pre
+      {{ newContribution.title }} {{ newContribution.description }}
 

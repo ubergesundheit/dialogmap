@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'page#index'
 
-  resources :features
+  namespace :api, defaults: { format: :json } do
+    resources :contributions
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
