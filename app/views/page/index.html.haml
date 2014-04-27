@@ -2,16 +2,13 @@
   #map
     %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson" }
   #sidebar
-    %button{ :ng_click => "newContribution.start()" } Neuer Beitrag
-    #contribution{ :ng_show => "composing" }
-      %input{ :placeholder => "Titel", :ng_model => "newContribution.title" }
-      %textarea{ :placeholder => "Beschreibung", :ng_model => "newContribution.description" }
-      %button{ :ng_click => "newContribution.submit()" } Abschicken
+    %button{ :ng_hide => "composing", :ng_click => "newContribution.start()" } Neuer Beitrag
+    %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }
+      %input{ :placeholder => "Titel", :ng_model => "newContribution.title", :type => "text", :required => true }
+      %textarea{ :placeholder => "Beschreibung", :ng_model => "newContribution.description", :required => "true" }
+      %button{ :ng_disabled => "contribution_form.$invalid", :ng_click => "newContribution.submit()" } Abschicken
       %button{ :ng_click => "newContribution.abort()" } Abbrechen
     %pre
-      {{ newContribution.features_attributes }}
-    %pre
       {{ newContribution.title }} {{ newContribution.description }}
-    %pre
-      {{ geojson }}
+    {{ geojson }}
 

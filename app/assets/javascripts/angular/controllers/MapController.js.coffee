@@ -3,21 +3,8 @@ angular.module("SustainabilityApp").controller "MapController", [
   "leafletData"
   "Contribution"
   ($scope, leafletData, Contribution) ->
-    Contribution.query().then (cts) ->
-      fcollection =
-        type: 'FeatureCollection'
-        features: []
-      for c in cts
-        do ->
-          if c.features.length > 0
-            for f in c.features
-              do ->
-                fcollection.features.push f
-      $scope.geojson = {}
-      $scope.geojson.data = fcollection
-      return
-
     angular.extend $scope,
+      # leaflet-directive stuff
       muenster:
         lat: 51.96
         lng: 7.62
@@ -29,9 +16,31 @@ angular.module("SustainabilityApp").controller "MapController", [
             draw:
               polyline: false
               circle: false
-            edit: false
+
+      updateGeoJSON: ->
+       Contribution.query().then (cts) ->
+          fcollection =
+            type: 'FeatureCollection'
+            features: []
+          for c in cts
+            do ->
+              if c.features.length > 0
+                for f in c.features
+                  do ->
+                    fcollection.features.push f
+                    return
+              return
+          $scope.geojson = {}
+          $scope.geojson.data = fcollection
+          return
+        return
+
+      # Contribution state
       composing: false
+      # Map Object use with .then (map) ->
       map_main: leafletData.getMap('map_main')
+
+      # Contribution Object
       newContribution:
         start: ->
           @reset()
@@ -42,28 +51,35 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
         abort: ->
           @reset()
+          $scope.composing = false
           $scope.map_main.then (map) ->
             map.removeControl($scope.drawControl)
-          $scope.composing = false
+            return
+          return
         reset: ->
           @title = ''
           @description = ''
-          @features_attributes = []
-        submit: ->
-          new Contribution(@).create()
-          @reset()
-        features_attributes: []
-        addFeature: (feature) ->
-          feature.properties = { "stroke-width": 5.5 }
-          @features_attributes.push { geojson: feature }
+          $scope.drawControl.options.edit.featureGroup.clearLayers()
           return
-
-    $scope.map_main.then (map) ->
-      window.map = map
-      map.on "draw:created", (e) ->
-        $scope.newContribution.addFeature e.layer.toGeoJSON()
-        #Contribution.setTitle "#{Contribution.title} hallo"
-        return
-      return
+        submit: ->
+          @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
+          new Contribution(@).create().then (data) ->
+            temp = $scope.geojson
+            $scope.geojson = {}
+            $scope.geojson.data =
+              type: "FeatureCollection"
+              features: []
+            for feature in data.featuresAttributes
+              do ->
+                $scope.geojson.data.features.push feature.geojson
+                return
+            for feature in temp.data.features
+              do ->
+                $scope.geojson.data.features.push feature
+            return
+          @reset()
+          #$scope.updateGeoJSON()
+          return
+    $scope.updateGeoJSON()
     return
 ]
