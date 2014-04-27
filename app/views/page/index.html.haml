@@ -7,6 +7,7 @@
       %input{ :placeholder => "Titel", :ng_model => "newContribution.title" }
       %textarea{ :placeholder => "Beschreibung", :ng_model => "newContribution.description" }
       %button{ :ng_click => "newContribution.submit()" } Abschicken
+      %button{ :ng_click => "newContribution.abort()" } Abbrechen
     %pre
       {{ newContribution.features_attributes }}
     %pre

@@ -42,6 +42,8 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
         abort: ->
           @reset()
+          $scope.map_main.then (map) ->
+            map.removeControl($scope.drawControl)
           $scope.composing = false
         reset: ->
           @title = ''
