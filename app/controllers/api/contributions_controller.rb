@@ -4,7 +4,7 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions
   # GET /contributions.json
   def index
-    @contributions = Contribution.all
+    render json: Contribution.all.as_json(include: :features)
   end
 
   # GET /contributions/1

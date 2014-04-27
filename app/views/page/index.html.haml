@@ -1,13 +1,16 @@
 %div{ :ng_controller => "MapController" }
   #map
-    %leaflet{ id: "map_main", center: "muenster", controls: "controls" }
+    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson" }
   #sidebar
-    %input{ :placeholder => "title", :ng_model => "newContribution.title" }
-    %textarea{ :ng_model => "newContribution.description" }
-      Text
-    %button{ :ng_click => "newContribution.submit()" } Start
+    %button{ :ng_click => "newContribution.start()" } Neuer Beitrag
+    #contribution{ :ng_show => "composing" }
+      %input{ :placeholder => "Titel", :ng_model => "newContribution.title" }
+      %textarea{ :placeholder => "Beschreibung", :ng_model => "newContribution.description" }
+      %button{ :ng_click => "newContribution.submit()" } Abschicken
     %pre
       {{ newContribution.features_attributes }}
     %pre
       {{ newContribution.title }} {{ newContribution.description }}
+    %pre
+      {{ geojson }}
 
