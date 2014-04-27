@@ -19,6 +19,7 @@ class Feature < ActiveRecord::Base
 
   def attributes
     {
+      'id' => nil,
       'type' => nil,
       'geometry' => nil,
       'properties' => nil
