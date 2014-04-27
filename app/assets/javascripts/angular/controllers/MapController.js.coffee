@@ -21,6 +21,7 @@ angular.module("SustainabilityApp").controller "MapController", [
           new Contribution(@).create()
         features_attributes: []
         addFeature: (feature) ->
+          feature.properties = { "stroke-width": 5.5 }
           @features_attributes.push { geojson: feature }
           return
     leafletData.getMap("map_main").then (map) ->

@@ -1,5 +1,5 @@
 class Api::ContributionsController < Api::BaseController
-  before_action :set_contribution, only: [:update, :destroy]
+  before_action :set_contribution, only: [:show, :update, :destroy]
 
   # GET /contributions
   # GET /contributions.json
@@ -10,6 +10,7 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions/1
   # GET /contributions/1.json
   def show
+    render json: @contribution.as_json(include: :features)
   end
 
   # POST /contributions
@@ -18,20 +19,10 @@ class Api::ContributionsController < Api::BaseController
     @contribution = Contribution.new(contribution_params)
 
     if @contribution.save
-      render json: @contribution
+      render json: @contribution.as_json(include: :features), status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end
-
-    #respond_to do |format|
-    #  if @contribution.save
-    #    format.html { redirect_to @contribution, notice: 'Contribution was successfully created.' }
-    #    format.json { render :show, status: :created, location: @contribution }
-    #  else
-    #    format.html { render :new }
-    #    format.json { render json: @contribution.errors, status: :unprocessable_entity }
-    #  end
-    #end
   end
 
   # PATCH/PUT /contributions/1
@@ -68,24 +59,29 @@ class Api::ContributionsController < Api::BaseController
     def contribution_params
       allowed_properties = params['contribution']['features_attributes'].try(:collect) do |f|
         f['geojson']['properties'].try(:keys)
-      end.try(:flatten).try(:uniq)
+      end.try(:flatten).try(:uniq) || []
       allowed_properties << ""
-      binding.pry
       params.require(:contribution).permit(
         :title,
         :description,
         features_attributes: [
-          { geojson: [
+          {
+            geojson: [
               :type,
               { geometry: [
                   :type,
-                  { coordinates: [] }
+                  { coordinates: [] },
+                  coordinates: [[]]
                 ]
               },
               { properties: allowed_properties }
             ]
           }
         ]
-      )
+      ).tap do |whitelisted|
+        whitelisted['features_attributes'].try(:each_index) do |i|
+          whitelisted['features_attributes'][i]['geojson']['geometry']['coordinates'] = params['contribution']['features_attributes'][i]['geojson']['geometry']['coordinates']
+        end
+      end
     end
 end
