@@ -4,7 +4,11 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions
   # GET /contributions.json
   def index
-    render json: Contribution.all.as_json(include: :features)
+    if bbox_params != {}
+      render json: Contribution.within(bbox_params).as_json(include: :features)
+    else
+      render json: Contribution.all.as_json(include: :features)
+    end
   end
 
   # GET /contributions/1
@@ -53,6 +57,11 @@ class Api::ContributionsController < Api::BaseController
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution
       @contribution = Contribution.find(params[:id])
+    end
+
+
+    def bbox_params
+      params.fetch(:bbox,{})
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

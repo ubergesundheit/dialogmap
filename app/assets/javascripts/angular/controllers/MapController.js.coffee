@@ -16,22 +16,28 @@ angular.module("SustainabilityApp").controller "MapController", [
             draw:
               polyline: false
               circle: false
+      events:
+        map:
+          enable: ['moveend']
 
       updateGeoJSON: ->
-       Contribution.query().then (cts) ->
-          fcollection =
-            type: 'FeatureCollection'
-            features: []
-          for c in cts
-            do ->
-              if c.features.length > 0
-                for f in c.features
-                  do ->
-                    fcollection.features.push f
-                    return
-              return
-          $scope.geojson = {}
-          $scope.geojson.data = fcollection
+        $scope.map_main.then (map) ->
+          bbox = map.getBounds().pad(1.01).toBBoxString()
+          Contribution.query({bbox: bbox}).then (cts) ->
+            fcollection =
+              type: 'FeatureCollection'
+              features: []
+            for c in cts
+              do ->
+                if c.features.length > 0
+                  for f in c.features
+                    do ->
+                      fcollection.features.push f
+                      return
+                return
+            $scope.geojson = {}
+            $scope.geojson.data = fcollection
+            return
           return
         return
 
@@ -81,5 +87,8 @@ angular.module("SustainabilityApp").controller "MapController", [
           #$scope.updateGeoJSON()
           return
     $scope.updateGeoJSON()
+    $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
+      $scope.updateGeoJSON()
+      return
     return
 ]

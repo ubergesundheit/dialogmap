@@ -1,6 +1,6 @@
 %div{ :ng_controller => "MapController" }
   #map
-    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson" }
+    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events" }
   #sidebar
     %button{ :ng_hide => "composing", :ng_click => "newContribution.start()" } Neuer Beitrag
     %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }

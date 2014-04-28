@@ -1,6 +1,6 @@
 class Feature < ActiveRecord::Base
-  self.inheritance_column = 'inheritance_column'
   # see api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html#method-i-inheritance_column
+  self.inheritance_column = 'inheritance_column'
   set_rgeo_factory_for_column(:geom, RGeo::Geographic.spherical_factory(:srid => 4326))
   attr_accessor :geojson
   hstore_accessor :properties, #simplestyle-spec github.com/mapbox/simplestyle-spec
@@ -16,6 +16,15 @@ class Feature < ActiveRecord::Base
     :"fill-opacity"   => :float
 
   before_validation :decode_geojson_from_params, if: :geojson_present?
+
+  scope :within, -> (bbox_string) {
+    bbox_array = bbox_string.split(",")
+    factory = rgeo_factory_for_column(:geom)
+    sw = factory.point(bbox_array[0], bbox_array[1])
+    ne = factory.point(bbox_array[2], bbox_array[3])
+    window = RGeo::Cartesian::BoundingBox.create_from_points(sw, ne).to_geometry
+    where("geom && ?", window)
+  }
 
   def attributes
     {
