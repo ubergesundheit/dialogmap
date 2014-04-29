@@ -912,12 +912,13 @@
           var isDefined = leafletHelpers.isDefined, leafletScope = controller.getLeafletScope(), controls = leafletScope.controls;
           controller.getMap().then(function (map) {
             if (isDefined(L.Control.Draw) && isDefined(controls.draw)) {
-              var drawnItems = new L.FeatureGroup();
+              //var drawnItems = new L.FeatureGroup();
+              var drawnItems = L.mapbox.featureLayer();
               map.addLayer(drawnItems);
               var options = { edit: { featureGroup: drawnItems } };
               angular.extend(options, controls.draw.options);
               var drawControl = new L.Control.Draw(options);
-              //map.addControl(drawControl);
+              map.addControl(drawControl);
               scope.drawControl = drawControl;
               map.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);

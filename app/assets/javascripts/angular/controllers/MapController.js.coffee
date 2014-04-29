@@ -8,17 +8,17 @@ angular.module("SustainabilityApp").controller "MapController", [
       muenster:
         lat: 51.96
         lng: 7.62
-        zoom: 10
+        zoom: 14
       controls:
         draw:
           options:
-            position: 'topright'
             draw:
               polyline: false
               circle: false
       events:
         map:
-          enable: ['moveend']
+          enable: ['moveend', 'draw:created']
+          logic: 'emit'
 
       updateGeoJSON: ->
         $scope.map_main.then (map) ->
@@ -51,16 +51,10 @@ angular.module("SustainabilityApp").controller "MapController", [
         start: ->
           @reset()
           $scope.composing = true
-          $scope.map_main.then (map) ->
-            map.addControl($scope.drawControl)
-            return
           return
         abort: ->
           @reset()
           $scope.composing = false
-          $scope.map_main.then (map) ->
-            map.removeControl($scope.drawControl)
-            return
           return
         reset: ->
           @title = ''
@@ -84,13 +78,17 @@ angular.module("SustainabilityApp").controller "MapController", [
                 $scope.geojson.data.features.push feature
             return
           @reset()
-          #$scope.updateGeoJSON()
           return
-
 
     $scope.updateGeoJSON()
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()
+      return
+    $scope.$on 'leafletDirectiveMap.draw:created', (evt,leafletEvent) ->
+      $scope.composing = true
+      layer = leafletEvent.leafletEvent.layer
+      window.l = layer
+      layer.bindPopup('<tags-input ng-model="newContribution.title"></tags-input>').openPopup();
       return
     return
 ]

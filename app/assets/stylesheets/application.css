@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require ng-tags-input
- *= require mapbox1.6.2
- *= require leaflet.draw0.2.2
+ *= require mapbox
+ *= require leaflet.draw
  *= require page
  */
