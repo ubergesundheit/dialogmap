@@ -10,6 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require ng-tags-input
  *= require mapbox1.6.2
  *= require leaflet.draw0.2.2
  *= require page

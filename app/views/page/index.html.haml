@@ -5,10 +5,12 @@
     %button{ :ng_hide => "composing", :ng_click => "newContribution.start()" } Neuer Beitrag
     %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }
       %input{ :placeholder => "Titel", :ng_model => "newContribution.title", :type => "text", :required => true }
-      %textarea{ :placeholder => "Beschreibung", :ng_model => "newContribution.description", :required => "true" }
+      #highlighterArea
+        #highlighterContainer
+          #highlighter{ :"description-area" => true, :ng_model => "newContribution.description" }
+        %textarea.txt{ :ng_model => "newContribution.description" }
+      //%tags-input{ :"add-on-enter" => "false", :"add-on-space" => "true", :"add-on-comma" => "false", :"add-on-blur" => "false", :"enable-editing-last-tag" => "true", :"min-length" => 1, :ng_model => "newContribution.description", :required => true }
+
       %button{ :ng_disabled => "contribution_form.$invalid", :ng_click => "newContribution.submit()" } Abschicken
       %button{ :ng_click => "newContribution.abort()" } Abbrechen
-    %pre
-      {{ newContribution.title }} {{ newContribution.description }}
-    {{ geojson }}
 

@@ -86,6 +86,8 @@ angular.module("SustainabilityApp").controller "MapController", [
           @reset()
           #$scope.updateGeoJSON()
           return
+
+
     $scope.updateGeoJSON()
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()

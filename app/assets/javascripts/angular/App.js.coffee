@@ -1,1 +1,1 @@
-angular.module "SustainabilityApp", ["leaflet-directive", "rails"]
+angular.module "SustainabilityApp", ["leaflet-directive", "rails", "ngTagsInput"]
