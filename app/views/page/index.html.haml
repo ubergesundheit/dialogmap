@@ -1,14 +1,16 @@
 %div{ :ng_controller => "MapController" }
   #map
-    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events" }
+    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles", markers: 'drawControl.options.edit.featureGroup' }
   #sidebar{ :ng_show => "composing" }
     %h3 Beitrag verfassen
     %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }
       %input{ :placeholder => "Titel", :ng_model => "newContribution.title", :type => "text", :required => true }
-      .highlighterArea
-        .highlighterContainer
-          .highlighter{ :"description-area" => true, :ng_model => "newContribution.description", :highlights => "" }
-        %textarea.txt{ :ng_model => "newContribution.description" }
+      %div{ :"description-area" => true, :ng_model => "newContribution.description", :highlights => "newContribution.omfg" }
+      {{ newContribution.description }}
+      //.highlighterArea
+      //  .highlighterContainer
+      //    .highlighter{ :"description-area" => true, :ng_model => "newContribution.description", :highlights => "" }
+      //  %textarea.txt{ :ng_model => "newContribution.description" }
       //%tags-input{ :"add-on-enter" => "false", :"add-on-space" => "true", :"add-on-comma" => "false", :"add-on-blur" => "false", :"enable-editing-last-tag" => "true", :"min-length" => 1, :ng_model => "newContribution.description", :required => true }
 
       %button{ :ng_disabled => "contribution_form.$invalid", :ng_click => "newContribution.submit()" } Abschicken

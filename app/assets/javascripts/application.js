@@ -18,3 +18,4 @@
 //= require angular-leaflet-directive
 //= require leaflet.draw
 //= require_tree ./angular
+//= require_tree ./templates
