@@ -33,16 +33,14 @@ angular.module("SustainabilityApp").controller "MapController", [
           dashArray: '3',
           fillOpacity: 0.7
         onEachFeature: (feature, layer) ->
-          #Create get the view template
-          popupContent = "<div ng-include=\"'popupcontent.html'\"></div>"
-
-          layer.bindPopup(popupContent,{
+          popupContent = "<div ng-include=\"'popupcontent_show.html'\"></div>"
+          feature.mode = 'show'
+          layer.bindPopup popupContent,
             minWidth: 250,
             feature: feature
-          })
           return
 
-      updateGeoJSON: ->
+      updateGeoJSON: (data) ->
         $scope.map_main.then (map) ->
           bbox = map.getBounds().pad(1.005).toBBoxString()
           Contribution.query({bbox: bbox}).then (cts) ->
@@ -91,17 +89,17 @@ angular.module("SustainabilityApp").controller "MapController", [
           @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
           new Contribution(@).create().then (data) ->
             temp = $scope.geojson
-            $scope.geojson = {}
-            $scope.geojson.data =
-              type: "FeatureCollection"
-              features: []
             for feature in data.featuresAttributes
               do ->
-                $scope.geojson.data.features.push feature.geojson
+                temp.data.features.push feature.geojson
                 return
-            for feature in temp.data.features
-              do ->
-                $scope.geojson.data.features.push feature
+            #for feature in temp.data.features
+            #  do ->
+            #    $scope.geojson.data.features.push feature
+            $scope.geojson =
+              style: temp.style
+              onEachFeature: temp.onEachFeature
+              data: temp.data
             return
           @reset()
           return
@@ -116,20 +114,22 @@ angular.module("SustainabilityApp").controller "MapController", [
       layer = leafletEvent.leafletEvent.layer
       id = layer._leaflet_id
       layer.options.properties = {}
-      popupContent = $compile('<div description-area ng_model="popups.description_'+id+'" highlights="popups.highlights_'+id+'"></div>')($scope)
-      layer.bindPopup(popupContent[0],{minWidth: 250}).openPopup();
-      $scope.$watch 'popups.description_'+id, (value) ->
+      editFeatueScope = $scope.$new()
+      popupContent = $compile('<div description-area ng_model="popups.description_'+id+'" highlights="popups.highlights_'+id+'"></div>')(editFeatueScope)
+      layer.bindPopup popupContent[0],
+        minWidth: 250
+        feature: {}
+      .openPopup();
+      editFeatueScope.$watch 'popups.description_'+id, (value) ->
         layer.options.properties.title = value
         return
       return
     $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->
       feature = leafletEvent.leafletEvent.popup.options.feature;
-
-      newScope = $scope.$new()
-      newScope.feature = feature.properties
-
-      $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope)
-      console.log $compile(leafletEvent.leafletEvent.popup._content)($scope)
+      if feature.mode == 'show'
+        newScope = $scope.$new()
+        newScope.feature = feature.properties
+        $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope)
 
       return
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
