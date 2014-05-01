@@ -1,6 +1,6 @@
 %div{ :ng_controller => "MapController" }
   #map
-    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles", markers: 'drawControl.options.edit.featureGroup' }
+    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
   #sidebar{ :ng_show => "composing" }
     %h3 Beitrag verfassen
     %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }
