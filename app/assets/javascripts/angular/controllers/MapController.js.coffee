@@ -25,13 +25,7 @@ angular.module("SustainabilityApp").controller "MapController", [
         url: 'http://osm-bright-ms.herokuapp.com/v2/osmbright/{z}/{x}/{y}.png'
       geojson:
         data: { "type": "FeatureCollection", "features": [] }
-        style:
-          fillColor: "green",
-          weight: 2,
-          opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
+        style: L.mapbox.simplestyle.style
         onEachFeature: (feature, layer) ->
           popupContent = "<div ng-include=\"'popupcontent_show.html'\"></div>"
           feature.mode = 'show'
@@ -71,8 +65,13 @@ angular.module("SustainabilityApp").controller "MapController", [
       # Contribution Object
       newContribution:
         omfg: ['wurst']
-        start: ->
-          @reset()
+        references: []
+        start: (feature) ->
+          if feature?
+            @reset()
+            @references.push feature
+          else
+            @references = []
           $scope.composing = true
           return
         abort: ->
@@ -82,7 +81,8 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
         reset: ->
           @title = ''
-          @description = {}
+          @description = ''
+          @references = []
           $scope.drawControl.options.edit.featureGroup.clearLayers()
           return
         submit: ->
@@ -111,9 +111,8 @@ angular.module("SustainabilityApp").controller "MapController", [
       $scope.updateGeoJSON()
       return
     $scope.$on 'leafletDirectiveMap.draw:created', (evt,leafletEvent) ->
-      $scope.composing = true
+      $scope.newContribution.start()
       layer = leafletEvent.leafletEvent.layer
-      id = layer._leaflet_id
       layer.options.properties = {}
       editFeatueScope = $scope.$new()
       popupContent = $compile('<div><input placeholder="Titel" class="input_title" ng_model="popups.title" /><div description-area ng_model="popups.description" highlights="popups.highlights"></div></div>')(editFeatueScope)
@@ -126,10 +125,11 @@ angular.module("SustainabilityApp").controller "MapController", [
         return
       return
     $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->
-      feature = leafletEvent.leafletEvent.popup.options.feature;
+      feature = leafletEvent.leafletEvent.popup.options.feature
+      console.log feature
       if feature.mode == 'show'
         newScope = $scope.$new()
-        newScope.feature = feature.properties
+        newScope.feature = feature
         $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope)
 
       return

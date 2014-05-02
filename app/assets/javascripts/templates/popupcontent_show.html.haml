@@ -1,3 +1,4 @@
 .popupcontent
-  %h3 {{feature.title}}
-  .description {{ feature.description }}
+  %h3 {{feature.properties.title}}
+  .description {{ feature.properties.description }}
+  %button{ :ng_click => "newContribution.start(feature)" } Antworten

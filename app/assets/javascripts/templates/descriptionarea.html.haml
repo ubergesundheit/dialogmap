@@ -4,7 +4,8 @@
   %textarea.txt{ :ng_model => "internal.raw_description", :placeholder => 'Beschreibung' }
   .references_container
     %ul.references_list
+      %li.references_item{ :ng_repeat => "ref in references" }
+        {{ ref | json }}
+        //%img{ :src => "#{asset_path('marker-icon.png')}" }
       %li.references_item
-        %img{ :src => "#{asset_path('marker-icon.png')}" }
-      %li.references_item
-        %img{ :src => "#{asset_path('marker-icon.png')}" }
+        +
