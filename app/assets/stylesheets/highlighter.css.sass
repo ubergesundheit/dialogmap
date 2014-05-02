@@ -1,0 +1,60 @@
+$area-height: 150px
+$references_height: 40px
+
+
+.highlighterArea
+  height: $area-height
+  margin-bottom: 4px
+
+.highlighterArea, .highlighterContainer, .highlighter, textarea.txt, .references_container
+  width: 100%
+
+.highlighterArea, .highlighterContainer
+  position: relative
+  float: none
+
+.highlighter, textarea.txt, .highlighterContainer
+  height: ($area-height - $references_height - 8px )
+  word-spacing: 0px
+
+.highlighter, textarea.txt
+  position: absolute
+  top: 0
+  padding: 4px
+  margin-top: 4px
+  margin-bottom: 4px
+  left: 0
+  resize: none
+
+.highlighter
+  background-color: white
+  overflow: hidden
+  white-space: pre-wrap
+  word-wrap: break-word
+  vertical-align: text-bottom
+  color: transparent
+
+textarea.txt
+  background: transparent
+
+.highlight
+  background-color: yellow
+  color: yellow
+
+.references_container
+  position: absolute
+  height: $references_height
+  top: ($area-height - $references_height + 0px)
+  border: solid 1px
+  background-color: $light-grey
+
+ul.references_list
+  display: inline
+
+li.references_item
+  display: inline
+  padding-top: 4px
+  padding-bottom: 4px
+  cursor: pointer
+  img
+    height: 32px

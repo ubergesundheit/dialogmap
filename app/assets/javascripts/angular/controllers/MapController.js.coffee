@@ -102,6 +102,7 @@ angular.module("SustainabilityApp").controller "MapController", [
               data: temp.data
             return
           @reset()
+          $scope.composing = false
           return
 
     # init stuff
@@ -115,13 +116,13 @@ angular.module("SustainabilityApp").controller "MapController", [
       id = layer._leaflet_id
       layer.options.properties = {}
       editFeatueScope = $scope.$new()
-      popupContent = $compile('<div description-area ng_model="popups.description_'+id+'" highlights="popups.highlights_'+id+'"></div>')(editFeatueScope)
+      popupContent = $compile('<div><input placeholder="Titel" class="input_title" ng_model="popups.title" /><div description-area ng_model="popups.description" highlights="popups.highlights"></div></div>')(editFeatueScope)
       layer.bindPopup popupContent[0],
         minWidth: 250
         feature: {}
       .openPopup();
-      editFeatueScope.$watch 'popups.description_'+id, (value) ->
-        layer.options.properties.title = value
+      editFeatueScope.$watch 'popups', (value) ->
+        layer.options.properties = value
         return
       return
     $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->

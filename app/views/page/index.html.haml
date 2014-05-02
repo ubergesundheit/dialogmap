@@ -4,7 +4,7 @@
   #sidebar{ :ng_show => "composing" }
     %h3 Beitrag verfassen
     %form{ :name => "contribution_form", :novalidate=> true, :ng_show => "composing" }
-      %input{ :placeholder => "Titel", :ng_model => "newContribution.title", :type => "text", :required => true }
+      %input{ :placeholder => "Titel", :ng_model => "newContribution.title", :type => "text", :required => true, :class => "input_title" }
       %div{ :"description-area" => true, :ng_model => "newContribution.description", :highlights => "newContribution.omfg" }
       {{ newContribution.description }}
       //.highlighterArea
