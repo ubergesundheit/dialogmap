@@ -19,7 +19,7 @@ angular.module("SustainabilityApp").controller "MapController", [
               circle: false
       events:
         map:
-          enable: ['moveend', 'draw:created','click','popupopen']
+          enable: ['moveend','draw:created','draw:aborted','click','popupopen']
           logic: 'emit'
       tiles:
         url: 'http://osm-bright-ms.herokuapp.com/v2/osmbright/{z}/{x}/{y}.png'
@@ -62,14 +62,14 @@ angular.module("SustainabilityApp").controller "MapController", [
       addingFeature: false
       # Map Object use with .then (map) ->
       map_main: leafletData.getMap('map_main')
-      addDrawControl: ->
+      setDrawControlVisibility: (onoff) ->
         $scope.map_main.then (map) ->
-          map.addControl($scope.drawControl)
-          return
-        return
-      removeDrawControl: ->
-        $scope.map_main.then (map) ->
-          map.removeControl($scope.drawControl)
+          if map.options.drawControl == true and onoff == false
+            map.removeControl($scope.drawControl)
+            map.options.drawControl = false
+          else if map.options.drawControl == false and onoff == true
+            map.addControl($scope.drawControl)
+            map.options.drawControl = true
           return
         return
 
@@ -82,21 +82,22 @@ angular.module("SustainabilityApp").controller "MapController", [
             @references.push feature
           else
             @references = []
-          $scope.removeDrawControl()
+          $scope.setDrawControlVisibility(false)
           $scope.composing = true
           return
         startAddFeatureReference: ->
           $scope.addingFeature = true
-          $scope.addDrawControl()
+          $scope.setDrawControlVisibility(true)
           return
         stopAddFeatureReference: ->
           $scope.addingFeature = false
-          $scope.removeDrawControl()
+          $scope.setDrawControlVisibility(false)
           return
         abort: ->
           @reset()
           $scope.composing = false
-          $scope.addDrawControl()
+          $scope.addingFeature = false
+          $scope.setDrawControlVisibility(true)
           return
         reset: ->
           @title = ''
@@ -127,7 +128,7 @@ angular.module("SustainabilityApp").controller "MapController", [
     # init stuff
     # put the feature creation controls to the map because someone could want to create a new contribution
     # which gets started by creating a feature
-    $scope.addDrawControl()
+    $scope.setDrawControlVisibility(true)
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()
       return
@@ -140,13 +141,13 @@ angular.module("SustainabilityApp").controller "MapController", [
         $scope.newContribution.stopAddFeatureReference()
       layer = leafletEvent.leafletEvent.layer
       layer.options.properties = {}
-      editFeatueScope = $scope.$new()
-      popupContent = $compile('<div><input placeholder="Titel" class="input_title" ng_model="popups.title" /><div description-area ng_model="popups.description" highlights="popups.highlights"></div></div>')(editFeatueScope)
+      editFeatureScope = $scope.$new()
+      popupContent = $compile('<div><input placeholder="Titel" class="input_title" ng_model="popups.title" /><textarea class="popup_txt" ng_model="popups.description" ></textarea></div></div>')(editFeatureScope)
       layer.bindPopup popupContent[0],
         minWidth: 250
         feature: {}
       .openPopup();
-      editFeatueScope.$watch 'popups', (value) ->
+      editFeatureScope.$watch 'popups', (value) ->
         layer.options.properties = value
         return
       return
