@@ -918,7 +918,7 @@
               var options = { edit: { featureGroup: drawnItems } };
               angular.extend(options, controls.draw.options);
               var drawControl = new L.Control.Draw(options);
-              map.addControl(drawControl);
+              //map.addControl(drawControl);
               scope.drawControl = drawControl;
               map.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);

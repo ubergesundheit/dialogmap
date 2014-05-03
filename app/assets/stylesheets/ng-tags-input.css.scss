@@ -6,23 +6,22 @@ tags-input *, *:before, *:after {
 
 tags-input .host {
   position: relative;
-  margin-top: 5px;
-  margin-bottom: 5px;
 }
 tags-input .host:active {
   outline: none;
 }
 
 tags-input .tags {
-  -moz-appearance: textfield;
-  -webkit-appearance: textfield;
-  padding: 1px;
+  //-moz-appearance: textfield;
+  //-webkit-appearance: textfield;
+  padding: 4px;
   overflow: hidden;
   word-wrap: break-word;
-  cursor: text;
+  //cursor: text;
   background-color: white;
-  border: 1px solid darkgray;
-  box-shadow: 1px 1px 1px 0 lightgray inset;
+  //border: 1px solid darkgray;
+  //box-shadow: 1px 1px 1px 0 lightgray inset;
+  height: 38px
 }
 tags-input .tags.focused {
   outline: none;

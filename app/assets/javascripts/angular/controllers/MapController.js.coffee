@@ -59,12 +59,22 @@ angular.module("SustainabilityApp").controller "MapController", [
 
       # Contribution state
       composing: false
+      addingFeature: false
       # Map Object use with .then (map) ->
       map_main: leafletData.getMap('map_main')
+      addDrawControl: ->
+        $scope.map_main.then (map) ->
+          map.addControl($scope.drawControl)
+          return
+        return
+      removeDrawControl: ->
+        $scope.map_main.then (map) ->
+          map.removeControl($scope.drawControl)
+          return
+        return
 
       # Contribution Object
       newContribution:
-        omfg: ['wurst']
         references: []
         start: (feature) ->
           if feature?
@@ -72,12 +82,21 @@ angular.module("SustainabilityApp").controller "MapController", [
             @references.push feature
           else
             @references = []
+          $scope.removeDrawControl()
           $scope.composing = true
           return
+        startAddFeatureReference: ->
+          $scope.addingFeature = true
+          $scope.addDrawControl()
+          return
+        stopAddFeatureReference: ->
+          $scope.addingFeature = false
+          $scope.removeDrawControl()
+          return
         abort: ->
-          console.log @description
           @reset()
           $scope.composing = false
+          $scope.addDrawControl()
           return
         reset: ->
           @title = ''
@@ -106,12 +125,19 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
 
     # init stuff
-    #$scope.updateGeoJSON()
+    # put the feature creation controls to the map because someone could want to create a new contribution
+    # which gets started by creating a feature
+    $scope.addDrawControl()
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()
       return
     $scope.$on 'leafletDirectiveMap.draw:created', (evt,leafletEvent) ->
-      $scope.newContribution.start()
+      console.log $scope.composing
+      if $scope.composing == true and $scope.addingFeature == false
+        $scope.newContribution.start()
+      else
+        $scope.composing = true
+        $scope.newContribution.stopAddFeatureReference()
       layer = leafletEvent.leafletEvent.layer
       layer.options.properties = {}
       editFeatueScope = $scope.$new()
@@ -126,7 +152,6 @@ angular.module("SustainabilityApp").controller "MapController", [
       return
     $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->
       feature = leafletEvent.leafletEvent.popup.options.feature
-      console.log feature
       if feature.mode == 'show'
         newScope = $scope.$new()
         newScope.feature = feature
@@ -134,7 +159,7 @@ angular.module("SustainabilityApp").controller "MapController", [
 
       return
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
-      console.log leafletEvent
+      #console.log leafletEvent
       return
     return
 ]

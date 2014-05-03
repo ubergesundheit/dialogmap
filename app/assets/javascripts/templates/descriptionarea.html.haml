@@ -1,11 +1,12 @@
 .highlighterArea
   .highlighterContainer
-    .highlighter {{ internal.highlighted }}
+    .highlighter
+    //{{ internal.highlighted }}
   %textarea.txt{ :ng_model => "internal.raw_description", :placeholder => 'Beschreibung' }
   .references_container
-    %ul.references_list
-      %li.references_item{ :ng_repeat => "ref in references" }
-        {{ ref | json }}
-        //%img{ :src => "#{asset_path('marker-icon.png')}" }
-      %li.references_item
-        +
+    %tags-input{ ng_model: "internal_references", add_on_enter: "false", display_property: "properties.title" }
+    //%ul.references_list
+    //  %li.references_item{ :ng_repeat => "ref in references" }
+    //    {{ ref.id }}
+    //  %li.references_item
+    //    .add_reference +

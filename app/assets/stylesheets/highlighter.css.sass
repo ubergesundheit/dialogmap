@@ -27,7 +27,7 @@ $references_height: 40px
   resize: none
 
 .highlighter
-  background-color: white
+  //background-color: white
   overflow: hidden
   white-space: pre-wrap
   word-wrap: break-word
@@ -50,11 +50,28 @@ textarea.txt
 
 ul.references_list
   display: inline
+  margin: 4px
 
 li.references_item
   display: inline
+  margin: 4px
   padding-top: 4px
   padding-bottom: 4px
   cursor: pointer
+  vertical-align: middle
   img
     height: 32px
+  &:hover
+    background-color: yellow
+
+.add_reference
+  display: inline-block
+  margin: -16px 0 0 -16px
+  background-color: limegreen
+  width: 32px
+  height: 32px
+  @include border-radius(50%, 50%)
+  font-size: 20px
+  font-weight: 700
+  vertical-align: middle
+  text-align: center

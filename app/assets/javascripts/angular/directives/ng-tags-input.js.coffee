@@ -191,7 +191,7 @@
               maxLength: [Number]
               addOnEnter: [
                 Boolean
-                true
+                false
               ]
               addOnSpace: [
                 Boolean
@@ -199,11 +199,11 @@
               ]
               addOnComma: [
                 Boolean
-                true
+                false
               ]
               addOnBlur: [
                 Boolean
-                true
+                false
               ]
               allowedTagsPattern: [
                 RegExp
@@ -292,7 +292,11 @@
             invalid: null
 
           scope.getDisplayText = (tag) ->
-            tag[options.displayProperty].trim()
+            if options.displayProperty.indexOf('.') != -1
+              properties_path = options.displayProperty.split('.')
+              tag[properties_path[0]][properties_path[1]].trim()
+            else
+              tag[options.displayProperty].trim()
 
           scope.track = (tag) ->
             tag[options.displayProperty]
@@ -315,49 +319,50 @@
           # This hack is needed because jqLite doesn't implement stopImmediatePropagation properly.
           # I've sent a PR to Angular addressing this issue and hopefully it'll be fixed soon.
           # https://github.com/angular/angular.js/pull/4833
-          input.on("keydown", (e) ->
-            return  if e.isImmediatePropagationStopped and e.isImmediatePropagationStopped()
-            key = e.keyCode
-            isModifier = e.shiftKey or e.altKey or e.ctrlKey or e.metaKey
-            addKeys = {}
-            shouldAdd = undefined
-            shouldRemove = undefined
-            return  if isModifier or hotkeys.indexOf(key) is -1
-            addKeys[KEYS.enter] = options.addOnEnter
-            addKeys[KEYS.comma] = options.addOnComma
-            addKeys[KEYS.space] = options.addOnSpace
-            shouldAdd = not options.addFromAutocompleteOnly and addKeys[key]
-            shouldRemove = not shouldAdd and key is KEYS.backspace and scope.newTag.text.length is 0
-            if shouldAdd
-              tagList.addText scope.newTag.text
-              scope.$apply()
-              e.preventDefault()
-            else if shouldRemove
-              tag = tagList.removeLast()
-              scope.newTag.text = tag[options.displayProperty]  if tag and options.enableEditingLastTag
-              scope.$apply()
-              e.preventDefault()
-            return
-          ).on("focus", ->
-            return  if scope.hasFocus
-            scope.hasFocus = true
-            events.trigger "input-focus"
-            scope.$apply()
-            return
-          ).on "blur", ->
-            $timeout ->
-              activeElement = $document.prop("activeElement")
-              lostFocusToBrowserWindow = activeElement is input[0]
-              lostFocusToChildElement = element[0].contains(activeElement)
-              if lostFocusToBrowserWindow or not lostFocusToChildElement
-                scope.hasFocus = false
-                events.trigger "input-blur"
-              return
+          #input.on("keydown", (e) ->
+          #  return  if e.isImmediatePropagationStopped and e.isImmediatePropagationStopped()
+          #  key = e.keyCode
+          #  isModifier = e.shiftKey or e.altKey or e.ctrlKey or e.metaKey
+          #  addKeys = {}
+          #  shouldAdd = undefined
+          #  shouldRemove = undefined
+          #  return  if isModifier or hotkeys.indexOf(key) is -1
+          #  addKeys[KEYS.enter] = options.addOnEnter
+          #  addKeys[KEYS.comma] = options.addOnComma
+          #  addKeys[KEYS.space] = options.addOnSpace
+          #  shouldAdd = not options.addFromAutocompleteOnly and addKeys[key]
+          #  shouldRemove = not shouldAdd and key is KEYS.backspace and scope.newTag.text.length is 0
+          #  if shouldAdd
+          #    tagList.addText scope.newTag.text
+          #    scope.$apply()
+          #    e.preventDefault()
+          #  else if shouldRemove
+          #    tag = tagList.removeLast()
+          #    scope.newTag.text = tag[options.displayProperty]  if tag and options.enableEditingLastTag
+          #    scope.$apply()
+          #    e.preventDefault()
+          #  return
+          #).on("focus", ->
+          #  return  if scope.hasFocus
+          #  scope.hasFocus = true
+          #  events.trigger "input-focus"
+          #  scope.$apply()
+          #  return
+          #).on "blur", ->
+          #  $timeout ->
+          #    activeElement = $document.prop("activeElement")
+          #    lostFocusToBrowserWindow = activeElement is input[0]
+          #    lostFocusToChildElement = element[0].contains(activeElement)
+          #    if lostFocusToBrowserWindow or not lostFocusToChildElement
+          #      scope.hasFocus = false
+          #      events.trigger "input-blur"
+          #    return
 
-            return
+          #  return
 
-          element.find("div").on "click", ->
-            input[0].focus()
+          element.find(".add_reference").on "click", (evt) ->
+            scope.$parent.$parent.newContribution.startAddFeatureReference()
+            #input[0].focus()
             return
 
           return
@@ -383,207 +388,207 @@
   suggestions list.
   @param {number=} [maxResultsToShow=10] Maximum number of results to be displayed at a time.
   ###
-  tagsInput.directive "autoComplete", [
-    "$document"
-    "$timeout"
-    "$sce"
-    "tagsInputConfig"
-    ($document, $timeout, $sce, tagsInputConfig) ->
-      SuggestionList = (loadFn, options) ->
-        self = {}
-        debouncedLoadId = undefined
-        getDifference = undefined
-        lastPromise = undefined
-        getDifference = (array1, array2) ->
-          array1.filter (item) ->
-            not findInObjectArray(array2, item, options.tagsInput.displayProperty)
+  #tagsInput.directive "autoComplete", [
+  #  "$document"
+  #  "$timeout"
+  #  "$sce"
+  #  "tagsInputConfig"
+  #  ($document, $timeout, $sce, tagsInputConfig) ->
+  #    SuggestionList = (loadFn, options) ->
+  #      self = {}
+  #      debouncedLoadId = undefined
+  #      getDifference = undefined
+  #      lastPromise = undefined
+  #      getDifference = (array1, array2) ->
+  #        array1.filter (item) ->
+  #          not findInObjectArray(array2, item, options.tagsInput.displayProperty)
 
 
-        self.reset = ->
-          lastPromise = null
-          self.items = []
-          self.visible = false
-          self.index = -1
-          self.selected = null
-          self.query = null
-          $timeout.cancel debouncedLoadId
-          return
+  #      self.reset = ->
+  #        lastPromise = null
+  #        self.items = []
+  #        self.visible = false
+  #        self.index = -1
+  #        self.selected = null
+  #        self.query = null
+  #        $timeout.cancel debouncedLoadId
+  #        return
 
-        self.show = ->
-          self.selected = null
-          self.visible = true
-          return
+  #      self.show = ->
+  #        self.selected = null
+  #        self.visible = true
+  #        return
 
-        self.load = (query, tags) ->
-          if query.length < options.minLength
-            self.reset()
-            return
-          $timeout.cancel debouncedLoadId
-          debouncedLoadId = $timeout(->
-            self.query = query
-            promise = loadFn($query: query)
-            lastPromise = promise
-            promise.then (items) ->
-              return  if promise isnt lastPromise
-              items = makeObjectArray(items.data or items, options.tagsInput.displayProperty)
-              items = getDifference(items, tags)
-              self.items = items.slice(0, options.maxResultsToShow)
-              if self.items.length > 0
-                self.show()
-              else
-                self.reset()
-              return
+  #      self.load = (query, tags) ->
+  #        if query.length < options.minLength
+  #          self.reset()
+  #          return
+  #        $timeout.cancel debouncedLoadId
+  #        debouncedLoadId = $timeout(->
+  #          self.query = query
+  #          promise = loadFn($query: query)
+  #          lastPromise = promise
+  #          promise.then (items) ->
+  #            return  if promise isnt lastPromise
+  #            items = makeObjectArray(items.data or items, options.tagsInput.displayProperty)
+  #            items = getDifference(items, tags)
+  #            self.items = items.slice(0, options.maxResultsToShow)
+  #            if self.items.length > 0
+  #              self.show()
+  #            else
+  #              self.reset()
+  #            return
 
-            return
-          , options.debounceDelay, false)
-          return
+  #          return
+  #        , options.debounceDelay, false)
+  #        return
 
-        self.selectNext = ->
-          self.select ++self.index
-          return
+  #      self.selectNext = ->
+  #        self.select ++self.index
+  #        return
 
-        self.selectPrior = ->
-          self.select --self.index
-          return
+  #      self.selectPrior = ->
+  #        self.select --self.index
+  #        return
 
-        self.select = (index) ->
-          if index < 0
-            index = self.items.length - 1
-          else index = 0  if index >= self.items.length
-          self.index = index
-          self.selected = self.items[index]
-          return
+  #      self.select = (index) ->
+  #        if index < 0
+  #          index = self.items.length - 1
+  #        else index = 0  if index >= self.items.length
+  #        self.index = index
+  #        self.selected = self.items[index]
+  #        return
 
-        self.reset()
-        self
-      encodeHTML = (value) ->
-        value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace />/g, "&gt;"
-      return (
-        restrict: "E"
-        require: "^tagsInput"
-        scope:
-          source: "&"
+  #      self.reset()
+  #      self
+  #    encodeHTML = (value) ->
+  #      value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace />/g, "&gt;"
+  #    return (
+  #      restrict: "E"
+  #      require: "^tagsInput"
+  #      scope:
+  #        source: "&"
 
-        templateUrl: "ngTagsInput/auto-complete.html"
-        link: (scope, element, attrs, tagsInputCtrl) ->
-          hotkeys = [
-            KEYS.enter
-            KEYS.tab
-            KEYS.escape
-            KEYS.up
-            KEYS.down
-          ]
-          suggestionList = undefined
-          tagsInput = undefined
-          options = undefined
-          getItemText = undefined
-          documentClick = undefined
-          tagsInputConfig.load "autoComplete", scope, attrs,
-            debounceDelay: [
-              Number
-              100
-            ]
-            minLength: [
-              Number
-              3
-            ]
-            highlightMatchedText: [
-              Boolean
-              true
-            ]
-            maxResultsToShow: [
-              Number
-              10
-            ]
+  #      templateUrl: "ngTagsInput/auto-complete.html"
+  #      link: (scope, element, attrs, tagsInputCtrl) ->
+  #        hotkeys = [
+  #          KEYS.enter
+  #          KEYS.tab
+  #          KEYS.escape
+  #          KEYS.up
+  #          KEYS.down
+  #        ]
+  #        suggestionList = undefined
+  #        tagsInput = undefined
+  #        options = undefined
+  #        getItemText = undefined
+  #        documentClick = undefined
+  #        tagsInputConfig.load "autoComplete", scope, attrs,
+  #          debounceDelay: [
+  #            Number
+  #            100
+  #          ]
+  #          minLength: [
+  #            Number
+  #            3
+  #          ]
+  #          highlightMatchedText: [
+  #            Boolean
+  #            true
+  #          ]
+  #          maxResultsToShow: [
+  #            Number
+  #            10
+  #          ]
 
-          options = scope.options
-          tagsInput = tagsInputCtrl.registerAutocomplete()
-          options.tagsInput = tagsInput.getOptions()
-          suggestionList = new SuggestionList(scope.source, options)
-          getItemText = (item) ->
-            item[options.tagsInput.displayProperty]
+  #        options = scope.options
+  #        tagsInput = tagsInputCtrl.registerAutocomplete()
+  #        options.tagsInput = tagsInput.getOptions()
+  #        suggestionList = new SuggestionList(scope.source, options)
+  #        getItemText = (item) ->
+  #          item[options.tagsInput.displayProperty]
 
-          scope.suggestionList = suggestionList
-          scope.addSuggestion = ->
-            added = false
-            if suggestionList.selected
-              tagsInput.addTag suggestionList.selected
-              suggestionList.reset()
-              tagsInput.focusInput()
-              added = true
-            added
+  #        scope.suggestionList = suggestionList
+  #        scope.addSuggestion = ->
+  #          added = false
+  #          if suggestionList.selected
+  #            tagsInput.addTag suggestionList.selected
+  #            suggestionList.reset()
+  #            tagsInput.focusInput()
+  #            added = true
+  #          added
 
-          scope.highlight = (item) ->
-            text = getItemText(item)
-            text = encodeHTML(text)
-            text = replaceAll(text, encodeHTML(suggestionList.query), "<em>$&</em>")  if options.highlightMatchedText
-            $sce.trustAsHtml text
+  #        scope.highlight = (item) ->
+  #          text = getItemText(item)
+  #          text = encodeHTML(text)
+  #          text = replaceAll(text, encodeHTML(suggestionList.query), "<em>$&</em>")  if options.highlightMatchedText
+  #          $sce.trustAsHtml text
 
-          scope.track = (item) ->
-            getItemText item
+  #        scope.track = (item) ->
+  #          getItemText item
 
 
-          # This hack is needed because jqLite doesn't implement stopImmediatePropagation properly.
-          # I've sent a PR to Angular addressing this issue and hopefully it'll be fixed soon.
-          # https://github.com/angular/angular.js/pull/4833
-          tagsInput.on("tag-added invalid-tag", ->
-            suggestionList.reset()
-            return
-          ).on("input-change", (value) ->
-            if value
-              suggestionList.load value, tagsInput.getTags()
-            else
-              suggestionList.reset()
-            return
-          ).on("input-keydown", (e) ->
-            key = undefined
-            handled = undefined
-            return  if hotkeys.indexOf(e.keyCode) is -1
-            immediatePropagationStopped = false
-            e.stopImmediatePropagation = ->
-              immediatePropagationStopped = true
-              e.stopPropagation()
-              return
+  #        # This hack is needed because jqLite doesn't implement stopImmediatePropagation properly.
+  #        # I've sent a PR to Angular addressing this issue and hopefully it'll be fixed soon.
+  #        # https://github.com/angular/angular.js/pull/4833
+  #        tagsInput.on("tag-added invalid-tag", ->
+  #          suggestionList.reset()
+  #          return
+  #        ).on("input-change", (value) ->
+  #          if value
+  #            suggestionList.load value, tagsInput.getTags()
+  #          else
+  #            suggestionList.reset()
+  #          return
+  #        ).on("input-keydown", (e) ->
+  #          key = undefined
+  #          handled = undefined
+  #          return  if hotkeys.indexOf(e.keyCode) is -1
+  #          immediatePropagationStopped = false
+  #          e.stopImmediatePropagation = ->
+  #            immediatePropagationStopped = true
+  #            e.stopPropagation()
+  #            return
 
-            e.isImmediatePropagationStopped = ->
-              immediatePropagationStopped
+  #          e.isImmediatePropagationStopped = ->
+  #            immediatePropagationStopped
 
-            if suggestionList.visible
-              key = e.keyCode
-              handled = false
-              if key is KEYS.down
-                suggestionList.selectNext()
-                handled = true
-              else if key is KEYS.up
-                suggestionList.selectPrior()
-                handled = true
-              else if key is KEYS.escape
-                suggestionList.reset()
-                handled = true
-              else handled = scope.addSuggestion()  if key is KEYS.enter or key is KEYS.tab
-              if handled
-                e.preventDefault()
-                e.stopImmediatePropagation()
-                scope.$apply()
-            return
-          ).on "input-blur", ->
-            suggestionList.reset()
-            return
+  #          if suggestionList.visible
+  #            key = e.keyCode
+  #            handled = false
+  #            if key is KEYS.down
+  #              suggestionList.selectNext()
+  #              handled = true
+  #            else if key is KEYS.up
+  #              suggestionList.selectPrior()
+  #              handled = true
+  #            else if key is KEYS.escape
+  #              suggestionList.reset()
+  #              handled = true
+  #            else handled = scope.addSuggestion()  if key is KEYS.enter or key is KEYS.tab
+  #            if handled
+  #              e.preventDefault()
+  #              e.stopImmediatePropagation()
+  #              scope.$apply()
+  #          return
+  #        ).on "input-blur", ->
+  #          suggestionList.reset()
+  #          return
 
-          documentClick = ->
-            if suggestionList.visible
-              suggestionList.reset()
-              scope.$apply()
-            return
+  #        documentClick = ->
+  #          if suggestionList.visible
+  #            suggestionList.reset()
+  #            scope.$apply()
+  #          return
 
-          $document.on "click", documentClick
-          scope.$on "$destroy", ->
-            $document.off "click", documentClick
-            return
+  #        $document.on "click", documentClick
+  #        scope.$on "$destroy", ->
+  #          $document.off "click", documentClick
+  #          return
 
-          return
-      )
-  ]
+  #        return
+  #    )
+  #]
 
   ###
   @ngdoc directive
@@ -738,7 +743,8 @@
   tagsInput.run [
     "$templateCache"
     ($templateCache) ->
-      $templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" ng-click=\"tagList.selected = $index\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li></ul><input class=\"input\" placeholder=\"{{options.placeholder}}\" tabindex=\"{{options.tabindex}}\" ng-model=\"newTag.text\" ng-change=\"newTagChange()\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ti-autosize=\"\"></div></div>"
+      #$templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" ng-click=\"tagList.selected = $index\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li></ul><input class=\"input\" placeholder=\"{{options.placeholder}}\" tabindex=\"{{options.tabindex}}\" ng-model=\"newTag.text\" ng-change=\"newTagChange()\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ti-autosize=\"\"></div></div>"
+      $templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" lol-ng-click=\"tagList.selected = $index\"><span>{{getDisplayText(tag)}}</span></li><li class=\"tag-item add_reference\"><span>+</span></li></ul></div></div>"
       $templateCache.put "ngTagsInput/auto-complete.html", "<div class=\"autocomplete\" ng-show=\"suggestionList.visible\"><ul class=\"suggestion-list\"><li class=\"suggestion-item\" ng-repeat=\"item in suggestionList.items track by track(item)\" ng-class=\"{selected: item == suggestionList.selected}\" ng-click=\"addSuggestion()\" ng-mouseenter=\"suggestionList.select($index)\" ng-bind-html=\"highlight(item)\"></li></ul></div>"
   ]
   return
