@@ -19,13 +19,14 @@ angular.module("SustainabilityApp").controller "MapController", [
               circle: false
       events:
         map:
-          enable: ['moveend','draw:created','draw:aborted','click','popupopen']
+          enable: ['moveend','draw:created','click','popupopen']
           logic: 'emit'
       tiles:
         url: 'http://osm-bright-ms.herokuapp.com/v2/osmbright/{z}/{x}/{y}.png'
       geojson:
         data: { "type": "FeatureCollection", "features": [] }
         style: L.mapbox.simplestyle.style
+        pointToLayer: L.mapbox.marker.style
         onEachFeature: (feature, layer) ->
           popupContent = "<div ng-include=\"'popupcontent_show.html'\"></div>"
           feature.mode = 'show'
@@ -52,6 +53,7 @@ angular.module("SustainabilityApp").controller "MapController", [
             $scope.geojson =
               style: $scope.geojson.style
               onEachFeature: $scope.geojson.onEachFeature
+              pointToLayer: $scope.geojson.pointToLayer
               data: fcollection
             return
           return
@@ -113,16 +115,16 @@ angular.module("SustainabilityApp").controller "MapController", [
               do ->
                 temp.data.features.push feature.geojson
                 return
-            #for feature in temp.data.features
-            #  do ->
-            #    $scope.geojson.data.features.push feature
             $scope.geojson =
               style: temp.style
               onEachFeature: temp.onEachFeature
+              pointToLayer: temp.pointToLayer
               data: temp.data
             return
           @reset()
+          $scope.setDrawControlVisibility(true)
           $scope.composing = false
+          $scope.addingFeature = false
           return
 
     # init stuff
@@ -133,7 +135,6 @@ angular.module("SustainabilityApp").controller "MapController", [
       $scope.updateGeoJSON()
       return
     $scope.$on 'leafletDirectiveMap.draw:created', (evt,leafletEvent) ->
-      console.log $scope.composing
       if $scope.composing == true and $scope.addingFeature == false
         $scope.newContribution.start()
       else
@@ -142,7 +143,9 @@ angular.module("SustainabilityApp").controller "MapController", [
       layer = leafletEvent.leafletEvent.layer
       layer.options.properties = {}
       editFeatureScope = $scope.$new()
-      popupContent = $compile('<div><input placeholder="Titel" class="input_title" ng_model="popups.title" /><textarea class="popup_txt" ng_model="popups.description" ></textarea></div></div>')(editFeatureScope)
+      editFeatureScope.layer_type = leafletEvent.leafletEvent.layerType
+      console.log leafletEvent.leafletEvent.layerType
+      popupContent = $compile('<div popup-input="" ></div>')(editFeatureScope)
       layer.bindPopup popupContent[0],
         minWidth: 250
         feature: {}

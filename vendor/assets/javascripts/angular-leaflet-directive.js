@@ -57,6 +57,7 @@
           }
           // Create the Leaflet Map Object with the options
           var map = new L.Map(element[0], leafletMapDefaults.getMapCreationDefaults(attrs.id));
+          //var map = new L.mapbox.map(element[0],null, leafletMapDefaults.getMapCreationDefaults(attrs.id));
           _leafletMap.resolve(map);
           if (!isDefined(attrs.center)) {
             map.setView([
@@ -921,6 +922,7 @@
               //map.addControl(drawControl);
               scope.drawControl = drawControl;
               map.on('draw:created', function(e) {
+
                 drawnItems.addLayer(e.layer);
               });
             }
