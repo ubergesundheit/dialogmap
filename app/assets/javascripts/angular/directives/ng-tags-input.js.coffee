@@ -186,7 +186,7 @@
               ]
               minLength: [
                 Number
-                3
+                1
               ]
               maxLength: [Number]
               addOnEnter: [
@@ -298,7 +298,7 @@
               tag[options.displayProperty].trim()
 
           scope.track = (tag) ->
-            tag[options.displayProperty]
+            tag[options.displayProperty] || ""
 
           scope.newTagChange = ->
             events.trigger "input-change", scope.newTag.text

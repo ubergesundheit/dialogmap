@@ -66,6 +66,10 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
         return
 
+      removeDraftFeature: (leaflet_id) ->
+        $scope.drawControl.options.edit.featureGroup.removeLayer leaflet_id
+        return
+
       # Contribution state
       composing: false
       addingFeature: false
@@ -127,6 +131,7 @@ angular.module("SustainabilityApp").controller "MapController", [
           @description = ''
           @references = []
           $scope.drawControl.options.edit.featureGroup.clearLayers()
+          $scope.drawControl.disableEditing()
           return
         submit: ->
           @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)

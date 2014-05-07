@@ -913,17 +913,39 @@
           var isDefined = leafletHelpers.isDefined, leafletScope = controller.getLeafletScope(), controls = leafletScope.controls;
           controller.getMap().then(function (map) {
             if (isDefined(L.Control.Draw) && isDefined(controls.draw)) {
-              //var drawnItems = new L.FeatureGroup();
               var drawnItems = L.mapbox.featureLayer();
               map.addLayer(drawnItems);
-              var options = { edit: { featureGroup: drawnItems } };
+              var options = { "edit": { "featureGroup": drawnItems } };
               angular.extend(options, controls.draw.options);
               var drawControl = new L.Control.Draw(options);
               //map.addControl(drawControl);
               scope.drawControl = drawControl;
               map.on('draw:created', function(e) {
-
                 drawnItems.addLayer(e.layer);
+
+                var editToolbar = new L.EditToolbar.Edit(map, {
+                    featureGroup: L.featureGroup([e.layer]),
+                    selectedPathOptions: {
+                    color: '#fe57a1',
+                    opacity: 0.6,
+                    dashArray: '10, 10',
+                    fill: !0,
+                    fillColor: '#fe57a1',
+                    fillOpacity: 0.1,
+                    maintainColor: !1
+                }
+                });
+                scope.drawControl.disableEditing = function () {
+                  editToolbar.disable();
+                  editToolbar = undefined;
+                }
+                editToolbar.enable();
+                e.layer.on('dragend', function () {
+                  editToolbar.save()
+                }),
+                e.layer.on('edit', function () {
+                  editToolbar.save()
+                });
               });
             }
             if (isDefined(controls.custom)) {

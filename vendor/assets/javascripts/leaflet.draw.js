@@ -92,7 +92,7 @@ L.drawLocal = {
       edit: {
         tooltip: {
           text: 'Drag handles, or marker to edit feature.',
-          subtext: 'Click cancel to undo changes.'
+          subtext: ''
         }
       },
       remove: {
@@ -1871,14 +1871,14 @@ L.Control.Draw = L.Control.extend({
       this._toolbars[id].on('enable', this._toolbarEnabled, this);
     }
 
-    if (L.EditToolbar && this.options.edit) {
-      toolbar = new L.EditToolbar(this.options.edit);
-      id = L.stamp(toolbar);
-      this._toolbars[id] = toolbar;
+    //if (L.EditToolbar && this.options.edit) {
+    //  toolbar = new L.EditToolbar(this.options.edit);
+    //  id = L.stamp(toolbar);
+    //  this._toolbars[id] = toolbar;
 
-      // Listen for when toolbar is enabled
-      this._toolbars[id].on('enable', this._toolbarEnabled, this);
-    }
+    //  // Listen for when toolbar is enabled
+    //  this._toolbars[id].on('enable', this._toolbarEnabled, this);
+    //}
   },
 
   onAdd: function (map) {
