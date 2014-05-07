@@ -23,6 +23,7 @@ angular.module("SustainabilityApp").controller "MapController", [
           logic: 'emit'
       tiles:
         url: 'http://osm-bright-ms.herokuapp.com/v2/osmbright/{z}/{x}/{y}.png'
+      # contains all geofeatures
       geojson:
         data: { "type": "FeatureCollection", "features": [] }
         style: L.mapbox.simplestyle.style
@@ -33,6 +34,12 @@ angular.module("SustainabilityApp").controller "MapController", [
           layer.bindPopup popupContent,
             minWidth: 250,
             feature: feature
+          layer.on 'click', (evt) ->
+            if $scope.addingFeature == true
+              feature = evt.target.feature
+              $scope.newContribution.addFeatureReference feature
+              $scope.newContribution.stopAddFeatureReference()
+            return
           return
 
       updateGeoJSON: (data) ->
@@ -78,14 +85,28 @@ angular.module("SustainabilityApp").controller "MapController", [
       # Contribution Object
       newContribution:
         references: []
-        start: (feature) ->
-          if feature?
+        start: (reference) ->
+          if reference?
             @reset()
-            @references.push feature
+            @addFeatureReference reference
           else
             @references = []
           $scope.setDrawControlVisibility(false)
           $scope.composing = true
+          return
+        addFeatureReference: (reference) ->
+          if reference._leaflet_id?
+            tempRef =
+              title: ''
+              type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
+              leaflet_id: reference._leaflet_id
+          else
+            tempRef =
+              title: if reference.geometry? then reference.properties.title
+              type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
+              id: reference.id
+
+          @references.push tempRef
           return
         startAddFeatureReference: ->
           $scope.addingFeature = true
@@ -134,26 +155,36 @@ angular.module("SustainabilityApp").controller "MapController", [
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()
       return
+
     $scope.$on 'leafletDirectiveMap.draw:created', (evt,leafletEvent) ->
       if $scope.composing == true and $scope.addingFeature == false
         $scope.newContribution.start()
       else
         $scope.composing = true
         $scope.newContribution.stopAddFeatureReference()
+
       layer = leafletEvent.leafletEvent.layer
       layer.options.properties = {}
+      layer.feature_type = leafletEvent.leafletEvent.layerType
+
+      $scope.newContribution.addFeatureReference layer
+
       editFeatureScope = $scope.$new()
       editFeatureScope.layer_type = leafletEvent.leafletEvent.layerType
-      console.log leafletEvent.leafletEvent.layerType
+      editFeatureScope.$watch 'popups.title', (value) ->
+        ( elem.title = value ) for elem in $scope.newContribution.references when elem.leaflet_id? and elem.leaflet_id == layer._leaflet_id
+        return
+      editFeatureScope.$watch 'popups', (value) ->
+        layer.options.properties = value
+        return
+
       popupContent = $compile('<div popup-input="" ></div>')(editFeatureScope)
       layer.bindPopup popupContent[0],
         minWidth: 250
         feature: {}
-      .openPopup();
-      editFeatureScope.$watch 'popups', (value) ->
-        layer.options.properties = value
-        return
+      .openPopup()
       return
+
     $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->
       feature = leafletEvent.leafletEvent.popup.options.feature
       if feature.mode == 'show'
@@ -162,8 +193,10 @@ angular.module("SustainabilityApp").controller "MapController", [
         $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope)
 
       return
+
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
       #console.log leafletEvent
       return
+
     return
 ]

@@ -6,7 +6,7 @@ angular.module("SustainabilityApp").directive 'popupInput', ->
   #scope: true
   controller: ($scope) ->
     # pre-configure the popup object for polygons and markers
-    $scope.popups = {}
+    $scope.popups = { "title": "", "description": "" }
     if $scope.layer_type == "marker"
       $scope.popups["marker-size"] = "medium"
       $scope.popups["marker-symbol"] = "circle-stroked"
@@ -18,6 +18,6 @@ angular.module("SustainabilityApp").directive 'popupInput', ->
       $scope.popups["fill"] = "#3bc43b"
       $scope.popups["fill-opacity"] = 0.6
     return
-  link: (scope, element, attrs, controller) ->
-    return
+  #link: (scope, element, attrs, controller) ->
+  #  return
 
