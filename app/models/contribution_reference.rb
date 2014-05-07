@@ -1,0 +1,2 @@
+class ContributionReference < Reference
+end

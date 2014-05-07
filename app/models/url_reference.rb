@@ -1,0 +1,2 @@
+class UrlReference < Reference
+end

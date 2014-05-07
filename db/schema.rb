@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140426140149) do
+ActiveRecord::Schema.define(version: 20140507132522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,5 +34,15 @@ ActiveRecord::Schema.define(version: 20140426140149) do
   end
 
   add_index "features", ["geom"], :name => "index_features_on_geom", :spatial => true
+
+  create_table "references", force: true do |t|
+    t.integer  "contribution_id"
+    t.string   "type"
+    t.string   "title"
+    t.integer  "ref_id"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

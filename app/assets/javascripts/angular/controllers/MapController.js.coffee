@@ -134,6 +134,7 @@ angular.module("SustainabilityApp").controller "MapController", [
           $scope.drawControl.disableEditing()
           return
         submit: ->
+          @references = @references.filter (ref) -> ref.leaflet_id?
           @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
           new Contribution(@).create().then (data) ->
             temp = $scope.geojson

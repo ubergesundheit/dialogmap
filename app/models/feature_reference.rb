@@ -1,0 +1,2 @@
+class FeatureReference < Reference
+end
