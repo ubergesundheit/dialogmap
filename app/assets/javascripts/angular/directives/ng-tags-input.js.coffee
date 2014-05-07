@@ -298,7 +298,7 @@
               tag[options.displayProperty].trim()
 
           scope.track = (tag) ->
-            tag[options.displayProperty] || ""
+            tag.id || tag.leaflet_id
 
           scope.newTagChange = ->
             events.trigger "input-change", scope.newTag.text
