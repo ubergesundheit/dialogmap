@@ -5,7 +5,7 @@ class Contribution < ActiveRecord::Base
   accepts_nested_attributes_for :features
   accepts_nested_attributes_for :references
 
-  validates_presence_of :title, :description, :features
+  validates_presence_of :title, :description
 
   scope :within, -> (bbox_string) {
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })

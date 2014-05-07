@@ -21,7 +21,7 @@ class Api::ContributionsController < Api::BaseController
   # POST /contributions.json
   def create
     @contribution = Contribution.new(contribution_params)
-
+    binding.pry
     if @contribution.save
       render json: @contribution.as_json(include: :features), status: :created
     else
@@ -86,7 +86,8 @@ class Api::ContributionsController < Api::BaseController
               { properties: allowed_properties }
             ]
           }
-        ]
+        ],
+        references_attributes: [  :type, :ref_id, :title ]
       ).tap do |whitelisted|
         whitelisted['features_attributes'].try(:each_index) do |i|
           whitelisted['features_attributes'][i]['geojson']['geometry']['coordinates'] = params['contribution']['features_attributes'][i]['geojson']['geometry']['coordinates']

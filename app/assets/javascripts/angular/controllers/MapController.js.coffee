@@ -102,13 +102,16 @@ angular.module("SustainabilityApp").controller "MapController", [
           if reference._leaflet_id?
             tempRef =
               title: ''
-              type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
-              leaflet_id: reference._leaflet_id
+              #type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
+              type: 'FeatureReference'
+              ref_id: reference._leaflet_id
+              drawnItem: true
           else
             tempRef =
               title: if reference.geometry? then reference.properties.title
-              type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
-              id: reference.id
+              #type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
+              type: 'FeatureReference'
+              ref_id: reference.id
 
           @references.push tempRef
           return
@@ -134,7 +137,8 @@ angular.module("SustainabilityApp").controller "MapController", [
           $scope.drawControl.disableEditing()
           return
         submit: ->
-          @references = @references.filter (ref) -> ref.leaflet_id?
+          @references_attributes = @references.filter (ref) -> !ref.drawnItem?
+          @references = undefined
           @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
           new Contribution(@).create().then (data) ->
             temp = $scope.geojson
@@ -178,7 +182,7 @@ angular.module("SustainabilityApp").controller "MapController", [
       editFeatureScope = $scope.$new()
       editFeatureScope.layer_type = leafletEvent.leafletEvent.layerType
       editFeatureScope.$watch 'popups.title', (value) ->
-        ( elem.title = value ) for elem in $scope.newContribution.references when elem.leaflet_id? and elem.leaflet_id == layer._leaflet_id
+        ( elem.title = value ) for elem in $scope.newContribution.references when elem.ref_id? and elem.ref_id == layer._leaflet_id
         return
       editFeatureScope.$watch 'popups', (value) ->
         layer.options.properties = value

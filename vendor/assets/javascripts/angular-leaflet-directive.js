@@ -937,8 +937,10 @@
                 }
                 });
                 scope.drawControl.disableEditing = function () {
-                  editToolbar.disable();
-                  editToolbar = undefined;
+                  if(typeof editToolbar !== 'undefined') {
+                    editToolbar.disable();
+                    editToolbar = undefined;
+                  }
                 }
                 editToolbar.enable();
                 e.layer.on('dragend', function () {
