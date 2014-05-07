@@ -920,6 +920,7 @@
               var drawControl = new L.Control.Draw(options);
               //map.addControl(drawControl);
               scope.drawControl = drawControl;
+              scope.drawControl.disableEditing = function () {};
               map.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
 
