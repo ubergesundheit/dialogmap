@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   root 'page#index'
+  devise_for :users, path: "api/users", defaults: { format: :json }
 
   namespace :api, defaults: { format: :json } do
     resources :contributions
+
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

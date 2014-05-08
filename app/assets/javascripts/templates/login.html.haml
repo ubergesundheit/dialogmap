@@ -1,0 +1,4 @@
+%form{ name: "login_form", novalidate: true }
+  %input{ ng_model: "login.email", placeholder: "E-Mail" }
+  %input{ ng_model: "login.password", placeholder: "Password", type: "password" }
+  %button{ ng_click: "performLogin()" } einloggen

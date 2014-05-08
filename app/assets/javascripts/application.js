@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require angular
 //= require angularjs/rails/resource
+//= require angular-devise
+//= require ngDialog
 //= require mapbox
 //= require angular-leaflet-directive
 //= require leaflet.draw

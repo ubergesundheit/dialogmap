@@ -3,7 +3,9 @@ angular.module("SustainabilityApp").controller "MapController", [
   "$compile"
   "leafletData"
   "Contribution"
-  ($scope, $compile, leafletData, Contribution) ->
+  "Auth"
+  "ngDialog"
+  ($scope, $compile, leafletData, Contribution, Auth, ngDialog) ->
     L.Icon.Default.imagePath = 'assets/'
     angular.extend $scope,
       # leaflet-directive stuff
@@ -85,6 +87,17 @@ angular.module("SustainabilityApp").controller "MapController", [
             map.options.drawControl = true
           return
         return
+      login: {}
+      performLogin: ->
+        console.log $scope.login
+        Auth.login
+          email: $scope.login.email
+          password: $scope.login.password
+        .then (user) ->
+          console.log user
+          ngDialog.close()
+          return
+        return
 
       # Contribution Object
       newContribution:
@@ -158,6 +171,7 @@ angular.module("SustainabilityApp").controller "MapController", [
           $scope.addingFeature = false
           return
 
+    ngDialog.open({ template: 'login.html', scope: $scope });
     # init stuff
     # put the feature creation controls to the map because someone could want to create a new contribution
     # which gets started by creating a feature

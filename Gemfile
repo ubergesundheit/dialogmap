@@ -5,6 +5,7 @@ ruby '2.1.1'
 gem 'rails', '4.1.1'
 
 gem 'pg'
+gem 'devise'
 
 gem 'sass-rails', '~> 4.0.3'
 gem 'compass-rails'
@@ -16,6 +17,8 @@ gem 'angularjs-rails'
 gem 'angularjs-rails-resource'
 gem 'angular_rails_csrf'
 gem 'angular-rails-templates', github: 'whitehat101/angular-rails-templates'
+gem 'rails-assets-angular-devise'
+gem 'rails-assets-ngDialog'
 
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'

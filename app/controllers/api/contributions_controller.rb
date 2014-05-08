@@ -5,7 +5,7 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.within(bbox_params).as_json(include: :features)
+      render json: Contribution.within(bbox_params).as_json(include: {features: {}, references: {}})
     else
       render json: Contribution.all.as_json(include: :features)
     end
@@ -14,7 +14,7 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions/1
   # GET /contributions/1.json
   def show
-    render json: @contribution.as_json(include: :features)
+    render json: @contribution.as_json(:include => {:features => {}, :references =>{}})
   end
 
   # POST /contributions
