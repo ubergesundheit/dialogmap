@@ -21,9 +21,9 @@ class Api::ContributionsController < Api::BaseController
   # POST /contributions.json
   def create
     @contribution = Contribution.new(contribution_params)
-    binding.pry
+
     if @contribution.save
-      render json: @contribution.as_json(include: :features), status: :created
+      render json: @contribution, status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end

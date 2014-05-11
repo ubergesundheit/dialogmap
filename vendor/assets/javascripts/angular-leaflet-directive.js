@@ -919,8 +919,8 @@
               angular.extend(options, controls.draw.options);
               var drawControl = new L.Control.Draw(options);
               //map.addControl(drawControl);
-              scope.drawControl = drawControl;
-              scope.drawControl.disableEditing = function () {};
+              map.drawControl = drawControl;
+              map.drawControl.disableEditing = function () {};
               map.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
 
@@ -936,7 +936,7 @@
                     maintainColor: !1
                 }
                 });
-                scope.drawControl.disableEditing = function () {
+                map.drawControl.disableEditing = function () {
                   if(typeof editToolbar !== 'undefined') {
                     editToolbar.disable();
                     editToolbar = undefined;
@@ -1116,6 +1116,7 @@
       var paths = {};
       var markers = {};
       var geoJSON = {};
+      var drawControl = void 0;
       this.setMap = function (leafletMap, scopeId) {
         var defer = getUnresolvedDefer(maps, scopeId);
         defer.resolve(leafletMap);

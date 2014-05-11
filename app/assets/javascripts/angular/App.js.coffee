@@ -1,3 +1,4 @@
+L.Icon.Default.imagePath = 'assets/'
 angular.module "SustainabilityApp", ["leaflet-directive", "rails", "ngTagsInput", "Devise", "ngDialog"]
 .config [
   "AuthProvider"

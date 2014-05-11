@@ -99,7 +99,8 @@
     "$timeout"
     "$document"
     "tagsInputConfig"
-    ($timeout, $document, tagsInputConfig) ->
+    "Contribution"
+    ($timeout, $document, tagsInputConfig, Contribution) ->
       TagList = (options, events) ->
         self = {}
         getTagText = undefined
@@ -360,8 +361,7 @@
           #  return
 
           element.find(".add_reference").on "click", (evt) ->
-            scope.$parent.$parent.newContribution.startAddFeatureReference()
-            #input[0].focus()
+            Contribution.startAddFeatureReference()
             return
 
           return
