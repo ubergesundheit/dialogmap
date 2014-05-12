@@ -7,6 +7,15 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       url: "/api/contributions"
       name: 'contribution'
 
+    resource.contributions = []
+    resource.addInterceptor
+      response: (result, resourceConstructor, context) ->
+        if result.status == 200
+          resource.contributions = result.data
+        else if result.status == 201
+          resource.contributions.push result.data
+        result
+
     resource.composing =  false
     resource.addingFeature = false
     resource.references = []
@@ -91,77 +100,9 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         return
       return
 
+    resource.setCurrentContribution = (id) ->
+      ($rootScope.$apply -> resource.currentContribution = elem) for elem in resource.contributions when elem.id is id
+      return
+
     resource
 ]
-# newContribution:
-#   composing: false
-#   addingFeature: false
-#   references: []
-#   start: (reference) ->
-#     if reference?
-#       @reset()
-#       @addFeatureReference reference
-#     else
-#       @references = []
-#     $scope.setDrawControlVisibility(false)
-#     @composing = true
-#     return
-#   addFeatureReference: (reference) ->
-#     if reference._leaflet_id?
-#       tempRef =
-#         title: ''
-#         #type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
-#         type: 'FeatureReference'
-#         ref_id: reference._leaflet_id
-#         drawnItem: true
-#     else
-#       tempRef =
-#         title: if reference.geometry? then reference.properties.title
-#         #type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
-#         type: 'FeatureReference'
-#         ref_id: reference.id
-#
-#     @references.push tempRef
-#     return
-#   startAddFeatureReference: ->
-#     @addingFeature = true
-#     $scope.setDrawControlVisibility(true)
-#     return
-#   stopAddFeatureReference: ->
-#     @addingFeature = false
-#     $scope.setDrawControlVisibility(false)
-#     return
-#   abort: ->
-#     @reset()
-#     @composing = false
-#     @addingFeature = false
-#     $scope.setDrawControlVisibility(true)
-#     return
-#   reset: ->
-#     @title = ''
-#     @description = ''
-#     @references = []
-#     $scope.drawControl.options.edit.featureGroup.clearLayers()
-#     $scope.drawControl.disableEditing()
-#     return
-#   submit: ->
-#     @references_attributes = @references.filter (ref) -> !ref.drawnItem?
-#     @references = undefined
-#     @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
-#     new Contribution(@).create().then (data) ->
-#       temp = $scope.geojson
-#       for feature in data.featuresAttributes
-#         do ->
-#           temp.data.features.push feature.geojson
-#           return
-#       $scope.geojson =
-#         style: temp.style
-#         onEachFeature: temp.onEachFeature
-#         pointToLayer: temp.pointToLayer
-#         data: temp.data
-#       return
-#     @reset()
-#     $scope.setDrawControlVisibility(true)
-#     @composing = false
-#     @addingFeature = false
-#     return

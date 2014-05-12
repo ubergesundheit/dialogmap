@@ -5,7 +5,8 @@ angular.module("SustainabilityApp").directive 'descriptionArea', ->
   scope: { descr: '=ngModel', references: '=references' }
   templateUrl: 'descriptionarea.html'
   link: (scope, element, attrs, controller) ->
-    scope.removeDraftFeature = scope.$parent.removeDraftFeature
+    scope.removeDraftFeature = ->
+      console.log 'implement me!!!'
     scope.$watch 'internal.raw_description', (value) ->
       highlighted = ''
       if value? and value != ""

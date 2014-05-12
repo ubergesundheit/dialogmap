@@ -1,5 +1,6 @@
-%div{ ng_controller: "MainController" }
-  #map{ :ng_controller => "MapController" }
+%div{ ng_controller: "MainController"}
+  #map{ ng_controller: "MapController" }
     %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
-  #sidebar{ :ng_controller => "SidebarController" }
-    %div{ contribution_input: true }
+  #sidebar{ ng_controller: "SidebarController" }
+    %div{ ng_include: "'contribution_input.html'" }
+    %div{ ng_include: "'contribution_show.html'" }

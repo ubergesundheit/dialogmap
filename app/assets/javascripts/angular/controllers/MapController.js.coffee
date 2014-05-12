@@ -30,12 +30,10 @@ angular.module("SustainabilityApp").controller "MapController", [
         style: L.mapbox.simplestyle.style
         pointToLayer: L.mapbox.marker.style
         onEachFeature: (feature, layer) ->
-          popupContent = "<div ng-include=\"'popupcontent_show.html'\"></div>"
-          feature.mode = 'show'
-          layer.bindPopup popupContent,
-            minWidth: 250,
-            feature: feature
+          layer.bindPopup L.mapbox.marker.createPopup(feature),
+            closeButton: false
           layer.on 'click', (evt) ->
+            Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
             if Contribution.addingFeature == true
               feature = evt.target.feature
               Contribution.addFeatureReference feature
@@ -71,9 +69,6 @@ angular.module("SustainabilityApp").controller "MapController", [
         $scope.drawControl.options.edit.featureGroup.removeLayer leaflet_id
         return
 
-      # Contribution state
-      #composing: false
-      #addingFeature: false
       # Map Object use with .then (map) ->
       map_main: leafletData.getMap('map_main')
       setDrawControlVisibility: (onoff) ->
@@ -87,79 +82,6 @@ angular.module("SustainabilityApp").controller "MapController", [
           return
         return
       Contribution: Contribution
-      # Contribution Object
-      # newContribution:
-      #   composing: false
-      #   addingFeature: false
-      #   references: []
-      #   start: (reference) ->
-      #     if reference?
-      #       @reset()
-      #       @addFeatureReference reference
-      #     else
-      #       @references = []
-      #     $scope.setDrawControlVisibility(false)
-      #     @composing = true
-      #     return
-      #   addFeatureReference: (reference) ->
-      #     if reference._leaflet_id?
-      #       tempRef =
-      #         title: ''
-      #         #type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
-      #         type: 'FeatureReference'
-      #         ref_id: reference._leaflet_id
-      #         drawnItem: true
-      #     else
-      #       tempRef =
-      #         title: if reference.geometry? then reference.properties.title
-      #         #type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
-      #         type: 'FeatureReference'
-      #         ref_id: reference.id
-      #
-      #     @references.push tempRef
-      #     return
-      #   startAddFeatureReference: ->
-      #     @addingFeature = true
-      #     $scope.setDrawControlVisibility(true)
-      #     return
-      #   stopAddFeatureReference: ->
-      #     @addingFeature = false
-      #     $scope.setDrawControlVisibility(false)
-      #     return
-      #   abort: ->
-      #     @reset()
-      #     @composing = false
-      #     @addingFeature = false
-      #     $scope.setDrawControlVisibility(true)
-      #     return
-      #   reset: ->
-      #     @title = ''
-      #     @description = ''
-      #     @references = []
-      #     $scope.drawControl.options.edit.featureGroup.clearLayers()
-      #     $scope.drawControl.disableEditing()
-      #     return
-      #   submit: ->
-      #     @references_attributes = @references.filter (ref) -> !ref.drawnItem?
-      #     @references = undefined
-      #     @features_attributes = ( { "geojson": feature } for feature in $scope.drawControl.options.edit.featureGroup.toGeoJSON().features)
-      #     new Contribution(@).create().then (data) ->
-      #       temp = $scope.geojson
-      #       for feature in data.featuresAttributes
-      #         do ->
-      #           temp.data.features.push feature.geojson
-      #           return
-      #       $scope.geojson =
-      #         style: temp.style
-      #         onEachFeature: temp.onEachFeature
-      #         pointToLayer: temp.pointToLayer
-      #         data: temp.data
-      #       return
-      #     @reset()
-      #     $scope.setDrawControlVisibility(true)
-      #     @composing = false
-      #     @addingFeature = false
-      #     return
 
     # init stuff
     # put the feature creation controls to the map because someone could want to create a new contribution
@@ -169,6 +91,7 @@ angular.module("SustainabilityApp").controller "MapController", [
       temp = $scope.geojson
       for feature in data.featuresAttributes
         do ->
+          feature.geojson.properties.contributionId = data.id
           temp.data.features.push feature.geojson
           return
       $scope.geojson =
@@ -177,6 +100,7 @@ angular.module("SustainabilityApp").controller "MapController", [
         pointToLayer: temp.pointToLayer
         data: temp.data
       return
+
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
       $scope.updateGeoJSON()
       return
@@ -210,19 +134,12 @@ angular.module("SustainabilityApp").controller "MapController", [
       .openPopup()
       return
 
-    $scope.$on 'leafletDirectiveMap.popupopen', (evt, leafletEvent) ->
-      feature = leafletEvent.leafletEvent.popup.options.feature
-      if feature.mode == 'show'
-        newScope = $scope.$new()
-        newScope.feature = feature
-        newScope.Contribution = $scope.Contribution
-        $compile(leafletEvent.leafletEvent.popup._contentNode)(newScope)
-
-      return
-
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
       #console.log leafletEvent
       return
 
+    $scope.$watch 'Contribution.currentContribution', (value) ->
+      #console.log $scope.geojson
+      $scope.geojson
     return
 ]

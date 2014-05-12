@@ -7,7 +7,7 @@ class Api::ContributionsController < Api::BaseController
     if bbox_params != {}
       render json: Contribution.within(bbox_params).as_json(include: {features: {}, references: {}})
     else
-      render json: Contribution.all.as_json(include: :features)
+      render json: Contribution.all.as_json(include: {features: {}, references: {}})
     end
   end
 
@@ -23,7 +23,7 @@ class Api::ContributionsController < Api::BaseController
     @contribution = Contribution.new(contribution_params)
 
     if @contribution.save
-      render json: @contribution, status: :created
+      render json: @contribution.as_json(:include => {:features => {}, :references =>{}}), status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end

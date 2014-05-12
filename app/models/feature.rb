@@ -43,6 +43,10 @@ class Feature < ActiveRecord::Base
     'Feature'
   end
 
+  def properties
+    super.merge({ :contribution_id => self.contribution_id, :id => self.id })
+  end
+
   private
     def decode_geojson_from_params
       geojson = RGeo::GeoJSON.decode(self.geojson, :json_parser => :json)

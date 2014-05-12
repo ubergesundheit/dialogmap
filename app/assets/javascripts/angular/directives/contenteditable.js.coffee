@@ -1,9 +1,10 @@
-angular.module("contenteditable", []).directive "contenteditable", [
+angular.module("SustainabilityApp").directive "descriptioninput", [
   "$timeout"
   ($timeout) ->
     return (
       restrict: "A"
       require: "?ngModel"
+      transclude: true
       link: (scope, element, attrs, ngModel) ->
 
         # don't do anything unless this is actually bound to a model

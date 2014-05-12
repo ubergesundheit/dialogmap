@@ -25,25 +25,34 @@ h3
   bottom: 0
   right: 0
 
-.input_title
+input, button
+  margin-bottom: 2px
+  margin-top: 2px
+  border: solid $darker-grey 1px
+
+.input_title, input
   width: 100%
   padding: 4px
 
-//.input_title, .highlighterContainer
-//  margin: 4px
-
-.input_title, .highlighter, textarea.txt, textarea.popup_txt
+.input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
+.contribution_descriptioninput
   color: $darker-grey
   font-family: $default-font-family
   border: solid $darker-grey 1px
   background-color: $lighter-grey
   font-size: 12pt
 
-textarea.popup_txt
+textarea.popup_txt, .contribution_descriptioninput
   width: 100%
   resize: none
   padding: 4px
-  margin-bottom: 4px
-  margin-top: 4px
+  margin-bottom: 2px
+  margin-top: 2px
 
+.contribution_descriptioninput
+  height: 100px
+  &:focus
+    outline: 0
 
+button
+  @include sassy-button("glass", 5px, 16px, #8cbe5f)

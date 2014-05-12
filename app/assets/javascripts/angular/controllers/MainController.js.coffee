@@ -6,16 +6,23 @@ angular.module("SustainabilityApp").controller "MainController", [
   "ngDialog"
   ($scope, $compile, Contribution, Auth, ngDialog) ->
     angular.extend $scope,
-      #Contribution: Contribution
-      login: {}
+      loginCredentials: {}
       performLogin: ->
-        console.log $scope.login
         Auth.login
-          email: $scope.login.email
-          password: $scope.login.password
+          email: $scope.loginCredentials.email
+          password: $scope.loginCredentials.password
         .then (user) ->
+          $scope.loginCredentials = {}
+          $scope.user =
+            email: user.email
+          $scope.authenticated = Auth.isAuthenticated()
           console.log user
-          ngDialog.close()
           return
         return
+      performLogout: ->
+        Auth.logout().then ->
+          $scope.user = undefined
+          $scope.authenticated = Auth.isAuthenticated()
+          return
+    return
 ]
