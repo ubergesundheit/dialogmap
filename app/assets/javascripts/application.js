@@ -15,6 +15,7 @@
 //= require angular
 //= require angularjs/rails/resource
 //= require angular-devise
+//= require ng-contenteditable
 //= require ngDialog
 //= require mapbox
 //= require angular-leaflet-directive

@@ -26,12 +26,12 @@ angular.module("SustainabilityApp").directive "descriptioninput", [
         # view -> model
         element.bind "input", (e) ->
           scope.$apply ->
-            html = undefined
-            html2 = undefined
-            rerender = undefined
+            #html = undefined
+            #html2 = undefined
+            #rerender = undefined
             html = element.html()
             rerender = false
-            html = html.replace(/<br>$/, "")  if opts.stripBr
+            html = html.replace(/<br>$/, "")  #if opts.stripBr
             if opts.noLineBreaks
               html2 = html.replace(/<div>/g, "").replace(/<br>/g, "").replace(/<\/div>/g, "")
               if html2 isnt html
