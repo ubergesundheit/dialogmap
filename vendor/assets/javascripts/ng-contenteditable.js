@@ -64,6 +64,8 @@ ngContentEditable.directive('editable', ['$compile', 'editable.dragHelperService
 
             var _processData = function (event, callback) {
 
+                console.log(event.dataTransfer);
+
                 var data = event.dataTransfer || event.clipboardData || null;
 
                 if (!data) {
@@ -76,9 +78,12 @@ ngContentEditable.directive('editable', ['$compile', 'editable.dragHelperService
                     uriData = data.getData('text/uri-list'),
                     textData = data.getData('text'),
                     textData = (textData) ? '<span>' + textData + '</span>' : null,
+                    feature_refData = data.getData('reference/feature'),
                     filesData = data.files,
                     types = data.types;
 
+                scope.feature_refData = feature_refData;
+                //console.log(scope);
                 data = (htmlData || _formatText(textData) || _formatUri(uriData));
 
                 if (filesData.length) {
@@ -182,14 +187,14 @@ ngContentEditable.directive('editable', ['$compile', 'editable.dragHelperService
                 })
             );
             element[0].addEventListener('drop', function (event) {
-              console.log(event);
                 event.preventDefault();
 
                 var component = drag.getDragElement();
 
                 if (component) {
+                    console.log('component');
                     event.preventDefault();
-                    var el = component[0],
+                    var el = component,
                         r = range.captureRange(event),
                         placeholder = document.createElement('span');
                     el.parentNode.removeChild(el);
@@ -215,22 +220,19 @@ ngContentEditable.directive('editableComponent', ['editable.dragHelperService', 
     return {
         restrict: 'C',
         link: function (scope, element, attrs) {
+            // console.log(attrs);
+            console.log(scope);
+            scope.feature_refData = JSON.parse(scope.$parent.feature_refData);
             element.attr('contenteditable', false);
-            ((element[0])
-                //.attr('contenteditable', false)
-                .addEventListener('dragstart', function (event) {
-                    if (scope.$isNgContentEditable) {
-                        drag.setDragElement(element);
-                        return true;
-                    }
-                    //console.log(element[0].outerHTML);
-                    //event.dataTransfer.setData('text/html', element[0].outerHTML);
-                    event.dataTransfer.setData('reference', JSON.stringify({ "bam": "oida"}));
-                    //event.dataTransfer.setData('text/html', "<span draggable=\"true\" class=\"draggable-tag\" contenteditable=\"false\" style=\"background-color:red\">wamba</span>");
-                    event.dataTransfer.setData('text/html', '<span ng-include="\'draggable-tag.html\'"></span>');
+            element[0].addEventListener('dragstart', function (event) {
+              event.dataTransfer.setData('text/html', element[0].innerHTML);
+              event.dataTransfer.setData('reference', JSON.stringify({ "bam": "oida"}));
+                if (scope.$isNgContentEditable) {
+                    drag.setDragElement(element[0]);
                     return true;
-                })
-            );
+                }
+                return true;
+            });
         }
     };
 }]);

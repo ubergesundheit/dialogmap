@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive "descriptioninput", [
+angular.module("SustainabilityApp").directive "contenteditable", [
   "$timeout"
   ($timeout) ->
     return (

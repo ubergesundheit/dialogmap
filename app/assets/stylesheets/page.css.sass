@@ -51,8 +51,62 @@ textarea.popup_txt, .contribution_descriptioninput
 
 .contribution_descriptioninput
   height: 100px
+  position: relative
   &:focus
     outline: 0
 
+.disabled_contenteditable
+  background-color: #AAAAAA
+
 button
   @include sassy-button("glass", 5px, 16px, #8cbe5f)
+
+.contributions-buttons
+  position: absolute
+  width: 100px
+  background-color: #EFEFEF
+  color: green
+  .button
+    width: 26px
+    height: 26px
+    display: inline-block
+    text-align: center
+    text-decoration: none
+    background-image: url("spritesheet.png")
+  .marker
+    background-position: -122px -2px
+  .polygon
+    background-position: -31px -2px
+
+
+.contribution-description-tag
+  display: inline
+  background-color: #CCCCCC
+  border: solid 1px #505050
+  height: 14px
+  padding-left: 3px
+  padding-right: 3px
+  margin-left: 2px
+  margin-right: 2px
+  @include user-select(none)
+  .tag-title
+    color: $lighter-grey
+    padding-right: 2px
+    padding-left: 2px
+    @include user-select(text)
+  .tag-close
+    color: $darker-grey
+    text-decoration: none
+    @include user-select(none)
+  .contribution-icon
+    width: 14px
+    height: 14px
+    display: inline-block
+    text-align: center
+    text-decoration: none
+    background-image: url("spritesheet.png")
+    @include user-select(none)
+  .marker
+    background-position: -128px -8px
+  .polygon
+    background-position: -37px -8px

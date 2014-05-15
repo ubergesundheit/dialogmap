@@ -20,15 +20,17 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.addingFeature = false
     resource.references = []
     resource.features = []
+    resource._currentDrawHandler = undefined
     resource._setDrawControlVisibility = (onoff) ->
-      leafletData.getMap('map_main').then (map) ->
-        if map.options.drawControl == true and onoff == false
-          map.removeControl(map.drawControl)
-          map.options.drawControl = false
-        else if map.options.drawControl == false and onoff == true
-          map.addControl(map.drawControl)
-          map.options.drawControl = true
-        return
+      console.log 'actually there is no draw control to toggle..'
+      # leafletData.getMap('map_main').then (map) ->
+      #   if map.options.drawControl == true and onoff == false
+      #     map.removeControl(map.drawControl)
+      #     map.options.drawControl = false
+      #   else if map.options.drawControl == false and onoff == true
+      #     map.addControl(map.drawControl)
+      #     map.options.drawControl = true
+      #   return
       return
     resource.start = (reference) ->
       $rootScope.$broadcast('Contribution.start')
@@ -37,8 +39,18 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         @addFeatureReference reference
       else
         @references = []
-      @_setDrawControlVisibility(false)
       @composing = true
+      return
+    resource.addFeature = (feature) ->
+      @features.push feature
+      return
+    resource.removeFeature = (leaflet_id) ->
+      @features = @features.filter (feature) -> feature isnt parseInt(leaflet_id)
+      leafletData.getMap('map_main').then (map) ->
+        map.drawControl.options.edit.featureGroup.removeLayer leaflet_id
+        if map.drawControl.options.edit.featureGroup.getLayers().length == 0
+          map.drawControl.disableEditing();
+        return
       return
     resource.addFeatureReference = (reference) ->
       if reference._leaflet_id?
@@ -66,6 +78,22 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       $rootScope.$broadcast('Contribution.startAddFeatureReference')
       @addingFeature = false
       @_setDrawControlVisibility(false)
+      return
+    resource.startAddMarker = ->
+      leafletData.getMap('map_main').then (map) ->
+        resource._currentDrawHandler = new L.Draw.Marker(map)
+        resource._currentDrawHandler.enable()
+        return
+      return
+    resource.startAddPolygon = ->
+      leafletData.getMap('map_main').then (map) ->
+        resource._currentDrawHandler = new L.Draw.Polygon(map)
+        resource._currentDrawHandler.enable()
+        return
+      return
+    resource.disableDraw = ->
+      @_currentDrawHandler.disable()
+      @_currentDrawHandler = undefined
       return
     resource.abort = ->
       @reset()
@@ -96,7 +124,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         new resource(contribution).create().then (data) ->
           $rootScope.$broadcast('Contribution.submitted', data)
           return
-        resource._setDrawControlVisibility(true)
+        #resource._setDrawControlVisibility(true)
         return
       return
 

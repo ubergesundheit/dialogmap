@@ -936,6 +936,11 @@
                     maintainColor: !1
                 }
                 });
+                map.on('draw:deleted', function(e) {
+                  if(map.drawControl.options.edit.featureGroup.getLayers().length == 0){
+                    map.drawControl.disableEditing();
+                  }
+                });
                 map.drawControl.disableEditing = function () {
                   if(typeof editToolbar !== 'undefined') {
                     editToolbar.disable();

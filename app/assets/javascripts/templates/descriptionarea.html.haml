@@ -1,12 +1,11 @@
-.highlighterArea
-  .highlighterContainer
-    .highlighter
-    //{{ internal.highlighted }}
-  %textarea.txt{ :ng_model => "internal.raw_description", :placeholder => 'Beschreibung' }
-  .references_container
-    %tags-input{ ng_model: "references", display_property: "title", on_tag_removed: "removeDraftFeature($tag.ref_id)" }
-    //%ul.references_list
-    //  %li.references_item{ :ng_repeat => "ref in references" }
-    //    {{ ref.id }}
-    //  %li.references_item
-    //    .add_reference +
+%div{ id: "contribution_description_text", contenteditable: "true", class: "contribution_descriptioninput", ng_model: "internal.description" }
+%div{ class: "contributions-buttons" }
+  %a{ id: "create-marker", class: "button marker", href: "#", title: "Draw a marker", ng_click: "clickMarker()" }
+  %a{ id: "create-polygon", class: "button polygon", href: "#", title: "Draw a polygon", ng_click: "clickPolygon()" }
+
+%div{ id: "tag-blueprint", class: "contribution-description-tag", contenteditable: "false", leaflet_id: "new", ng_hide: "true" }
+  %span{ class: "contribution-icon", contenteditable: "false" }
+  %span{ class: "tag-title", contenteditable: "true" }
+  %a{ href: "#", class: "tag-close", contenteditable: "false", ng_click: "clickDelete()" }
+
+{{ internal.description }}

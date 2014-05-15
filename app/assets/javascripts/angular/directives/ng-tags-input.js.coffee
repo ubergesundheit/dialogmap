@@ -292,14 +292,21 @@
             invalid: null
 
           scope.getDisplayText = (tag) ->
-            if options.displayProperty.indexOf('.') != -1
+            if options.displayProperty.indexOf('.') != -1 # is nested
               properties_path = options.displayProperty.split('.')
-              tag[properties_path[0]][properties_path[1]].trim()
+              curr_path = tag[properties_path.shift()]
+              while(properties_path.length > 1)
+                curr_path = curr_path[properties_path.shift()]
+
+              curr_path[properties_path[0]].trim()
             else
               tag[options.displayProperty].trim()
 
           scope.track = (tag) ->
-            tag.ref_id
+            if tag._leaflet_id?
+              tag._leaflet_id
+            else
+              tag.ref_id
 
           scope.newTagChange = ->
             events.trigger "input-change", scope.newTag.text
@@ -744,7 +751,7 @@
     "$templateCache"
     ($templateCache) ->
       #$templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" ng-click=\"tagList.selected = $index\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li></ul><input class=\"input\" placeholder=\"{{options.placeholder}}\" tabindex=\"{{options.tabindex}}\" ng-model=\"newTag.text\" ng-change=\"newTagChange()\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ti-autosize=\"\"></div></div>"
-      $templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item editable-component\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" lol-ng-click=\"tagList.selected = $index\" draggable=\"true\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li><li class=\"tag-item add_reference\"><span>+</span></li></ul></div></div>"
+      $templateCache.put "ngTagsInput/tags-input.html", "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item draggable-tag\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" lol-ng-click=\"tagList.selected = $index\" draggable=\"true\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li><li class=\"tag-item add_reference\"><span>+</span></li></ul></div></div>"
       $templateCache.put "ngTagsInput/auto-complete.html", "<div class=\"autocomplete\" ng-show=\"suggestionList.visible\"><ul class=\"suggestion-list\"><li class=\"suggestion-item\" ng-repeat=\"item in suggestionList.items track by track(item)\" ng-class=\"{selected: item == suggestionList.selected}\" ng-click=\"addSuggestion()\" ng-mouseenter=\"suggestionList.select($index)\" ng-bind-html=\"highlight(item)\"></li></ul></div>"
   ]
   return
