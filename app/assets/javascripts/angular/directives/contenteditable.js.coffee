@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive "contenteditable", [
+angular.module("SustainabilityApp").directive "OLOLOLOLcontenteditable", [
   "$timeout"
   ($timeout) ->
     return (
@@ -6,7 +6,6 @@ angular.module("SustainabilityApp").directive "contenteditable", [
       require: "?ngModel"
       transclude: true
       link: (scope, element, attrs, ngModel) ->
-
         # don't do anything unless this is actually bound to a model
         return  unless ngModel
 
@@ -26,12 +25,12 @@ angular.module("SustainabilityApp").directive "contenteditable", [
         # view -> model
         element.bind "input", (e) ->
           scope.$apply ->
-            #html = undefined
-            #html2 = undefined
-            #rerender = undefined
+            # html = undefined
+            # html2 = undefined
+            # rerender = undefined
             html = element.html()
             rerender = false
-            html = html.replace(/<br>$/, "")  #if opts.stripBr
+            html = html.replace(/<br>$/, "")  if opts.stripBr
             if opts.noLineBreaks
               html2 = html.replace(/<div>/g, "").replace(/<br>/g, "").replace(/<\/div>/g, "")
               if html2 isnt html

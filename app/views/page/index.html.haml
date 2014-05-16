@@ -4,10 +4,3 @@
   #sidebar{ ng_controller: "SidebarController" }
     %div{ ng_include: "'contribution_input.html'" }
     %div{ ng_include: "'contribution_show.html'" }
-    {{Contribution.features}}
-    {{Contribution.description}}
-    -#%div{ class: "editable", style:"height:40px", :"data-ng-model" => "hans.worst" }
-    -#%div{ droptarget: "true", style:"border:1px solid black;height: 40px; width: 100%", contenteditable: "true" }
-    -#%a{ href: "#", contenteditable: "false" } bla
-    -#= image_tag('marker-icon.png')
-    -#%p {{ hans.worst }}

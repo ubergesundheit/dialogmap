@@ -27,6 +27,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
 
     leafletData.getMap('map_main').then (map) ->
       map.on 'draw:created', (e) ->
+        e.layer.options.properties = {}
         Contribution.addFeature e.layer._leaflet_id
         # update the tag in the description field
         element.find('[leaflet_id=new]').attr('leaflet_id', e.layer._leaflet_id)
@@ -163,10 +164,11 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
       #updateExternalDescription()
       Contribution.description = element.find('#contribution_description_text').html()
       return
-    #
-    # scope.$watch 'Contribution.description', (value) ->
-    #   scope.internal.description = value
-    #   return
+
+    scope.$on 'Contribution.reset', (e) ->
+      scope.internal.description = ''
+      element.find('#contribution_description_text').html('')
+      return
     # scope.removeDraftFeature = ->
     #   console.log 'implement me!!!'
     # scope.$watch 'internal.raw_description', (value) ->

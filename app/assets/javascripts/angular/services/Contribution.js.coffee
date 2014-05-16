@@ -2,7 +2,8 @@ angular.module('SustainabilityApp').factory 'Contribution', [
   'railsResourceFactory'
   'leafletData'
   '$rootScope'
-  (railsResourceFactory, leafletData, $rootScope) ->
+  'propertiesHelper'
+  (railsResourceFactory, leafletData, $rootScope, propertiesHelper) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
@@ -19,7 +20,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.composing =  false
     resource.addingFeature = false
     resource.references = []
-    resource.features = []
+    resource.features = {}
     resource._currentDrawHandler = undefined
     resource._setDrawControlVisibility = (onoff) ->
       console.log 'actually there is no draw control to toggle..'
@@ -42,10 +43,10 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       @composing = true
       return
     resource.addFeature = (feature) ->
-      @features.push feature
+      @features[feature] = {}
       return
     resource.removeFeature = (leaflet_id) ->
-      @features = @features.filter (feature) -> feature isnt parseInt(leaflet_id)
+      @features = Object.keys(@features).filter (feature) -> feature isnt parseInt(leaflet_id)
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.options.edit.featureGroup.removeLayer leaflet_id
         if map.drawControl.options.edit.featureGroup.getLayers().length == 0
@@ -102,29 +103,61 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       @_setDrawControlVisibility(true)
       return
     resource.reset = ->
+      $rootScope.$broadcast('Contribution.reset')
       @title = ''
       @description = ''
       @references = []
-      @features = []
+      @features = {}
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.options.edit.featureGroup.clearLayers()
         map.drawControl.disableEditing()
         return
       return
-    resource.submit = ->
-      console.log @description
+    resource._prepareContribution = ->
       leafletData.getMap('map_main').then (map) ->
-        references_attributes = resource.references.filter (ref) -> !ref.drawnItem?
-        features_attributes = ( { "geojson": feature } for feature in map.drawControl.options.edit.featureGroup.toGeoJSON().features)
-        contribution =
+        features_attributes = []
+        descr = resource.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
+        el = document.createElement('div')
+        el.innerHTML = descr
+        tags = Array.prototype.slice.call(el.getElementsByClassName('contribution-description-tag'))
+        for tag in tags
+          do ->
+            l_id = tag.getAttribute('leaflet_id')
+            title = tag.getElementsByClassName('tag-title')[0].innerHTML
+            # create geojson from features and append some properties
+            geojson = map.drawControl.options.edit.featureGroup.getLayer(l_id).toGeoJSON()
+            geojson.properties = propertiesHelper.createProperties(title,l_id,geojson.geometry.type)
+            features_attributes.push { geojson: geojson }
+            descr = descr.replace(tag.outerHTML, "%[#{l_id}]%")
+
+        {
           title: resource.title
-          description: resource.description
-          references_attributes: references_attributes
+          description: descr.replace(/<br>$/, "")
           features_attributes: features_attributes
+          references_attributes: resource.references.filter (ref) -> !ref.drawnItem?
+        }
+    resource.submit = ->
+      @_prepareContribution().then (contribution) ->
         resource.abort()
-        # new resource(contribution).create().then (data) ->
-        #   $rootScope.$broadcast('Contribution.submitted', data)
-        #   return
+        console.log contribution
+        new resource(contribution).create().then (data) ->
+          $rootScope.$broadcast('Contribution.submitted', data)
+          return
+      # leafletData.getMap('map_main').then (map) ->
+      #   references_attributes = resource.references.filter (ref) -> !ref.drawnItem?
+        # features_attributes = (
+        #   (
+        #     feature.properties = propertiesHelper.createProperties(0,feature.geometry.type)
+        #     { "geojson": augmentFeature(feature,0) }
+        #   )
+        #   for feature in map.drawControl.options.edit.featureGroup.toGeoJSON().features
+        #     )
+        # contribution =
+        #   title: resource.title
+        #   description: resource._prepareDescription()
+        #   references_attributes: references_attributes
+        #   features_attributes: features_attributes
+
         #resource._setDrawControlVisibility(true)
         return
       return

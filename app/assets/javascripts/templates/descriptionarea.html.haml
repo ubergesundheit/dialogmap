@@ -1,4 +1,4 @@
-%div{ id: "contribution_description_text", contenteditable: "true", class: "contribution_descriptioninput", ng_model: "internal.description" }
+%div{ id: "contribution_description_text", contenteditable: "true", :"strip-br" => "true", class: "contribution_descriptioninput", ng_model: "internal.description" }
 %div{ class: "contributions-buttons" }
   %a{ id: "create-marker", class: "button marker", href: "#", title: "Draw a marker", ng_click: "clickMarker()" }
   %a{ id: "create-polygon", class: "button polygon", href: "#", title: "Draw a polygon", ng_click: "clickPolygon()" }
