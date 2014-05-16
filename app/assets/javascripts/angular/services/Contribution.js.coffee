@@ -112,6 +112,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         return
       return
     resource.submit = ->
+      console.log @description
       leafletData.getMap('map_main').then (map) ->
         references_attributes = resource.references.filter (ref) -> !ref.drawnItem?
         features_attributes = ( { "geojson": feature } for feature in map.drawControl.options.edit.featureGroup.toGeoJSON().features)
@@ -121,9 +122,9 @@ angular.module('SustainabilityApp').factory 'Contribution', [
           references_attributes: references_attributes
           features_attributes: features_attributes
         resource.abort()
-        new resource(contribution).create().then (data) ->
-          $rootScope.$broadcast('Contribution.submitted', data)
-          return
+        # new resource(contribution).create().then (data) ->
+        #   $rootScope.$broadcast('Contribution.submitted', data)
+        #   return
         #resource._setDrawControlVisibility(true)
         return
       return

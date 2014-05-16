@@ -18,25 +18,27 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
         startFeatureCreation()
         return
       clickDelete: (e) ->
-        stopFeatureCreation()
         leaflet_id = e.target.getAttribute('leaflet_id')
         Contribution.removeFeature(leaflet_id)
         Contribution.disableDraw()
         element.find("[leaflet_id=#{leaflet_id}]").remove()
-
+        stopFeatureCreation()
+        return
 
     leafletData.getMap('map_main').then (map) ->
       map.on 'draw:created', (e) ->
-        stopFeatureCreation()
         Contribution.addFeature e.layer._leaflet_id
         # update the tag in the description field
         element.find('[leaflet_id=new]').attr('leaflet_id', e.layer._leaflet_id)
-        #console.log element.find('[leaflet_id=new]')
+        stopFeatureCreation()
+        hideButtons()
         return
       map.on 'draw:aborted', (e) ->
         stopFeatureCreation()
         # reset input to previous state
         element.find('#contribution_description_text').html(scope.old_contents)
+        updateExternalDescription()
+        hideButtons()
         return
       return
 
@@ -53,6 +55,8 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
         .attr('contenteditable', true)
         .removeClass('disabled_contenteditable')
         )
+      updateExternalDescription()
+      return
 
     createReplacementNode = (oldText, type) ->
       replacementNode = document.createElement('div')
@@ -77,6 +81,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
       closeNode.setAttribute('draggable', 'false')
       closeNode.setAttribute('leaflet_id', 'new')
       closeNode.addEventListener('click', scope.clickDelete)
+      closeNode.setAttribute('ng-click', 'clickDelete()')
 
       replacementNode.appendChild(iconNode)
       replacementNode.appendChild(textNode)
@@ -98,16 +103,23 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
         range = document.selection.createRange()
         range.text = replacementText
       clearSelection()
+      updateExternalDescription()
+      return
+
+    updateExternalDescription = ->
+      Contribution.description = element.find('#contribution_description_text').html()
       return
 
     getSelection = ->
+      html = ""
       unless typeof window.getSelection is "undefined"
         sel = window.getSelection()
         if sel.rangeCount
           # selection is in a tag..
-          className = sel.getRangeAt(0).commonAncestorContainer.parentElement.className
-          if className == "tag-title" or className == "tag-close"
-            return ""
+          if sel.getRangeAt(0).commonAncestorContainer.parentElement?
+            className = sel.getRangeAt(0).commonAncestorContainer.parentElement.className
+            if className == "tag-title" or className == "tag-close"
+              return ""
           container = document.createElement("div")
           i = 0
 
@@ -116,7 +128,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
             ++i
           html = container.innerHTML
       else html = document.selection.createRange().htmlText  if document.selection? and document.selection.type is "Text"
-      #html
+      html
 
     clearSelection = ->
       if window.getSelection
@@ -147,6 +159,14 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
         hideButtons()
       return
 
+    scope.$watch 'internal.description', (value) ->
+      #updateExternalDescription()
+      Contribution.description = element.find('#contribution_description_text').html()
+      return
+    #
+    # scope.$watch 'Contribution.description', (value) ->
+    #   scope.internal.description = value
+    #   return
     # scope.removeDraftFeature = ->
     #   console.log 'implement me!!!'
     # scope.$watch 'internal.raw_description', (value) ->

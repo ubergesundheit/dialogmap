@@ -2,10 +2,3 @@
 %div{ class: "contributions-buttons" }
   %a{ id: "create-marker", class: "button marker", href: "#", title: "Draw a marker", ng_click: "clickMarker()" }
   %a{ id: "create-polygon", class: "button polygon", href: "#", title: "Draw a polygon", ng_click: "clickPolygon()" }
-
-%div{ id: "tag-blueprint", class: "contribution-description-tag", contenteditable: "false", leaflet_id: "new", ng_hide: "true" }
-  %span{ class: "contribution-icon", contenteditable: "false" }
-  %span{ class: "tag-title", contenteditable: "true" }
-  %a{ href: "#", class: "tag-close", contenteditable: "false", ng_click: "clickDelete()" }
-
-{{ internal.description }}
