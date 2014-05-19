@@ -14,6 +14,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         if result.status == 200
           resource.contributions = result.data
         else if result.status == 201
+          console.log resource.contributions
           resource.contributions.push result.data
         result
 
@@ -126,8 +127,8 @@ angular.module('SustainabilityApp').factory 'Contribution', [
             title = tag.getElementsByClassName('tag-title')[0].innerHTML
             # create geojson from features and append some properties
             geojson = map.drawControl.options.edit.featureGroup.getLayer(l_id).toGeoJSON()
-            geojson.properties = propertiesHelper.createProperties(title,l_id,geojson.geometry.type)
-            features_attributes.push { geojson: geojson }
+            geojson.properties = propertiesHelper.createProperties(title,geojson.geometry.type)
+            features_attributes.push { geojson: geojson, leaflet_id: l_id }
             descr = descr.replace(tag.outerHTML, "%[#{l_id}]%")
 
         {

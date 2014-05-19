@@ -1,6 +1,6 @@
 angular.module('SustainabilityApp').service "propertiesHelper", ->
-  @createProperties = (title,leaflet_id,type) ->
-    properties = { "title": title, "leaflet_id": leaflet_id }
+  @createProperties = (title,type) ->
+    properties = { "title": title }
     if type == "Point"
       properties["marker-size"] = "medium"
       properties["marker-symbol"] = "circle-stroked"

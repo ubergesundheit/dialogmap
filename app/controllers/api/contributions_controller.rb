@@ -85,7 +85,8 @@ class Api::ContributionsController < Api::BaseController
               },
               { properties: allowed_properties }
             ]
-          }
+          },
+          :leaflet_id
         ],
         references_attributes: [  :type, :ref_id, :title ]
       ).tap do |whitelisted|

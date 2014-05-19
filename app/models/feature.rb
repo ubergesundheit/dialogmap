@@ -3,6 +3,7 @@ class Feature < ActiveRecord::Base
   self.inheritance_column = 'inheritance_column'
   set_rgeo_factory_for_column(:geom, RGeo::Geographic.spherical_factory(:srid => 4326))
   attr_accessor :geojson
+  attr_accessor :leaflet_id
   hstore_accessor :properties, #simplestyle-spec github.com/mapbox/simplestyle-spec
     :title            => :string,
     :description      => :string,
@@ -39,12 +40,17 @@ class Feature < ActiveRecord::Base
     RGeo::GeoJSON.encode(self.geom)
   end
 
+  # overwritten
   def type
     'Feature'
   end
 
+  # augment the properties hash for better handling
   def properties
-    super.merge({ :contribution_id => self.contribution_id, :id => self.id })
+    props = super
+    props.merge! :contribution_id => self.contribution_id unless props.has_key? :contribution_id
+    props.merge! :id => self.id unless props.has_key? :id
+    props
   end
 
   private
