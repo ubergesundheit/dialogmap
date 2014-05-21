@@ -1,11 +1,9 @@
 angular.module("SustainabilityApp").controller "MapController", [
   "$scope"
-  "$compile"
   "leafletData"
   "Contribution"
-  "Auth"
-  "ngDialog"
-  ($scope, $compile, leafletData, Contribution, Auth, ngDialog) ->
+  "User"
+  ($scope, leafletData, Contribution, User) ->
     angular.extend $scope,
       # leaflet-directive stuff
       muenster:

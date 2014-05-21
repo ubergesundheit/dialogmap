@@ -1,7 +1,0 @@
-%form{ id: "login_form", name: "login_form", novalidate: true }
-  %input{ class: "username", ng_model: "loginCredentials.email", placeholder: "E-Mail" }
-  %input{ class: "password", ng_model: "loginCredentials.password", placeholder: "Passwort", type: "password" }
-  %button{ class: "sign_in", ng_click: "performLogin()" } Anmelden
-#user{ ng_show: "authenticated" }
-  {{ user.email }}
-  %button{ ng_click: "performLogout()" } Ausloggen

@@ -1,0 +1,15 @@
+%div{ ng_hide: "authenticated" }
+  %h3 Einloggen
+  %a{ ng_click: "showLoginTab=!showLoginTab", href:"#" } oder {{ showLoginTab ? "einloggen" : "registrieren" }}?
+  %form{ id: "register_form", name: "register_form", novalidate: true, ng_show: "showLoginTab" }
+    %input{ class: "username", ng_model: "registerCredentials.email", placeholder: "E-Mail" }
+    %input{ class: "password", ng_model: "registerCredentials.password", placeholder: "Passwort", type: "password" }
+    %input{ class: "password", ng_model: "registerCredentials.password_confirmation", placeholder: "Passwortwiederholung", type: "password" }
+    %button{ class: "sign_in", ng_click: "performRegister()" } Registrieren
+  %form{ id: "login_form", name: "login_form", novalidate: true, ng_hide: "showLoginTab" }
+    %input{ class: "username", ng_model: "loginCredentials.email", placeholder: "E-Mail" }
+    %input{ class: "password", ng_model: "loginCredentials.password", placeholder: "Passwort", type: "password" }
+    %button{ class: "sign_in", ng_click: "performLogin()" } Anmelden
+#modal_user{ ng_show: "authenticated" }
+  {{ user.email }}
+  %button{ ng_click: "performLogout()" } Ausloggen

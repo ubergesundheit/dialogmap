@@ -1,9 +1,10 @@
 angular.module("SustainabilityApp").controller "SidebarController", [
   "$scope"
   "Contribution"
-  "Auth"
-  ($scope, Contribution, Auth) ->
+  "User"
+  ($scope, Contribution, User) ->
     angular.extend $scope,
       Contribution: Contribution
+      User: User
     return
 ]
