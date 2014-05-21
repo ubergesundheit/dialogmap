@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20140508102330) do
   create_table "contributions", force: true do |t|
     t.string   "title"
     t.text     "description"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
