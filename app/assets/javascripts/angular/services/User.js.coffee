@@ -1,4 +1,13 @@
-angular.module('SustainabilityApp').factory 'User', [
+angular.module('SustainabilityApp')
+.config [
+  "AuthProvider"
+  (AuthProvider) ->
+    AuthProvider.loginPath '/api/users/sign_in.json'
+    AuthProvider.logoutPath '/api/users/sign_out.json'
+    AuthProvider.registerPath '/api/users.json'
+    return
+]
+.factory 'User', [
   'Auth'
   'ngDialog'
   '$rootScope'
