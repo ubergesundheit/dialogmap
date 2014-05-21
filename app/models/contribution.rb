@@ -21,6 +21,7 @@ class Contribution < ActiveRecord::Base
       substitutions = self.features.map { |f| [ "%[#{f.leaflet_id}]%", "%[#{f.id}]%" ]}.to_h
       #substitute..
       self.description.gsub! /%\[\d+\]%/, substitutions
+      self.save
     end
 
 end
