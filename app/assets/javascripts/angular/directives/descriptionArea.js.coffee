@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution', 'leafletData', '$compile', (Contribution, leafletData, $compile) ->
+angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution', 'leafletData', 'descriptionTagHelper', '$compile', (Contribution, leafletData, descriptionTagHelper, $compile) ->
   restrict: 'AE'
   require: 'ngModel'
   transclude: true
@@ -59,37 +59,6 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
       updateExternalDescription()
       return
 
-    createReplacementNode = (oldText, type) ->
-      replacementNode = document.createElement('div')
-      replacementNode.className = 'contribution-description-tag'
-      replacementNode.setAttribute('contenteditable', 'false')
-      replacementNode.setAttribute('leaflet_id','new')
-
-      iconNode = document.createElement('span')
-      iconNode.className = "contribution-icon #{type}"
-      iconNode.setAttribute('contenteditable', 'false')
-
-      textNode = document.createElement('span')
-      textNode.appendChild(document.createTextNode(oldText))
-      textNode.className = "tag-title"
-      textNode.setAttribute('contenteditable', 'true')
-
-      closeNode = document.createElement('a')
-      closeNode.appendChild(document.createTextNode('×'))
-      closeNode.className = 'tag-close'
-      closeNode.setAttribute('href','#')
-      closeNode.setAttribute('contenteditable', 'false')
-      closeNode.setAttribute('draggable', 'false')
-      closeNode.setAttribute('leaflet_id', 'new')
-      closeNode.addEventListener('click', scope.clickDelete)
-      closeNode.setAttribute('ng-click', 'clickDelete()')
-
-      replacementNode.appendChild(iconNode)
-      replacementNode.appendChild(textNode)
-      replacementNode.appendChild(closeNode)
-
-      replacementNode
-
     replaceSelectedText = (replacementText, type) ->
       #store the contents in case the user aborts
       scope.old_contents = element.find('#contribution_description_text').html()
@@ -99,7 +68,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [ 'Contribution
           range = sel.getRangeAt(0)
           range.deleteContents()
           #range.insertNode document.createTextNode(replacementText)
-          range.insertNode createReplacementNode(replacementText, type)
+          range.insertNode descriptionTagHelper.createReplacementNode(replacementText, type, scope.clickDelete)
       else if document.selection and document.selection.createRange
         range = document.selection.createRange()
         range.text = replacementText
