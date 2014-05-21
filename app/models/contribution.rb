@@ -4,13 +4,17 @@ class Contribution < ActiveRecord::Base
 
   accepts_nested_attributes_for :features, :references
 
-  validates_presence_of :title, :description
+  validates_presence_of :title, :description, :user_id
 
   after_create :transform_description
 
   scope :within, -> (bbox_string) {
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })
   }
+
+  def user
+    User.find(self.user_id)
+  end
 
   private
     def transform_description

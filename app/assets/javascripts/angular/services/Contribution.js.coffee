@@ -11,15 +11,14 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.contributions = []
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
-        for c in result.data
-          do ->
-            c = contributionTransformer.createFancyContributionFromRaw(c)
+        # transform the result array to fancy html
+        (c = contributionTransformer.createFancyContributionFromRaw(c) for c in result.data)
 
         if result.status == 200
           resource.contributions = result.data
         else if result.status == 201
-          console.log resource.contributions
-          resource.contributions.push result.data
+          # this only works if the '201-created' call returns one object
+          resource.contributions.push contributionTransformer.createFancyContributionFromRaw(result.data)
         result
 
     resource.composing =  false

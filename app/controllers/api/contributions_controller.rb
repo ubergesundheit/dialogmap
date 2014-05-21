@@ -1,13 +1,14 @@
 class Api::ContributionsController < Api::BaseController
   before_action :set_contribution, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   # GET /contributions
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.within(bbox_params).as_json(include: {features: {}, references: {}})
+      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: {}, user: {} })
     else
-      render json: Contribution.all.as_json(include: {features: {}, references: {}})
+      render json: Contribution.all.as_json(include: { features: {}, references: {}, user: {} })
     end
   end
 
@@ -21,6 +22,8 @@ class Api::ContributionsController < Api::BaseController
   # POST /contributions.json
   def create
     @contribution = Contribution.new(contribution_params)
+
+    set_user!
 
     if @contribution.save
       render json: @contribution.as_json(:include => {:features => {}, :references =>{}}), status: :created
@@ -59,6 +62,9 @@ class Api::ContributionsController < Api::BaseController
       @contribution = Contribution.find(params[:id])
     end
 
+    def set_user!
+      @contribution.user_id = current_user.id
+    end
 
     def bbox_params
       params.fetch(:bbox,{})

@@ -5,6 +5,7 @@ angular.module("SustainabilityApp").controller "MapController", [
   "User"
   ($scope, leafletData, Contribution, User) ->
     angular.extend $scope,
+      Contribution: Contribution
       # leaflet-directive stuff
       muenster:
         lat: 51.96
@@ -39,61 +40,43 @@ angular.module("SustainabilityApp").controller "MapController", [
             return
           return
 
-      updateGeoJSON: (data) ->
-        $scope.map_main.then (map) ->
-          bbox = map.getBounds().pad(1.005).toBBoxString()
-          Contribution.query({bbox: bbox}).then (cts) ->
-            fcollection =
-              type: 'FeatureCollection'
-              features: []
-            for c in cts
-              do ->
-                if c.features.length > 0
-                  for f in c.features
-                    do ->
-                      fcollection.features.push f
-                      return
-                return
-            $scope.geojson =
-              style: $scope.geojson.style
-              onEachFeature: $scope.geojson.onEachFeature
-              pointToLayer: $scope.geojson.pointToLayer
-              data: fcollection
-            return
+      updateGeoJSON: (skip_reload) ->
+        updateGeoJSONinScope = (arr) ->
+          # transform the array to a feature collection
+          fCollection =
+            type: 'FeatureCollection'
+            features: []
+          for c in arr
+            do ->
+              if c.features.length > 0
+                for f in c.features
+                  do ->
+                    fCollection.features.push f
+                    return
+              return
+          # Update the scope
+          $scope.geojson =
+            style: $scope.geojson.style
+            onEachFeature: $scope.geojson.onEachFeature
+            pointToLayer: $scope.geojson.pointToLayer
+            data: fCollection
           return
+        if !skip_reload?
+          leafletData.getMap('map_main').then (map) ->
+            bbox = map.getBounds().pad(1.005).toBBoxString()
+            Contribution.query({bbox: bbox}).then updateGeoJSONinScope
+            return
+        else
+          updateGeoJSONinScope(Contribution.contributions)
         return
 
       removeDraftFeature: (leaflet_id) ->
         $scope.drawControl.options.edit.featureGroup.removeLayer leaflet_id
         return
 
-      # Map Object use with .then (map) ->
-      map_main: leafletData.getMap('map_main')
-      # setDrawControlVisibility: (onoff) ->
-      #   $scope.map_main.then (map) ->
-      #     if map.options.drawControl == true and onoff == false
-      #       map.removeControl($scope.drawControl)
-      #       map.options.drawControl = false
-      #     else if map.options.drawControl == false and onoff == true
-      #       map.addControl($scope.drawControl)
-      #       map.options.drawControl = true
-      #     return
-      #   return
-      Contribution: Contribution
-
     # init stuff
     $scope.$on 'Contribution.submitted', (evt, data) ->
-      temp = $scope.geojson
-      for feature in data.featuresAttributes
-        do ->
-          feature.geojson.properties.contributionId = data.id
-          temp.data.features.push feature.geojson
-          return
-      $scope.geojson =
-        style: temp.style
-        onEachFeature: temp.onEachFeature
-        pointToLayer: temp.pointToLayer
-        data: temp.data
+      $scope.updateGeoJSON(true)
       return
 
     $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
