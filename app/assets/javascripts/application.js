@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
+//= require angular-sanitize
 //= require angularjs/rails/resource
 //= require angular-devise
 //= require ng-contenteditable
