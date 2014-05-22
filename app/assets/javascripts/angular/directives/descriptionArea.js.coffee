@@ -38,6 +38,9 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           replaceSelectedText(scope.selection, 'reference', 'feature_reference')
           disableDescriptionArea()
           return
+        clickUrlReference: ->
+
+          return
 
       # Events for Feature creation
       leafletData.getMap('map_main').then (map) ->
@@ -143,17 +146,17 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
       element.find('#contribution_description_text').on 'mouseup', (e) ->
         scope.selection = getSelection()
         if scope.selection != ""
-          parentOffset = element.parent().offset()
-          lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
+          # calculate the position of the toolbar..
+          parentOffset = angular.element('#sidebar').offset()
           relX = e.pageX - parentOffset.left
           relY = e.pageY - parentOffset.top
-          showButtons(relX, relY + lineHeight / 2)
+          lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
+          showButtons(relX, relY + lineHeight / 2  )
         else
           hideButtons()
         return
 
       scope.$watch 'internal.description', (value) ->
-        #updateExternalDescription()
         Contribution.description = element.find('#contribution_description_text').html()
         return
 
@@ -168,19 +171,6 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
       scope.$on 'Contribution.submit_start', (e) ->
         updateExternalDescription()
         return
-      # scope.removeDraftFeature = ->
-      #   console.log 'implement me!!!'
-      # scope.$watch 'internal.raw_description', (value) ->
-      #   highlighted = ''
-      #   if value? and value != ""
-      #     highlighted = value.replace(/\n/g, '<br />')
-      #     angular.forEach scope.references, (h) ->
-      #       highlighted = highlighted.replace new RegExp("\\b(#{h.type})\\b"), (matched) ->
-      #         "<span class=\"highlight\">#{matched}</span>"
-      #       return
-      #   element.find('.highlighter').html(highlighted)
-      #   element.find('textarea.txt').html(value)
-      #   scope.descr = value
-      #   return
+
       return
 ]

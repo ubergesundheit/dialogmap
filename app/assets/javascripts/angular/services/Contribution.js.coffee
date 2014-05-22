@@ -26,17 +26,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.references = []
     resource.features = {}
     resource._currentDrawHandler = undefined
-    resource._setDrawControlVisibility = (onoff) ->
-      console.log 'actually there is no draw control to toggle..'
-      # leafletData.getMap('map_main').then (map) ->
-      #   if map.options.drawControl == true and onoff == false
-      #     map.removeControl(map.drawControl)
-      #     map.options.drawControl = false
-      #   else if map.options.drawControl == false and onoff == true
-      #     map.addControl(map.drawControl)
-      #     map.options.drawControl = true
-      #   return
-      return
+
     resource.start = (reference) ->
       $rootScope.$broadcast('Contribution.start')
       if reference?

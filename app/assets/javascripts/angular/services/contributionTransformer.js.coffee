@@ -7,6 +7,8 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
+        descr = descr.replace(/^(<br>)*(<\/br>)*/,"")
+        console.log descr
         el = document.createElement('div')
         el.innerHTML = descr
         tags = Array.prototype.slice.call(el.getElementsByClassName('contribution-description-tag'))
@@ -31,18 +33,22 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
           title: contribution.title
           description: descr.replace(/<br>$/, "")
           features_attributes: features_attributes
-          references_attributes: contribution.references.filter (ref) -> !ref.drawnItem?
+          references_attributes: contribution.references
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->
         id = parseInt(match.split("").slice(2,match.length-2).join(""))
         feature = f for f in contribution.features when f.id is id
-        descriptionTagHelper.createReplacementNode(feature.properties.title, feature.geometry.type, 'feature').outerHTML
+        descriptionTagHelper
+          .createReplacementNode(feature.properties.title, feature.geometry.type, 'feature')
+          .outerHTML
 
       featureReferenceReplacer = (match, offset, string) ->
         id = parseInt(match.split("").slice(2,match.length-2).join(""))
         reference = r for r in contribution.references when r.refId is id
-        descriptionTagHelper.createReplacementNode(descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference').outerHTML
+        descriptionTagHelper
+          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference')
+          .outerHTML
 
       contribution.description = contribution.description.replace(/%\[\d+\]%/g, featureReplacer)
       contribution.description = contribution.description.replace(/#\[\d+\]#/g, featureReferenceReplacer)

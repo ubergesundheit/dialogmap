@@ -16,6 +16,7 @@ h3
   width: 100%
 
 #sidebar
+  overflow-y: auto
   position: absolute
   margin: 10px
   padding: 10px
@@ -31,10 +32,9 @@ h3
 input, button
   margin-bottom: 2px
   margin-top: 2px
+  margin-left: 0px
+  margin-right: 0px
   border: solid $darker-grey 1px
-
-.input_title, input
-  width: 100%
   padding: 4px
 
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
@@ -63,78 +63,3 @@ textarea.popup_txt, .contribution_descriptioninput
 
 button
   @include sassy-button("glass", 5px, 16px, #8cbe5f)
-
-.contributions-buttons
-  display: none
-  position: absolute
-  width: 117px
-  background-color: #EFEFEF
-  .button
-    width: 26px
-    height: 26px
-    display: inline-block
-    text-align: center
-    text-decoration: none
-    background-image: url("spritesheet.png")
-  .marker
-    background-position: -122px -2px
-  .polygon
-    background-position: -31px -2px
-  .feature-reference
-    background-position: -268px -2px
-  .url-reference
-    background-position: -302px -2px
-  .divider
-    background-color: rgb(70,70,70)
-    width: 1px
-    height: 22px
-    display: inline-block
-    margin-bottom: 3px
-
-.userselect_none
-  @include user-select(none)
-
-.contribution-description-tag
-  display: inline
-  height: 14px
-  padding-left: 3px
-  padding-right: 3px
-  margin-left: 2px
-  margin-right: 2px
-  @include user-select(none)
-  .tag-title
-    color: $lighter-grey
-    padding-right: 2px
-    padding-left: 2px
-    @include user-select(text)
-  .tag-close
-    color: $darker-grey
-    text-decoration: none
-    //cursor: pointer
-    @include user-select(none)
-  .contribution-icon
-    width: 14px
-    height: 14px
-    display: inline-block
-    text-align: center
-    text-decoration: none
-    background-image: url("spritesheet.png")
-    @include user-select(none)
-  .marker, .Point
-    background-position: -128px -8px
-  .polygon, .Polygon
-    background-position: -37px -8px
-  .reference
-    background-position: -329px 0px
-
-._tag
-  background-color: #CCCCCC
-  border: solid 1px #505050
-
-.feature_tag
-  background-color: #69B687
-  border: solid 1px #505050
-
-.feature_reference_tag
-  background-color: #C17751
-  border: 1px solid #505050

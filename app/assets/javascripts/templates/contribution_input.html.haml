@@ -2,7 +2,7 @@
   %h3 Beitrag verfassen
   %form{ :name => "contribution_form", :novalidate=> true }
     %input{ :placeholder => "Titel", :ng_model => "Contribution.title", :type => "text", :required => true, :class => "input_title" }
-    %div{ description_area: true, ng_model: "Contribution" }
+    %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent" }
     %button{ :ng_disabled => "contribution_form.$invalid", :ng_click => "Contribution.submit()" } Abschicken
     %button{ :ng_click => "Contribution.abort()" } Abbrechen
 %button{ ng_click: "Contribution.start()", ng_hide: "Contribution.composing" } Neuen Beitrag verfassen
