@@ -22,7 +22,7 @@ class Contribution < ActiveRecord::Base
       # features that don't exist yet..
 
       # create a hash that contains the substitutions
-      substitutions = self.features.map { |f| [ "%[#{f.leaflet_id}]%", "%[#{f.id}]%" ]}.to_h
+      substitutions = self.features.map { |f| [ "%[#{f.feature_id}]%", "%[#{f.id}]%" ]}.to_h
       #substitute..
       self.description.gsub! /%\[\d+\]%/, substitutions
       self.save

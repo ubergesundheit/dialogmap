@@ -6,16 +6,16 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: {}, user: {} })
+      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
     else
-      render json: Contribution.all.as_json(include: { features: {}, references: {}, user: {} })
+      render json: Contribution.all.as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
     end
   end
 
   # GET /contributions/1
   # GET /contributions/1.json
   def show
-    render json: @contribution.as_json(:include => {:features => {}, :references =>{}})
+    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
   end
 
   # POST /contributions
@@ -26,7 +26,7 @@ class Api::ContributionsController < Api::BaseController
     set_user!
 
     if @contribution.save
-      render json: @contribution.as_json(:include => {:features => {}, :references =>{}}), status: :created
+      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {} }), status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end
@@ -92,7 +92,7 @@ class Api::ContributionsController < Api::BaseController
               { properties: allowed_properties }
             ]
           },
-          :leaflet_id
+          :feature_id
         ],
         references_attributes: [  :type, :ref_id, :title ]
       ).tap do |whitelisted|

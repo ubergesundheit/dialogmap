@@ -32,11 +32,11 @@ angular.module("SustainabilityApp").controller "MapController", [
           layer.bindPopup L.mapbox.marker.createPopup(feature),
             closeButton: false
           layer.on 'click', (evt) ->
-            Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
-            if Contribution.addingFeature == true
+            if Contribution.addingFeatureReference == true
               feature = evt.target.feature
               Contribution.addFeatureReference feature
-              Contribution.stopAddFeatureReference()
+            else
+              Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
             return
           return
 
@@ -87,8 +87,4 @@ angular.module("SustainabilityApp").controller "MapController", [
       #console.log leafletEvent
       return
 
-    $scope.$watch 'Contribution.currentContribution', (value) ->
-      #console.log $scope.geojson
-      $scope.geojson
-    return
 ]

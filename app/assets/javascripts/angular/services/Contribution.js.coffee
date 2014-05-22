@@ -22,7 +22,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         result
 
     resource.composing =  false
-    resource.addingFeature = false
+    resource.addingFeatureReference = false
     resource.references = []
     resource.features = {}
     resource._currentDrawHandler = undefined
@@ -54,35 +54,30 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.options.edit.featureGroup.removeLayer leaflet_id
         if map.drawControl.options.edit.featureGroup.getLayers().length == 0
-          map.drawControl.disableEditing();
+          map.drawControl.disableEditing()
         return
       return
     resource.addFeatureReference = (reference) ->
-      if reference._leaflet_id?
-        tempRef =
-          title: ''
-          #type: if reference.feature_type != 'marker' then 'polygon' else reference.feature_type
-          type: 'FeatureReference'
-          ref_id: reference._leaflet_id
-          drawnItem: true
-      else
-        tempRef =
-          title: if reference.geometry? then reference.properties.title
-          #type: if reference.geometry.type == 'Point' then 'marker' else 'polygon'
-          type: 'FeatureReference'
-          ref_id: reference.id
+      resource.stopAddFeatureReference()
+      tempRef =
+        type: 'FeatureReference'
+        title: reference.properties.title
+        ref_id: reference.id
+        feature_type: reference.geometry.type
 
       @references.push tempRef
+      $rootScope.$broadcast('Contribution.addFeatureReference', tempRef)
+      return
+    resource.removeReference = (id) ->
+      resource.references = @references.filter (f) -> f.ref_id == id
       return
     resource.startAddFeatureReference = ->
       $rootScope.$broadcast('Contribution.startAddFeatureReference')
-      @addingFeature = true
-      @_setDrawControlVisibility(true)
+      resource.addingFeatureReference = true
       return
     resource.stopAddFeatureReference = ->
-      $rootScope.$broadcast('Contribution.startAddFeatureReference')
-      @addingFeature = false
-      @_setDrawControlVisibility(false)
+      $rootScope.$broadcast('Contribution.stopAddFeatureReference')
+      resource.addingFeatureReference = false
       return
     resource.startAddMarker = ->
       leafletData.getMap('map_main').then (map) ->
@@ -97,14 +92,14 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         return
       return
     resource.disableDraw = ->
-      @_currentDrawHandler.disable()
-      @_currentDrawHandler = undefined
+      if @_currentDrawHandler?
+        @_currentDrawHandler.disable()
+        @_currentDrawHandler = undefined
       return
     resource.abort = ->
       @reset()
       @composing = false
-      @addingFeature = false
-      @_setDrawControlVisibility(true)
+      @addingFeatureReference = false
       return
     resource.reset = ->
       $rootScope.$broadcast('Contribution.reset')
@@ -116,8 +111,10 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         map.drawControl.options.edit.featureGroup.clearLayers()
         map.drawControl.disableEditing()
         return
+      @disableDraw()
       return
     resource.submit = ->
+      $rootScope.$broadcast('Contribution.submit_start')
       contributionTransformer.createContributionForSubmit(@).then (contribution) ->
         resource.abort()
         new resource(contribution).create().then (data) ->

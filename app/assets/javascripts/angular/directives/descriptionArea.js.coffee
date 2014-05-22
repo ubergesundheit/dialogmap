@@ -2,8 +2,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
-  '$compile'
-  (Contribution, leafletData, descriptionTagHelper, $compile) ->
+  (Contribution, leafletData, descriptionTagHelper) ->
     restrict: 'AE'
     require: 'ngModel'
     transclude: true
@@ -14,33 +13,44 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
         internal: {}
         clickMarker: (e) ->
           Contribution.startAddMarker()
-          replaceSelectedText(scope.selection, 'marker')
-          startFeatureCreation()
+          replaceSelectedText(scope.selection, 'marker', 'feature')
+          disableDescriptionArea()
           return
         clickPolygon: (e) ->
-          replaceSelectedText(scope.selection, 'polygon')
+          replaceSelectedText(scope.selection, 'polygon', 'feature')
           Contribution.startAddPolygon()
-          startFeatureCreation()
+          disableDescriptionArea()
           return
         clickDelete: (e) ->
-          leaflet_id = e.target.getAttribute('leaflet_id')
-          Contribution.removeFeature(leaflet_id)
-          Contribution.disableDraw()
-          element.find("[leaflet_id=#{leaflet_id}]").remove()
-          stopFeatureCreation()
+          id = e.target.getAttribute('type_id')
+          type = e.target.getAttribute('type')
+          if type == 'feature'
+            Contribution.removeFeature(id)
+            Contribution.disableDraw()
+          else
+            Contribution.removeReference(id)
+            Contribution.stopAddFeatureReference()
+          element.find("[type_id=#{id}][type=#{type}]").remove()
+          enableDescriptionArea()
+          return
+        clickFeatureReference: ->
+          Contribution.startAddFeatureReference()
+          replaceSelectedText(scope.selection, 'reference', 'feature_reference')
+          disableDescriptionArea()
           return
 
+      # Events for Feature creation
       leafletData.getMap('map_main').then (map) ->
         map.on 'draw:created', (e) ->
           e.layer.options.properties = {}
           Contribution.addFeature e.layer._leaflet_id
           # update the tag in the description field
-          element.find('[leaflet_id=new]').attr('leaflet_id', e.layer._leaflet_id)
-          stopFeatureCreation()
+          element.find('[type_id=new][type=feature]').attr('type_id', e.layer._leaflet_id)
+          enableDescriptionArea()
           hideButtons()
           return
         map.on 'draw:aborted', (e) ->
-          stopFeatureCreation()
+          enableDescriptionArea()
           # reset input to previous state
           element.find('#contribution_description_text').html(scope.old_contents)
           updateExternalDescription()
@@ -48,7 +58,16 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           return
         return
 
-      startFeatureCreation = ->
+      #Events for FeatureReferences
+      scope.$on 'Contribution.addFeatureReference', (e, data) ->
+        enableDescriptionArea()
+        element.find('[type_id=new][type=feature_reference]').attr('type_id', data.ref_id)
+        element.find("[type_id=#{data.ref_id}][type=feature_reference]")
+          .find('.tag-title')
+          .append(" #{descriptionTagHelper.featureReferenceTypeIndicatorHtml(data.title, data.feature_type)}")
+        return
+
+      disableDescriptionArea = ->
         ((element.find('#contribution_description_text'))
           .attr('contenteditable', false)
           .addClass('disabled_contenteditable')
@@ -56,7 +75,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
         hideButtons()
         return
 
-      stopFeatureCreation = ->
+      enableDescriptionArea = ->
         ((element.find('#contribution_description_text'))
           .attr('contenteditable', true)
           .removeClass('disabled_contenteditable')
@@ -64,7 +83,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
         updateExternalDescription()
         return
 
-      replaceSelectedText = (replacementText, type) ->
+      replaceSelectedText = (replacementText, icon_type, box_type) ->
         #store the contents in case the user aborts
         scope.old_contents = element.find('#contribution_description_text').html()
         if window.getSelection
@@ -72,8 +91,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           if sel.rangeCount
             range = sel.getRangeAt(0)
             range.deleteContents()
-            #range.insertNode document.createTextNode(replacementText)
-            range.insertNode descriptionTagHelper.createReplacementNode(replacementText, type, scope.clickDelete)
+            range.insertNode descriptionTagHelper.createReplacementNode(replacementText, icon_type, box_type, scope.clickDelete)
         else if document.selection and document.selection.createRange
           range = document.selection.createRange()
           range.text = replacementText
@@ -139,9 +157,16 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
         Contribution.description = element.find('#contribution_description_text').html()
         return
 
+      # Reset the area on Contribution reset
       scope.$on 'Contribution.reset', (e) ->
+        enableDescriptionArea()
         scope.internal.description = ''
         element.find('#contribution_description_text').html('')
+        return
+
+      # finally update the description
+      scope.$on 'Contribution.submit_start', (e) ->
+        updateExternalDescription()
         return
       # scope.removeDraftFeature = ->
       #   console.log 'implement me!!!'

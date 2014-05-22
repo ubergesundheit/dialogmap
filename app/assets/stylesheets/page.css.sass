@@ -67,9 +67,8 @@ button
 .contributions-buttons
   display: none
   position: absolute
-  width: 100px
+  width: 117px
   background-color: #EFEFEF
-  color: green
   .button
     width: 26px
     height: 26px
@@ -81,12 +80,22 @@ button
     background-position: -122px -2px
   .polygon
     background-position: -31px -2px
+  .feature-reference
+    background-position: -268px -2px
+  .url-reference
+    background-position: -302px -2px
+  .divider
+    background-color: rgb(70,70,70)
+    width: 1px
+    height: 22px
+    display: inline-block
+    margin-bottom: 3px
 
+.userselect_none
+  @include user-select(none)
 
 .contribution-description-tag
   display: inline
-  background-color: #CCCCCC
-  border: solid 1px #505050
   height: 14px
   padding-left: 3px
   padding-right: 3px
@@ -115,3 +124,17 @@ button
     background-position: -128px -8px
   .polygon, .Polygon
     background-position: -37px -8px
+  .reference
+    background-position: -329px 0px
+
+._tag
+  background-color: #CCCCCC
+  border: solid 1px #505050
+
+.feature_tag
+  background-color: #69B687
+  border: solid 1px #505050
+
+.feature_reference_tag
+  background-color: #C17751
+  border: 1px solid #505050

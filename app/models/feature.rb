@@ -3,7 +3,7 @@ class Feature < ActiveRecord::Base
   self.inheritance_column = 'inheritance_column'
   set_rgeo_factory_for_column(:geom, RGeo::Geographic.spherical_factory(:srid => 4326))
   attr_accessor :geojson
-  attr_accessor :leaflet_id
+  attr_accessor :feature_id
   hstore_accessor :properties, #simplestyle-spec github.com/mapbox/simplestyle-spec
     :title            => :string,
     :description      => :string,
