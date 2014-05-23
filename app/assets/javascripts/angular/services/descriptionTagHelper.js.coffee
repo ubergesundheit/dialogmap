@@ -17,15 +17,10 @@ angular.module('SustainabilityApp').service "descriptionTagHelper", ->
     tagTitleNode = @createTagTitleNode(false)
     linkNode = document.createElement('a')
     linkNode.href = url
+    linkNode.setAttribute('target', '_blank')
     linkNode.appendChild(document.createTextNode("#{text}"))
     tagTitleNode.setAttribute('title', url)
     tagTitleNode.appendChild(linkNode)
-
-    # tagTitleNode.addEventListener 'click', (e) ->
-    #
-    #   return
-    # #some code to show the url..
-
     tagTitleNode
   @createReplacementNode = (text, icon_type, box_type, clickDelete, clickExistingUrlReference) ->
     replacementNode = document.createElement('div')
