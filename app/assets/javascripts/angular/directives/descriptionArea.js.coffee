@@ -1,7 +1,4 @@
-angular.module("SustainabilityApp").filter 'decodeURIComponent', ->
-  window.decodeURIComponent
-
-.directive 'descriptionArea', [
+angular.module("SustainabilityApp").directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
@@ -13,7 +10,7 @@ angular.module("SustainabilityApp").filter 'decodeURIComponent', ->
     templateUrl: 'descriptionarea.html'
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
-        internal: { urlinput: "http://" }
+        internal: {}
         clickMarker: (e) ->
           Contribution.startAddMarker()
           replaceSelectedText(scope.selection, 'marker', 'feature')
@@ -163,22 +160,29 @@ angular.module("SustainabilityApp").filter 'decodeURIComponent', ->
         if x instanceof Array and typeof y == 'string' and text == undefined
           element.find(".url-input").show().css("left", x[0]).css("top", x[1])
           scope.internal.clickedUrlReference = y
+          element.find('#url-input-field').val(y)
           return
         element.find(".url-input").show().css("left", x).css("top", y)
         scope.internal.clickedUrlReference = text
+        element.find('#url-input-field').val(text)
         return
 
       hideUrlInput = ->
         element.find(".url-input").hide()
         return
 
+      popUrlInput = ->
+        val = element.find('#url-input-field').val()
+        element.find('#url-input-field').val('http://')
+        val
+
       leaveUrlInputMode = ->
+        urlinput = popUrlInput().trim()
         element
           .find("[type_id=\"#{encodeURIComponent(scope.internal.clickedUrlReference)}\"][type=url_reference]")
-          .attr('type_id', encodeURIComponent(scope.internal.urlinput.trim()))
-          .attr('title', scope.internal.urlinput.trim())
+          .attr('type_id', encodeURIComponent(urlinput))
+          .attr('title', urlinput.trim())
         scope.internal.clickedUrlReference = "http://"
-        scope.internal.urlinput = "http://"
         enableDescriptionArea()
         return
 
@@ -209,7 +213,6 @@ angular.module("SustainabilityApp").filter 'decodeURIComponent', ->
       scope.$on 'Contribution.reset', (e) ->
         enableDescriptionArea()
         scope.internal.description = ''
-        scope.internal.urlinput = 'http://'
         scope.internal.clickedUrlReference = undefined
         element.find('#contribution_description_text').html('')
         return

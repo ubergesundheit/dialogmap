@@ -51,20 +51,18 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
           .outerHTML
 
       urlReferenceReplacer = (match, offset, string) ->
+        console.log match
         ref = match.split('|')
         text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
         url = decodeURIComponent(ref[0].slice(2))
-        onclickFun = ->
-          console.log e
-          angular.element('#sidebar').hide()
-          return
+
         descriptionTagHelper
-          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference', undefined, onclickFun)
+          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference')
           .outerHTML
 
       contribution.description = contribution.description.replace(/%\[\d+\]%/g, featureReplacer)
       contribution.description = contribution.description.replace(/#\[\d+\]#/g, featureReferenceReplacer)
-      contribution.description = contribution.description.replace(/&\[.+\]&/g, urlReferenceReplacer)
+      contribution.description = contribution.description.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
       contribution
 
     return
