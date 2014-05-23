@@ -1,4 +1,7 @@
-angular.module("SustainabilityApp").directive 'descriptionArea', [
+angular.module("SustainabilityApp").filter 'decodeURIComponent', ->
+  window.decodeURIComponent
+
+.directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
@@ -10,7 +13,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
     templateUrl: 'descriptionarea.html'
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
-        internal: {}
+        internal: { urlinput: "http://" }
         clickMarker: (e) ->
           Contribution.startAddMarker()
           replaceSelectedText(scope.selection, 'marker', 'feature')
@@ -30,7 +33,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           else
             Contribution.removeReference(id)
             Contribution.stopAddFeatureReference()
-          element.find("[type_id=#{id}][type=#{type}]").remove()
+          element.find("[type_id=\"#{id}\"][type=#{type}]").remove()
           enableDescriptionArea()
           return
         clickFeatureReference: ->
@@ -39,7 +42,14 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           disableDescriptionArea()
           return
         clickUrlReference: ->
-
+          disableDescriptionArea()
+          replaceSelectedText(scope.selection, 'reference', 'url_reference')
+          showUrlInput(getLastButtonsPos(), 'http://')
+          return
+        clickExistingUrlReference: (e) ->
+          scope.internal.clickedUrlReference = angular.element(e.target).parent().attr('type_id')
+          disableDescriptionArea()
+          showUrlInput(getClickPositionWithOffset(e), decodeURIComponent(scope.internal.clickedUrlReference))
           return
 
       # Events for Feature creation
@@ -84,6 +94,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           .removeClass('disabled_contenteditable')
           )
         updateExternalDescription()
+        hideUrlInput()
         return
 
       replaceSelectedText = (replacementText, icon_type, box_type) ->
@@ -94,7 +105,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
           if sel.rangeCount
             range = sel.getRangeAt(0)
             range.deleteContents()
-            range.insertNode descriptionTagHelper.createReplacementNode(replacementText, icon_type, box_type, scope.clickDelete)
+            range.insertNode descriptionTagHelper.createReplacementNode(replacementText, icon_type, box_type, scope.clickDelete, ( if box_type is 'url_reference' then scope.clickExistingUrlReference else undefined ))
         else if document.selection and document.selection.createRange
           range = document.selection.createRange()
           range.text = replacementText
@@ -141,17 +152,51 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
         return
 
       hideButtons = ->
-        element.find(".contributions-buttons").hide()
+        elem = element.find(".contributions-buttons").hide()
+        return
+
+      getLastButtonsPos = ->
+        elem = element.find(".contributions-buttons").hide()
+        [elem.css('left'), elem.css('top')]
+
+      showUrlInput = (x,y,text) ->
+        if x instanceof Array and typeof y == 'string' and text == undefined
+          element.find(".url-input").show().css("left", x[0]).css("top", x[1])
+          scope.internal.clickedUrlReference = y
+          return
+        element.find(".url-input").show().css("left", x).css("top", y)
+        scope.internal.clickedUrlReference = text
+        return
+
+      hideUrlInput = ->
+        element.find(".url-input").hide()
+        return
+
+      leaveUrlInputMode = ->
+        element
+          .find("[type_id=\"#{encodeURIComponent(scope.internal.clickedUrlReference)}\"][type=url_reference]")
+          .attr('type_id', encodeURIComponent(scope.internal.urlinput.trim()))
+          .attr('title', scope.internal.urlinput.trim())
+        scope.internal.clickedUrlReference = "http://"
+        scope.internal.urlinput = "http://"
+        enableDescriptionArea()
+        return
+
+      getClickPositionWithOffset = (e) ->
+        parentOffset = angular.element('#sidebar').offset()
+        relX = e.pageX - parentOffset.left
+        relY = e.pageY - parentOffset.top
+        lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
+        [relX, relY + lineHeight / 2]
 
       element.find('#contribution_description_text').on 'mouseup', (e) ->
+        if element.find(".url-input").is(":visible") # url input is visible..
+          # user has clicked somewhere else.. leave url input mode
+          leaveUrlInputMode()
         scope.selection = getSelection()
         if scope.selection != ""
-          # calculate the position of the toolbar..
-          parentOffset = angular.element('#sidebar').offset()
-          relX = e.pageX - parentOffset.left
-          relY = e.pageY - parentOffset.top
-          lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
-          showButtons(relX, relY + lineHeight / 2  )
+          clickPos = getClickPositionWithOffset(e)
+          showButtons(clickPos[0], clickPos[1])
         else
           hideButtons()
         return
@@ -164,6 +209,8 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
       scope.$on 'Contribution.reset', (e) ->
         enableDescriptionArea()
         scope.internal.description = ''
+        scope.internal.urlinput = 'http://'
+        scope.internal.clickedUrlReference = undefined
         element.find('#contribution_description_text').html('')
         return
 

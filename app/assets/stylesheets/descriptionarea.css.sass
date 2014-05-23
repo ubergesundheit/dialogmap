@@ -1,8 +1,19 @@
+.url-input
+  background-color: #EFEFEF
+  position: absolute
+  padding: 5px
+  @include border-radius(5px)
+  @include single-box-shadow
+  display: none
+
 .contributions-buttons
   display: none
   position: absolute
-  width: 117px
+  width: 127px
   background-color: #EFEFEF
+  padding: 5px
+  @include border-radius(5px)
+  @include single-box-shadow
   .button
     width: 26px
     height: 26px
@@ -72,4 +83,8 @@
 
 .feature_reference_tag
   background-color: #C17751
+  border: 1px solid #505050
+
+.url_reference_tag
+  background-color: #6AACD4
   border: 1px solid #505050

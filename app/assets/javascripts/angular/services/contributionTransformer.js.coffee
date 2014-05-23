@@ -8,7 +8,6 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
         descr = descr.replace(/^(<br>)*(<\/br>)*/,"")
-        console.log descr
         el = document.createElement('div')
         el.innerHTML = descr
         tags = Array.prototype.slice.call(el.getElementsByClassName('contribution-description-tag'))
@@ -26,8 +25,9 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
             else if type == 'feature_reference'
               # this could be a problem if the user types in a name that contains "<span"
               tag_title = tag_title.slice(0,tag_title.indexOf("<span")-1)
-              console.log tag_title
               descr = descr.replace(tag.outerHTML, "#[#{id}]#")
+            else if type == 'url_reference'
+              descr = descr.replace(tag.outerHTML, "&[#{id}|#{encodeURIComponent(tag_title)}]&")
 
         {
           title: contribution.title
@@ -50,8 +50,21 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
           .createReplacementNode(descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference')
           .outerHTML
 
+      urlReferenceReplacer = (match, offset, string) ->
+        ref = match.split('|')
+        text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
+        url = decodeURIComponent(ref[0].slice(2))
+        onclickFun = ->
+          console.log e
+          angular.element('#sidebar').hide()
+          return
+        descriptionTagHelper
+          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference', undefined, onclickFun)
+          .outerHTML
+
       contribution.description = contribution.description.replace(/%\[\d+\]%/g, featureReplacer)
       contribution.description = contribution.description.replace(/#\[\d+\]#/g, featureReferenceReplacer)
+      contribution.description = contribution.description.replace(/&\[.+\]&/g, urlReferenceReplacer)
       contribution
 
     return
