@@ -3,7 +3,8 @@ angular.module('SustainabilityApp').factory 'Contribution', [
   'leafletData'
   '$rootScope'
   'contributionTransformer'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer) ->
+  'User'
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
@@ -104,14 +105,18 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       @disableDraw()
       return
     resource.submit = ->
-      $rootScope.$broadcast('Contribution.submit_start')
-      contributionTransformer.createContributionForSubmit(@).then (contribution) ->
-        resource.abort()
-        new resource(contribution).create().then (data) ->
-          $rootScope.$broadcast('Contribution.submitted', data)
+      if User.isAuthenticated()
+        $rootScope.$broadcast('Contribution.submit_start')
+        contributionTransformer.createContributionForSubmit(@).then (contribution) ->
+          resource.abort()
+          new resource(contribution).create().then (data) ->
+            $rootScope.$broadcast('Contribution.submitted', data)
+            return
           return
-        return
+      else
+        User._unauthorized()
       return
+
 
     resource.setCurrentContribution = (id) ->
       ($rootScope.$apply -> resource.currentContribution = elem) for elem in resource.contributions when elem.id is id

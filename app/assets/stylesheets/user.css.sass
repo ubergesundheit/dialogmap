@@ -1,5 +1,42 @@
-#login_form
+#login_form, #register_form
+  width: 50%
+  margin: auto
   .username, .password
     width: 100%
-  .sign_in
-    
+    border: 1px solid $darker-grey
+  .error
+    @include single-box-shadow(firebrick)
+
+  .field_label_container
+    height: 22px
+
+  .field_error_container
+    height: 18px
+
+  .field_error, .field_label
+    font-weight: bold
+    font-size: 16px
+    padding-left: 4px
+
+  .field_error
+    text-align: right
+    color: firebrick
+    font-weight: normal
+    font-size: 11px
+    font-style: italic
+
+  .button_container
+    text-align: center
+
+  button
+    padding: 0.5em
+
+
+#flash
+  border: 1px dashed firebrick
+  text-align: center
+  font-style: italic
+
+#register_form
+  input.ng-valid
+    +single-box-shadow(green)

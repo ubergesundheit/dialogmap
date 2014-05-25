@@ -59,7 +59,30 @@ textarea.popup_txt, .contribution_descriptioninput
     outline: 0
 
 .disabled_contenteditable
-  background-color: #AAAAAA
+  background-color: #AAA
 
 button
   @include sassy-button("glass", 5px, 16px, #8cbe5f)
+
+.abort
+  +sassy-button-gradient("glass", firebrick)
+
+.ngdialog.ngdialog-theme-default .ngdialog-content
+  font-family: $default-font-family
+
+
+.loading_container
+  margin-top: 200px
+  margin-bottom: 200px
+
+.loading
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  margin: auto
+  background-color: #CCC
+  padding: 3px
+  +border-radius(6px)
+  +single-box-shadow(rgba(40, 40, 40, 0.1), 0px, 0px, 2px, 2px)

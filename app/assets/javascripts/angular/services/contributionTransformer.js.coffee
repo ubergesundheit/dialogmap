@@ -51,7 +51,6 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
           .outerHTML
 
       urlReferenceReplacer = (match, offset, string) ->
-        console.log match
         ref = match.split('|')
         text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
         url = decodeURIComponent(ref[0].slice(2))
