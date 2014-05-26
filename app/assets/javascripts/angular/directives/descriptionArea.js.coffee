@@ -7,7 +7,7 @@ angular.module("SustainabilityApp").directive 'descriptionArea', [
     require: 'ngModel'
     transclude: true
     scope: { ngModel: '=ngModel' }
-    templateUrl: 'descriptionarea.html'
+    templateUrl: 'description_area.html'
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
         internal: {}
