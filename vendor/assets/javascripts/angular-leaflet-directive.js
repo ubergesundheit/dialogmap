@@ -920,40 +920,62 @@
               var drawControl = new L.Control.Draw(options);
               //map.addControl(drawControl);
               map.drawControl = drawControl;
-              map.drawControl.disableEditing = function () {};
+              map.drawControl.disableEditing = function () {
+                map.drawControl.options.edit.featureGroup.eachLayer(function (l){
+                  if(typeof l.disableEditing !== 'undefined'){
+                    l.disableEditing();
+                  }
+                });
+              };
+              map.drawControl.enableEditing = function () {
+                map.drawControl.options.edit.featureGroup.eachLayer(function (l){
+                  if(typeof l.enableEditing !== 'undefined'){
+                    l.enableEditing();
+                  }
+                });
+              };
+              map.on('draw:deleted', function(e) {
+                if(map.drawControl.options.edit.featureGroup.getLayers().length == 0){
+                  map.drawControl.disableEditing();
+                }
+              });
               map.on('draw:created', function(e) {
-                drawnItems.addLayer(e.layer);
+                var drawnLayer = e.layer;
 
-                var editToolbar = new L.EditToolbar.Edit(map, {
-                    featureGroup: L.featureGroup([e.layer]),
-                    selectedPathOptions: {
-                    color: '#fe57a1',
-                    opacity: 0.6,
-                    dashArray: '10, 10',
-                    fill: !0,
-                    fillColor: '#fe57a1',
-                    fillOpacity: 0.1,
-                    maintainColor: !1
-                }
-                });
-                map.on('draw:deleted', function(e) {
-                  if(map.drawControl.options.edit.featureGroup.getLayers().length == 0){
-                    map.drawControl.disableEditing();
+                //augment the Layer to support the activation and deactivation of editing
+                drawnLayer.enableEditing = function() {
+                  if(typeof drawnLayer.editToolbar === 'undefined') {
+                    drawnLayer.editToolbar = new L.EditToolbar.Edit(map, {
+                        featureGroup: L.featureGroup([e.layer]),
+                        selectedPathOptions: {
+                          color: '#fe57a1',
+                          opacity: 0.6,
+                          dashArray: '10, 10',
+                          fill: !0,
+                          fillColor: '#fe57a1',
+                          fillOpacity: 0.1,
+                          maintainColor: true
+                        }
+                    });
                   }
-                });
-                map.drawControl.disableEditing = function () {
-                  if(typeof editToolbar !== 'undefined') {
-                    editToolbar.disable();
-                    editToolbar = undefined;
+                  drawnLayer.editToolbar.enable();
+                  drawnLayer.on('dragend', function () {
+                    drawnLayer.editToolbar.save()
+                  }),
+                  drawnLayer.on('edit', function () {
+                    drawnLayer.editToolbar.save()
+                  });
+                };
+
+                drawnLayer.disableEditing = function() {
+                  if(typeof drawnLayer.editToolbar !== 'undefined') {
+                    drawnLayer.editToolbar.disable();
+                    drawnLayer.editToolbar = undefined;
                   }
-                }
-                editToolbar.enable();
-                e.layer.on('dragend', function () {
-                  editToolbar.save()
-                }),
-                e.layer.on('edit', function () {
-                  editToolbar.save()
-                });
+                };
+
+                //finally add the layer
+                drawnItems.addLayer(drawnLayer);
               });
             }
             if (isDefined(controls.custom)) {

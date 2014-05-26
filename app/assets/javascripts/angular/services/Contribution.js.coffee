@@ -40,6 +40,9 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       return
     resource.addFeature = (feature) ->
       @features[feature] = {}
+      leafletData.getMap('map_main').then (map) ->
+        map.drawControl.enableEditing()
+        return
       return
     resource.removeFeature = (leaflet_id) ->
       @features = Object.keys(@features).filter (feature) -> feature isnt parseInt(leaflet_id)
@@ -71,13 +74,20 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       $rootScope.$broadcast('Contribution.stopAddFeatureReference')
       resource.addingFeatureReference = false
       return
+    resource._startAddFeature = ->
+      leafletData.getMap('map_main').then (map) ->
+        map.drawControl.disableEditing()
+        return
+      return
     resource.startAddMarker = ->
+      @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
         resource._currentDrawHandler = new L.Draw.Marker(map)
         resource._currentDrawHandler.enable()
         return
       return
     resource.startAddPolygon = ->
+      @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
         resource._currentDrawHandler = new L.Draw.Polygon(map)
         resource._currentDrawHandler.enable()
@@ -101,8 +111,8 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       @features = {}
       @parent_contribution = undefined
       leafletData.getMap('map_main').then (map) ->
-        map.drawControl.options.edit.featureGroup.clearLayers()
         map.drawControl.disableEditing()
+        map.drawControl.options.edit.featureGroup.clearLayers()
         return
       @disableDraw()
       return
