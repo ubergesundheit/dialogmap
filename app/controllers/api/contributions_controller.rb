@@ -92,9 +92,9 @@ class Api::ContributionsController < Api::BaseController
               { properties: allowed_properties }
             ]
           },
-          :feature_id
+          :leaflet_id
         ],
-        references_attributes: [  :type, :ref_id, :title ]
+        references_attributes: [ :type, :ref_id, :title ]
       ).tap do |whitelisted|
         whitelisted['features_attributes'].try(:each_index) do |i|
           whitelisted['features_attributes'][i]['geojson']['geometry']['coordinates'] = params['contribution']['features_attributes'][i]['geojson']['geometry']['coordinates']

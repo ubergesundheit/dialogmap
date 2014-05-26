@@ -20,7 +20,7 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
               geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type)
-              features_attributes.push { geojson: geojson, feature_id: id }
+              features_attributes.push { geojson: geojson, leaflet_id: id }
               descr = descr.replace(tag.outerHTML, "%[#{id}]%")
             else if type == 'feature_reference'
               # this could be a problem if the user types in a name that contains "<span"

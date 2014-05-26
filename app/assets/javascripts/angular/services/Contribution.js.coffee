@@ -26,6 +26,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.addingFeatureReference = false
     resource.references = []
     resource.features = {}
+    resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
 
     resource.start = (reference) ->
@@ -98,6 +99,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       @description = ''
       @references = []
       @features = {}
+      @parent_contribution = undefined
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.options.edit.featureGroup.clearLayers()
         map.drawControl.disableEditing()
