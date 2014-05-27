@@ -2,9 +2,12 @@ class Contribution < ActiveRecord::Base
   has_many :features
   has_many :references
 
+  belongs_to :parent, :class_name => "Contribution"
+  has_many :children_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
+
   accepts_nested_attributes_for :features, :references
 
-  validates_presence_of :title, :description, :user_id
+  validates_presence_of :description, :user_id
 
   after_create :transform_description
 
@@ -15,6 +18,10 @@ class Contribution < ActiveRecord::Base
   def user
     User.find(self.user_id)
   end
+
+  # def children_ids
+  #   self.children_contributions.map { |c| c.merge(c.children_ids) }
+  # end
 
   private
     def transform_description

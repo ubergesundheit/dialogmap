@@ -6,16 +6,16 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
+      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
     else
-      render json: Contribution.all.as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
+      render json: Contribution.all.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
     end
   end
 
   # GET /contributions/1
   # GET /contributions/1.json
   def show
-    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {} })
+    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
   end
 
   # POST /contributions
@@ -26,7 +26,7 @@ class Api::ContributionsController < Api::BaseController
     set_user!
 
     if @contribution.save
-      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {} }), status: :created
+      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } }), status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end
@@ -79,6 +79,7 @@ class Api::ContributionsController < Api::BaseController
       params.require(:contribution).permit(
         :title,
         :description,
+        :parent_id,
         features_attributes: [
           {
             geojson: [

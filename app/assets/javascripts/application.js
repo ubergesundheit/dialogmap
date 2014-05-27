@@ -16,6 +16,7 @@
 //= require angular-sanitize
 //= require angularjs/rails/resource
 //= require angular-devise
+//= require angular-queue
 //= require ng-contenteditable
 //= require ngDialog
 //= require mapbox

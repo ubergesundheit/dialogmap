@@ -4,6 +4,7 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
   "descriptionTagHelper"
   (leafletData, propertiesHelper, descriptionTagHelper) ->
     @createContributionForSubmit = (contribution) ->
+      console.log contribution
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
@@ -34,6 +35,7 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
           description: descr.replace(/<br>$/, "")
           features_attributes: features_attributes
           references_attributes: contribution.references
+          parent_id: contribution.parent_contribution
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->
@@ -62,6 +64,7 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
       contribution.description = contribution.description.replace(/%\[\d+\]%/g, featureReplacer)
       contribution.description = contribution.description.replace(/#\[\d+\]#/g, featureReferenceReplacer)
       contribution.description = contribution.description.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
+
       contribution
 
     return

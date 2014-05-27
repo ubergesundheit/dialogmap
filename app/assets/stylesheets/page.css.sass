@@ -16,11 +16,11 @@ h3
   width: 100%
 
 #sidebar
-  overflow-y: auto
   position: absolute
   margin: 10px
   padding: 10px
-  width: 400px
+  width: 25%
+  min-width: 400px
   background-color: $sidebar-background
   top: 0
   bottom: 0
@@ -45,22 +45,6 @@ input, button
   background-color: $lighter-grey
   font-size: 12pt
 
-textarea.popup_txt, .contribution_descriptioninput
-  width: 100%
-  resize: none
-  padding: 4px
-  margin-bottom: 2px
-  margin-top: 2px
-
-.contribution_descriptioninput
-  height: 100px
-  position: relative
-  &:focus
-    outline: 0
-
-.disabled_contenteditable
-  background-color: #AAA
-
 button
   @include sassy-button("glass", 5px, 16px, #8cbe5f)
 
@@ -69,7 +53,6 @@ button
 
 .ngdialog.ngdialog-theme-default .ngdialog-content
   font-family: $default-font-family
-
 
 .loading_container
   margin-top: 200px
@@ -86,3 +69,27 @@ button
   padding: 3px
   +border-radius(6px)
   +single-box-shadow(rgba(40, 40, 40, 0.1), 0px, 0px, 2px, 2px)
+
+.contribution-list
+  overflow-y: auto
+  // height: 95%
+  float: right
+  margin-top: 5px
+  width: 100%
+  .contribution
+    border-bottom: 1px solid lighten($darker-grey,15)
+    padding-top: 0.5em
+    padding-bottom: 0.5em
+    clear: both
+    .contribution-replybutton
+      padding: 2px 10px
+      float: right
+      display: inline-block
+      &:after
+        clear: both
+
+    .contribution-info
+      font-size: 13px
+      color: lighten($darker-grey,15)
+    .contribution-description
+      line-height: 24px

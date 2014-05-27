@@ -4,24 +4,69 @@ angular.module('SustainabilityApp').factory 'Contribution', [
   '$rootScope'
   'contributionTransformer'
   'User'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User) ->
+  '$queue'
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $queue) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
 
+    queueCallback = (item) ->
+      item.childrenContributions.map (i) ->
+        found = false
+        (angular.extend(i,contrib); found = true) for contrib in resource.contributions when contrib.id is i.id
+        if found == false
+          resource.get({id: i.id}).then (contrib) ->
+            angular.extend(i,contrib)
+            return
+      console.log 'callback ended for', item.id
+      return
+    _fetchChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); return }
+
     resource.contributions = []
+
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
-        # transform the result array to fancy html
-        (c = contributionTransformer.createFancyContributionFromRaw(c) for c in result.data)
-
+        # transform all incoming contributions into fancy contributions. uuh!
         if result.status == 200
-          resource.contributions = result.data
+          (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(c)
+          _fetchChildrenQueue.add c) for c in result.data when c.id not in resource.contributions.map (r) -> r.id
         else if result.status == 201
           # this only works if the '201-created' call returns one object
-          resource.contributions.push contributionTransformer.createFancyContributionFromRaw(result.data)
+          (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(result.data)
+          _fetchChildrenQueue.add result.data) unless result.data.id in resource.contributions.map (r) -> r.id
+        _fetchChildrenQueue.start()
         result
 
+    # Methods for Contribution collection
+    resource.setCurrentContribution = (id) ->
+      ($rootScope.$apply -> resource.currentContribution = elem) for elem in resource.contributions when elem.id is id
+      return
+    resource.fetchMissingReplies = (id) ->
+      parent = elem for elem in resource.contributions when elem.id is id
+
+      out_children = []
+
+      for child in parent.childrenContributions
+        do ->
+          found = false
+          (out_children.push contrib; found = true) for contrib in resource.contributions when contrib.id is child.id
+          if found == false
+            console.log ''
+          return
+      out_children
+
+    resource.populateChildren = (ids) ->
+      fetchChildrenQueue = $queue.queue (id) ->
+        console.log 'queue', id
+        # resource.get({ id: id })
+        return
+
+      fetchChildrenQueue.addEach ids
+
+      return
+
+
+    # Methods for creating a Contribution
     resource.composing =  false
     resource.addingFeatureReference = false
     resource.references = []
@@ -29,13 +74,12 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
 
-    resource.start = (reference) ->
+    resource.start = (parent_id) ->
+      console.log 'start'
       $rootScope.$broadcast('Contribution.start')
-      if reference?
-        @reset()
-        @addFeatureReference reference
-      else
-        @references = []
+      @reset()
+      if parent_id?
+        @parent_contribution = parent_id
       @composing = true
       return
     resource.addFeature = (feature) ->
@@ -127,11 +171,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
           return
       else
         User._unauthorized()
-      return
-
-
-    resource.setCurrentContribution = (id) ->
-      ($rootScope.$apply -> resource.currentContribution = elem) for elem in resource.contributions when elem.id is id
       return
 
     resource

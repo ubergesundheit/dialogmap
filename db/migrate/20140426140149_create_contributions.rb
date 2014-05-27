@@ -4,6 +4,7 @@ class CreateContributions < ActiveRecord::Migration
       t.string :title
       t.text :description
       t.references :user
+      t.integer :parent_id
 
       t.timestamps
     end

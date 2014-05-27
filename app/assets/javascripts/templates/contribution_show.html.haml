@@ -1,5 +1,15 @@
-%p {{ Contribution.currentContribution.user.email }}
-%h3 {{ Contribution.currentContribution.title }}
-%p{ ng_bind_html: "Contribution.currentContribution.description" }
-
--# %button{ ng_click: "Contribution.start(Contribution.currentContribution.features[0])" } Antworten
+-# %contributions.contribution-list{ contributions: "contributions.childrenContributions" }
+-#   %contribution.contribution{ ng_repeat: "contribution in contributions" }
+.contribution
+  .contribution-info
+    {{ contribution.user.email }}
+    schrieb am
+    {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
+  %h3 {{ contribution.title }}
+  .contribution-description{ ng_bind_html: "contribution.description" }
+  .contribution_input_replace
+    %button.contribution-replybutton{ ng_click: "startContributionHere(contribution.id, $index)", ng_hide: "Contribution.composing" } Antwort verfassen
+    .composing_container
+    -# .contribution-list{ contributions_display: true, ng_model: "contribution.childrenContributions" }
+    -# .contribution-replies{ ng_repeat: "reply in contribution.childrenContributions" }
+      {{ reply }}

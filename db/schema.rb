@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20140508102330) do
     t.string   "title"
     t.text     "description"
     t.integer  "user_id"
+    t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
