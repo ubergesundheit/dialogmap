@@ -4,7 +4,6 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
   "descriptionTagHelper"
   (leafletData, propertiesHelper, descriptionTagHelper) ->
     @createContributionForSubmit = (contribution) ->
-      console.log contribution
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
@@ -26,6 +25,9 @@ angular.module('SustainabilityApp').service "contributionTransformer", [
             else if type == 'feature_reference'
               # this could be a problem if the user types in a name that contains "<span"
               tag_title = tag_title.slice(0,tag_title.indexOf("<span")-1)
+
+              (fRef.title = tag_title) for fRef in contribution.references when fRef.ref_id is parseInt(id)
+
               descr = descr.replace(tag.outerHTML, "#[#{id}]#")
             else if type == 'url_reference'
               descr = descr.replace(tag.outerHTML, "&[#{id}|#{encodeURIComponent(tag_title)}]&")
