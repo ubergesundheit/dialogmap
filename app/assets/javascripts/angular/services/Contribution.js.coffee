@@ -18,7 +18,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
           resource.get({id: i.id}).then (contrib) ->
             angular.extend(i,contrib)
             return
-      console.log 'callback ended for', item.id
+      # console.log 'callback ended for', item.id
       return
     _fetchChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); return }
 
@@ -27,44 +27,16 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
         # transform all incoming contributions into fancy contributions. uuh!
-        if result.status == 200
-          (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(c)
-          _fetchChildrenQueue.add c) for c in result.data when c.id not in resource.contributions.map (r) -> r.id
-        else if result.status == 201
-          # this only works if the '201-created' call returns one object
-          (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(result.data)
-          _fetchChildrenQueue.add result.data) unless result.data.id in resource.contributions.map (r) -> r.id
+        if angular.isArray(result.data) then resultData = result.data else resultData = [result.data]
+        (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(c)
+        _fetchChildrenQueue.add c) for c in resultData when c.id not in resource.contributions.map (r) -> r.id
         _fetchChildrenQueue.start()
         result
 
     # Methods for Contribution collection
     resource.setCurrentContribution = (id) ->
-      ($rootScope.$apply -> resource.currentContribution = elem) for elem in resource.contributions when elem.id is id
+      ($rootScope.$apply -> resource.currentContribution = elem; return) for elem in resource.contributions when elem.id is id
       return
-    resource.fetchMissingReplies = (id) ->
-      parent = elem for elem in resource.contributions when elem.id is id
-
-      out_children = []
-
-      for child in parent.childrenContributions
-        do ->
-          found = false
-          (out_children.push contrib; found = true) for contrib in resource.contributions when contrib.id is child.id
-          if found == false
-            console.log ''
-          return
-      out_children
-
-    resource.populateChildren = (ids) ->
-      fetchChildrenQueue = $queue.queue (id) ->
-        console.log 'queue', id
-        # resource.get({ id: id })
-        return
-
-      fetchChildrenQueue.addEach ids
-
-      return
-
 
     # Methods for creating a Contribution
     resource.composing =  false
@@ -75,7 +47,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource._currentDrawHandler = undefined
 
     resource.start = (parent_id) ->
-      console.log 'start'
       $rootScope.$broadcast('Contribution.start')
       @reset()
       if parent_id?

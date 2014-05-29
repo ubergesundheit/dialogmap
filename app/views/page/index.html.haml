@@ -3,8 +3,9 @@
     %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
   #sidebar{ ng_controller: "SidebarController" }
     #user{ ng_include: "'sidebar_user.html'" }
-    -# %button{ ng_click: "Contribution.start()" } start
-    -# %div{ ng_include: "'contribution_input.html'" }
+    %button{ ng_click: "startNewTopic()" } start
+    #new-topic-container
     -# .contribution-list{ contributions_display: true, ng_model: "Contribution.contributions" }
-    .contribution-list
-      %contributions{ contributions: "Contribution.contributions" }
+    #contributions-scroller
+      .contribution-list
+        %contributions{ contributions: "Contribution.contributions" }
