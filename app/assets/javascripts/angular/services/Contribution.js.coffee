@@ -13,30 +13,66 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     queueCallback = (item) ->
       item.childrenContributions.map (i) ->
         found = false
-        (angular.extend(i,contrib); found = true) for contrib in resource.contributions when contrib.id is i.id
+        (angular.extend(i,contrib); found = true) for contrib in resource.all_contributions when contrib.id is i.id
         if found == false
           resource.get({id: i.id}).then (contrib) ->
             angular.extend(i,contrib)
+            # _populateChildrenQueue.add(i)
             return
-      # console.log 'callback ended for', item.id
       return
-    _fetchChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); return }
+    # create a Queue for popuplating the children in the all_contributions array
+    _populateChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); _buildTree(); return }
 
-    resource.contributions = []
+    resource.all_contributions = []
+
+    resource.parent_contributions = []
+
+    _buildTree = ->
+      resource.parent_contributions = []
+      resource.parent_contributions.push c for c in resource.all_contributions when !c.parentId?
+      resource.setCurrentContribution(resource.currentContribution.id) if resource.currentContribution?
+      return
+
+    _updateParentInAllContributions = (contribution) ->
+      hasChild = (parent, childId) ->
+        found = false
+        (found = true) for child in parent.childrenContributions when child.id is childId
+        found
+
+      for parent in resource.all_contributions when parent.id is contribution.parentId
+        if !hasChild(parent, contribution.id)
+          parent.childrenContributions.push contribution
+      return
 
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
         # transform all incoming contributions into fancy contributions. uuh!
+        # make sure the resultData is always an array
         if angular.isArray(result.data) then resultData = result.data else resultData = [result.data]
-        (resource.contributions.push contributionTransformer.createFancyContributionFromRaw(c)
-        _fetchChildrenQueue.add c) for c in resultData when c.id not in resource.contributions.map (r) -> r.id
-        _fetchChildrenQueue.start()
+
+        (resource.all_contributions.push contributionTransformer.createFancyContributionFromRaw(c)
+        _populateChildrenQueue.add c
+        _updateParentInAllContributions(c)) for c in resultData when c.id not in resource.all_contributions.map (r) -> r.id
+        _populateChildrenQueue.start()
         result
+
+    resource.currentContribution = undefined
 
     # Methods for Contribution collection
     resource.setCurrentContribution = (id) ->
-      ($rootScope.$apply -> resource.currentContribution = elem; return) for elem in resource.contributions when elem.id is id
+      resource.currentContribution = undefined
+      found = false
+      (resource.currentContribution = elem; found = true) for elem in resource.all_contributions when elem.id is parseInt(id)
+      if found == false
+        resource.get({id: id}).then (data) ->
+          resource.setCurrentContribution(id)
+          return
+
       return
+
+    $rootScope.$on '$stateChangeSuccess', (event, toState, toParams) ->
+      if toState.name is 'contribution'
+        resource.setCurrentContribution(toParams.id)
 
     # Methods for creating a Contribution
     resource.composing =  false

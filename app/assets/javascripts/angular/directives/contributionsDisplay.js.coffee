@@ -17,20 +17,14 @@ angular.module("SustainabilityApp")
       contribution: "="
     #template: "<li>{{contribution.id}}</li>"
     templateUrl: 'contribution_show.html'
-    controller: ($scope, $element) ->
-      if angular.isArray($scope.contribution.childrenContributions)
-        childrenHtml = "<contributions class='contribution-list' contributions='contribution.childrenContributions'></contributions>"
-        console.log $element.html()
-        $element.find("[data-contribution-id=#{$scope.contribution.id}]").append childrenHtml
-      return
     link: (scope, element, attrs) ->
       angular.extend scope,
         Contribution: Contribution
+        childrenElementAdded = false
         # contributions: scope.Contribution.contributions
         startContributionHere: (id) ->
           # remove other composing containers
           angular.element('.composing_container').remove()
-          # console.log element.find('.contribution_input_replace')
 
           inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")(scope)
           element.append inputAreaHtml
@@ -38,13 +32,12 @@ angular.module("SustainabilityApp")
           # $compile(element.contents()) scope
           return
 
-      # if angular.isArray(scope.contribution.childrenContributions)
-      #   childrenHtml = $compile("<contributions class='contribution-list' contributions='contribution.childrenContributions'></contributions>")(scope)
-      #   console.log element.html()
-      #   angular.element.find("[data-contribution-id=#{scope.contribution.id}]").append childrenHtml
-        #element.append childrenHtml
-        # element.append "<contributions contributions='contribution.childrenContributions'></contributions>"
-        # $compile(element.contents()) scope
+      # scope.$watchCollection 'contribution.childrenContributions', (newValue, oldValue) ->
+      #   if angular.isArray(scope.contribution.childrenContributions)
+      #     console.log 'asdasd', angular.isArray(scope.contribution.childrenContributions)
+      #     childrenHtml = $compile("<contributions class='contribution-list' contributions='contribution.childrenContributions'></contributions>")(scope)
+      #     element.append childrenHtml
+      #   return
 
 
       return

@@ -62,12 +62,13 @@ angular.module("SustainabilityApp").controller "MapController", [
             data: fCollection
           return
         if !skip_reload?
-          leafletData.getMap('map_main').then (map) ->
-            bbox = map.getBounds().pad(1.005).toBBoxString()
-            Contribution.query({bbox: bbox}).then updateGeoJSONinScope
-            return
+          # leafletData.getMap('map_main').then (map) ->
+          #   bbox = map.getBounds().pad(1.005).toBBoxString()
+          #   Contribution.query({bbox: bbox}).then updateGeoJSONinScope
+          #   return
+          Contribution.query().then updateGeoJSONinScope
         else
-          updateGeoJSONinScope(Contribution.contributions)
+          updateGeoJSONinScope(Contribution.all_contributions)
         return
 
       removeDraftFeature: (leaflet_id) ->

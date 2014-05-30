@@ -6,16 +6,18 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
+      render json: Contribution.only_parents.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
+    elsif ids_params != {}
+      render json: Contribution.find(ids_params.split(",")).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
     else
-      render json: Contribution.all.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
+      render json: Contribution.only_parents.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
     end
   end
 
   # GET /contributions/1
   # GET /contributions/1.json
   def show
-    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } })
+    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
   end
 
   # POST /contributions
@@ -26,7 +28,7 @@ class Api::ContributionsController < Api::BaseController
     set_user!
 
     if @contribution.save
-      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: { only: :id } }), status: :created
+      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} }), status: :created
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end
@@ -68,6 +70,10 @@ class Api::ContributionsController < Api::BaseController
 
     def bbox_params
       params.fetch(:bbox,{})
+    end
+
+    def ids_params
+      params.fetch(:ids,{})
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

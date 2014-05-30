@@ -15,6 +15,8 @@ class Contribution < ActiveRecord::Base
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })
   }
 
+  scope :only_parents, -> { where(parent: nil) }
+
   def user
     User.find(self.user_id)
   end
