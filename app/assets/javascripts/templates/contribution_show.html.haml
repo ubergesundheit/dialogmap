@@ -7,7 +7,7 @@
     {{ Contribution.currentContribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ ng_bind_html: "Contribution.currentContribution.description" }
-  .children-contributions.contributions-list{ ng_repeat: "contribution in Contribution.currentContribution.childrenContributions", ng_show: "Contribution.currentContribution.childrenContributions" }
+  .children-contributions.contribution-list{ ng_repeat: "contribution in Contribution.currentContribution.childrenContributions", ng_show: "Contribution.currentContribution.childrenContributions" }
     .contribution
       .contribution-info
         {{ contribution.user.email }}
