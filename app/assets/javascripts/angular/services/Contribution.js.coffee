@@ -23,7 +23,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     # create a Queue for popuplating the children in the all_contributions array
     _populateChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); _buildTree(); return }
 
-
     resource.all_contributions = []
 
     resource.parent_contributions = []
@@ -47,7 +46,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
 
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
-        console.log 'interceptor start'
         # transform all incoming contributions into fancy contributions. uuh!
         # make sure the resultData is always an array
         if angular.isArray(result.data) then resultData = result.data else resultData = [result.data]
@@ -56,7 +54,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
         _populateChildrenQueue.add c
         _updateParentInAllContributions(c)) for c in resultData when c.id not in resource.all_contributions.map (r) -> r.id
         _populateChildrenQueue.start()
-        console.log 'interceptor end'
         result
 
     resource.currentContribution = undefined
@@ -76,6 +73,9 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     $rootScope.$on '$stateChangeSuccess', (event, toState, toParams) ->
       if toState.name is 'contribution'
         resource.setCurrentContribution(toParams.id)
+      else if toState.name is 'contributions'
+        resource.currentContribution = undefined
+      return
 
     # Methods for creating a Contribution
     resource.composing =  false

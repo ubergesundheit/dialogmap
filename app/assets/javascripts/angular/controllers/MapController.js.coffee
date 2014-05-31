@@ -37,26 +37,36 @@ angular.module("SustainabilityApp").controller "MapController", [
               feature = evt.target.feature
               Contribution.addFeatureReference feature
             else
-              console.log evt.target.feature
               $state.go 'contribution',
                 id: evt.target.feature.properties.contributionId
-              # Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
             return
           return
 
       updateGeoJSON: (skip_reload, bbox_string) ->
-        updateGeoJSONinScope = (arr) ->
+        updateGeoJSONinScope = (arr, includeChildren) ->
           # transform the array to a feature collection
           fCollection =
             type: 'FeatureCollection'
             features: []
-          for c in arr
+          pushFeaturesToCollection = (features) ->
+            for f in features
+              do ->
+                fCollection.features.push f
+                return
+          for contribution in arr
             do ->
-              if c.features.length > 0
-                for f in c.features
+              # add the parents features to the map..
+              if contribution.features.length > 0
+                pushFeaturesToCollection contribution.features
+
+              # add the features of the children to to the map
+              if includeChildren and contribution.childrenContributions?
+                for contribution in contribution.childrenContributions
                   do ->
-                    fCollection.features.push f
+                    if contribution.features.length > 0
+                      pushFeaturesToCollection contribution.features
                     return
+
               return
           # Update the scope
           $scope.geojson =
@@ -68,7 +78,13 @@ angular.module("SustainabilityApp").controller "MapController", [
         if !skip_reload?
           Contribution.query({bbox: bbox_string}).then updateGeoJSONinScope
         else
-          updateGeoJSONinScope(Contribution.all_contributions)
+          if Contribution.currentContribution?
+            contrib = [Contribution.currentContribution]
+          else if Contribution.parent_contributions?
+            contrib = Contribution.parent_contributions
+
+          # include the children if the state is in a show Topic state
+          updateGeoJSONinScope contrib, $state.is 'contribution'
         return
 
       removeDraftFeature: (leaflet_id) ->
@@ -81,13 +97,19 @@ angular.module("SustainabilityApp").controller "MapController", [
       return
 
     $scope.$on 'leafletDirectiveMap.moveend', (evt, leafletEvent) ->
+      if !$state.is 'contribution'
+        bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
+        $scope.updateGeoJSON(undefined,bbox_string)
+      return
 
-      bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
-      $scope.updateGeoJSON(undefined,bbox_string)
+    $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
+      # if the route is set to an contribution id..
+      $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
       return
 
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
       #console.log leafletEvent
       return
+
 
 ]
