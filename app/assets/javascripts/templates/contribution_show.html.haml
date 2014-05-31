@@ -16,7 +16,7 @@
       .contribution-description{ ng_bind_html: "contribution.description" }
   %span{ ng_hide: "Contribution.currentContribution.childrenContributions" }
     Noch keine Antworten &hellip;
-  .contribution_input_replace{ ng_show: "User.isAuthenticated()", :"data-id" => "{{Contribution.currentContribution.id}}" }
+  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }
     %button.contribution-replybutton{ ng_click: "startContributionHere(Contribution.currentContribution.id)", ng_hide: "Contribution.composing" }
       Antwort verfassen
   %a.contribution-links{ ui_sref: "contributions" }

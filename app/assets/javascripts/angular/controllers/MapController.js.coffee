@@ -3,7 +3,8 @@ angular.module("SustainabilityApp").controller "MapController", [
   "leafletData"
   "Contribution"
   "User"
-  ($scope, leafletData, Contribution, User) ->
+  "$state"
+  ($scope, leafletData, Contribution, User, $state) ->
     angular.extend $scope,
       Contribution: Contribution
       # leaflet-directive stuff
@@ -36,11 +37,14 @@ angular.module("SustainabilityApp").controller "MapController", [
               feature = evt.target.feature
               Contribution.addFeatureReference feature
             else
-              Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
+              console.log evt.target.feature
+              $state.go 'contribution',
+                id: evt.target.feature.properties.contributionId
+              # Contribution.setCurrentContribution(evt.target.feature.properties.contributionId)
             return
           return
 
-      updateGeoJSON: (skip_reload) ->
+      updateGeoJSON: (skip_reload, bbox_string) ->
         updateGeoJSONinScope = (arr) ->
           # transform the array to a feature collection
           fCollection =
@@ -62,11 +66,7 @@ angular.module("SustainabilityApp").controller "MapController", [
             data: fCollection
           return
         if !skip_reload?
-          # leafletData.getMap('map_main').then (map) ->
-          #   bbox = map.getBounds().pad(1.005).toBBoxString()
-          #   Contribution.query({bbox: bbox}).then updateGeoJSONinScope
-          #   return
-          Contribution.query().then updateGeoJSONinScope
+          Contribution.query({bbox: bbox_string}).then updateGeoJSONinScope
         else
           updateGeoJSONinScope(Contribution.all_contributions)
         return
@@ -80,8 +80,10 @@ angular.module("SustainabilityApp").controller "MapController", [
       $scope.updateGeoJSON(true)
       return
 
-    $scope.$on 'leafletDirectiveMap.moveend', (evt) ->
-      $scope.updateGeoJSON()
+    $scope.$on 'leafletDirectiveMap.moveend', (evt, leafletEvent) ->
+
+      bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
+      $scope.updateGeoJSON(undefined,bbox_string)
       return
 
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
