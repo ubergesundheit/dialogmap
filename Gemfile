@@ -39,6 +39,8 @@ gem 'rgeo-geojson'
 
 gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
 
+gem "active_model_serializers"
+
 group :development do
   gem 'pry-rails'
 end

@@ -10,50 +10,41 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       url: "/api/contributions"
       name: 'contribution'
 
-    queueCallback = (item) ->
-      item.childrenContributions.map (i) ->
-        found = false
-        (angular.extend(i,contrib); found = true) for contrib in resource.all_contributions when contrib.id is i.id
-        if found == false
-          resource.get({id: i.id}).then (contrib) ->
-            angular.extend(i,contrib)
-            # _populateChildrenQueue.add(i)
-            return
-      return
-    # create a Queue for popuplating the children in the all_contributions array
-    _populateChildrenQueue = $queue.queue queueCallback, { paused: true, complete: -> @.pause(); _buildTree(); return }
-
-    resource.all_contributions = []
-
     resource.parent_contributions = []
 
-    _buildTree = ->
-      resource.parent_contributions = []
-      resource.parent_contributions.push c for c in resource.all_contributions when !c.parentId?
-      resource.setCurrentContribution(resource.currentContribution.id) if resource.currentContribution?
-      return
+    _replaceOrAppendContribution = (contribution) ->
+      # transform the contributions into a fancy contributions. uuh!
+      contribution = contributionTransformer.createFancyContributionFromRaw contribution
+      if contribution.childContributions
+        for child in contribution.childContributions
+          child = contributionTransformer.createFancyContributionFromRaw(child)
 
-    _updateParentInAllContributions = (contribution) ->
-      hasChild = (parent, childId) ->
-        found = false
-        (found = true) for child in parent.childrenContributions when child.id is childId
-        found
-
-      for parent in resource.all_contributions when parent.id is contribution.parentId
-        if !hasChild(parent, contribution.id)
-          parent.childrenContributions.push contribution
+      # now update the tree
+      if !contribution.parentId? # the contribution is a topic/parent
+        replaced = false
+        (elem = contribution; replaced = true) for elem in resource.parent_contributions when elem.id is contribution.id
+        unless replaced
+          resource.parent_contributions.push contribution
+      else
+        # search for the parent and replace/append in its childContributions
+        for parent in resource.parent_contributions
+          if parent.id is contribution.parentId
+            replaced = false
+            for child in parent
+              if child.id is contribution.id
+                child = contribution
+                replaced = true
+            unless replaced
+              parent.childContributions.push contribution
       return
 
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
-        # transform all incoming contributions into fancy contributions. uuh!
         # make sure the resultData is always an array
         if angular.isArray(result.data) then resultData = result.data else resultData = [result.data]
 
-        (resource.all_contributions.push contributionTransformer.createFancyContributionFromRaw(c)
-        _populateChildrenQueue.add c
-        _updateParentInAllContributions(c)) for c in resultData when c.id not in resource.all_contributions.map (r) -> r.id
-        _populateChildrenQueue.start()
+        ( _replaceOrAppendContribution(c) )for c in resultData
+
         result
 
     resource.currentContribution = undefined
@@ -62,11 +53,20 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.setCurrentContribution = (id) ->
       resource.currentContribution = undefined
       found = false
-      (resource.currentContribution = elem; found = true) for elem in resource.all_contributions when elem.id is parseInt(id)
+      id = parseInt(id)
+      # search only parents
+      (resource.currentContribution = elem; found = true) for elem in resource.parent_contributions when elem.id is id
       if found == false
-        resource.get({id: id}).then (data) ->
-          resource.setCurrentContribution(id)
-          return
+        # search the whole tree...
+        for parent in resource.parent_contributions
+          (resource.currentContribution = child; found = true) for child in parent.childContributions when child.id is id
+
+        # if all fails.. fetch the missing contribution.
+        # the interceptor will take care of appending it to the correct parent
+        if found == false
+          resource.get({id: id}).then (data) ->
+            resource.setCurrentContribution(id)
+            return
 
       return
 

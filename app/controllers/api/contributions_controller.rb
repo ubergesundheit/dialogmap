@@ -6,18 +6,18 @@ class Api::ContributionsController < Api::BaseController
   # GET /contributions.json
   def index
     if bbox_params != {}
-      render json: Contribution.only_parents.within(bbox_params).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
+      render json: Contribution.only_parents.within(bbox_params)
     elsif ids_params != {}
-      render json: Contribution.find(ids_params.split(",")).as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
+      render json: Contribution.find(ids_params.split(","))
     else
-      render json: Contribution.only_parents.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
+      render json: Contribution.only_parents
     end
   end
 
   # GET /contributions/1
   # GET /contributions/1.json
   def show
-    render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} })
+    render json: @contribution
   end
 
   # POST /contributions
@@ -28,7 +28,7 @@ class Api::ContributionsController < Api::BaseController
     set_user!
 
     if @contribution.save
-      render json: @contribution.as_json(include: { features: {}, references: { include: :reference_to }, user: {}, children_contributions: {} }), status: :created
+      render json: @contribution
     else
       render json: @contribution.errors, status: :unprocessable_entity
     end

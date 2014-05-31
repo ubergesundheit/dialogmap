@@ -36,7 +36,7 @@ angular.module("SustainabilityApp").controller "MapController", [
             if Contribution.addingFeatureReference == true
               feature = evt.target.feature
               Contribution.addFeatureReference feature
-            else
+            else if $state.is 'contributions'
               $state.go 'contribution',
                 id: evt.target.feature.properties.contributionId
             return
@@ -60,11 +60,11 @@ angular.module("SustainabilityApp").controller "MapController", [
                 pushFeaturesToCollection contribution.features
 
               # add the features of the children to to the map
-              if includeChildren and contribution.childrenContributions?
-                for contribution in contribution.childrenContributions
+              if includeChildren and contribution.childContributions?
+                for child in contribution.childContributions
                   do ->
-                    if contribution.features.length > 0
-                      pushFeaturesToCollection contribution.features
+                    if child.features.length > 0
+                      pushFeaturesToCollection child.features
                     return
 
               return
@@ -103,7 +103,6 @@ angular.module("SustainabilityApp").controller "MapController", [
       return
 
     $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-      # if the route is set to an contribution id..
       $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
       return
 

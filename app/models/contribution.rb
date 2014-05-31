@@ -3,7 +3,7 @@ class Contribution < ActiveRecord::Base
   has_many :references
 
   belongs_to :parent, :class_name => "Contribution"
-  has_many :children_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
+  has_many :child_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
 
   accepts_nested_attributes_for :features, :references
 

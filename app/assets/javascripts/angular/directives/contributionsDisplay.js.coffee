@@ -32,10 +32,10 @@ angular.module("SustainabilityApp")
           # $compile(element.contents()) scope
           return
 
-      # scope.$watchCollection 'contribution.childrenContributions', (newValue, oldValue) ->
-      #   if angular.isArray(scope.contribution.childrenContributions)
-      #     console.log 'asdasd', angular.isArray(scope.contribution.childrenContributions)
-      #     childrenHtml = $compile("<contributions class='contribution-list' contributions='contribution.childrenContributions'></contributions>")(scope)
+      # scope.$watchCollection 'contribution.childContributions', (newValue, oldValue) ->
+      #   if angular.isArray(scope.contribution.childContributions)
+      #     console.log 'asdasd', angular.isArray(scope.contribution.childContributions)
+      #     childrenHtml = $compile("<contributions class='contribution-list' contributions='contribution.childContributions'></contributions>")(scope)
       #     element.append childrenHtml
       #   return
 
