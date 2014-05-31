@@ -22,6 +22,7 @@
 //= require ngDialog
 //= require mapbox
 //= require angular-leaflet-directive
+//= require L.activearea.js
 //= require leaflet.draw
 //= require_tree ./angular
 //= require_tree ./templates

@@ -8,7 +8,6 @@ angular.module("SustainabilityApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
-      $state: $state
       startNewTopic: ->
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
@@ -24,13 +23,17 @@ angular.module("SustainabilityApp").controller "SidebarController", [
         Contribution.start(id)
         return
 
-    # $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-    #   if toState.name is 'contribution'
-    #     Contribution.setCurrentContribution(toParams.id)
-    #     # $scope.contribution = Contribution.currentContribution
-    #
-    #   console.log toState
-    #   console.log toParams
-    #   return
+    $scope.$on '$stateChangeStart', (event) ->
+      $scope.loading = true
+      return
+
+    $scope.$on '$stateChangeSuccess', (event) ->
+      $scope.loading = false
+      return
+
+    $scope.$on '$stateChangeError', (event) ->
+      $scope.loading = false
+      return
+
     return
 ]

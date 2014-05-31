@@ -1,3 +1,4 @@
+.activearea
 %div{ ng_controller: "MainController"}
   #map{ ng_controller: "MapController" }
     %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
@@ -6,4 +7,5 @@
     %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
     #new-topic-container
     #contributions-scroller
+      = image_tag("loading.gif", class: "loading", ng_show: "loading")
       .view{ ui_view: true }

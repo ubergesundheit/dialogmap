@@ -2,11 +2,19 @@ angular.module("SustainabilityApp").controller "MapController", [
   "$scope"
   "leafletData"
   "Contribution"
-  "User"
-  "$state"
-  ($scope, leafletData, Contribution, User, $state) ->
+  ($scope, leafletData, Contribution) ->
+    # use of L.activearea plugin in order to set the vieport to the visible area
+    leafletData.getMap('map_main').then (map) ->
+      map.setActiveArea
+        position: "absolute"
+        top: "0"
+        bottom: "0"
+        left: "0"
+        width: "75%"
+      return
     angular.extend $scope,
       Contribution: Contribution
+      currContrib: Contribution.currentContribution
       # leaflet-directive stuff
       muenster:
         lat: 51.96
@@ -36,14 +44,22 @@ angular.module("SustainabilityApp").controller "MapController", [
             if Contribution.addingFeatureReference == true
               feature = evt.target.feature
               Contribution.addFeatureReference feature
-            else if $state.is 'contributions'
-              $state.go 'contribution',
+            else if $scope.$state.is 'contributions'
+              $scope.$state.go 'contribution',
                 id: evt.target.feature.properties.contributionId
             return
           return
+      _dataFresh: true
 
       updateGeoJSON: (skip_reload, bbox_string) ->
-        updateGeoJSONinScope = (arr, includeChildren) ->
+        updateGeoJSONinScope = ->
+          includeChildren = $scope.$state.is 'contribution'
+          # decide which source to use
+          if Contribution.currentContribution?
+            contributions = [Contribution.currentContribution]
+          else if Contribution.parent_contributions?
+            contributions = Contribution.parent_contributions
+
           # transform the array to a feature collection
           fCollection =
             type: 'FeatureCollection'
@@ -53,7 +69,7 @@ angular.module("SustainabilityApp").controller "MapController", [
               do ->
                 fCollection.features.push f
                 return
-          for contribution in arr
+          for contribution in contributions
             do ->
               # add the parents features to the map..
               if contribution.features.length > 0
@@ -75,16 +91,14 @@ angular.module("SustainabilityApp").controller "MapController", [
             pointToLayer: $scope.geojson.pointToLayer
             data: fCollection
           return
-        if !skip_reload?
-          Contribution.query({bbox: bbox_string}).then updateGeoJSONinScope
-        else
-          if Contribution.currentContribution?
-            contrib = [Contribution.currentContribution]
-          else if Contribution.parent_contributions?
-            contrib = Contribution.parent_contributions
 
-          # include the children if the state is in a show Topic state
-          updateGeoJSONinScope contrib, $state.is 'contribution'
+        if !skip_reload? #reload the map!
+          Contribution.query({bbox: bbox_string}).then  ->
+            updateGeoJSONinScope()
+            return
+        else
+          updateGeoJSONinScope()
+          $scope._dataFresh = true
         return
 
       removeDraftFeature: (leaflet_id) ->
@@ -97,18 +111,36 @@ angular.module("SustainabilityApp").controller "MapController", [
       return
 
     $scope.$on 'leafletDirectiveMap.moveend', (evt, leafletEvent) ->
-      if !$state.is 'contribution'
+      if $scope.$state.is 'contributions'
         bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
         $scope.updateGeoJSON(undefined,bbox_string)
       return
 
+    # $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
+    #     $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
+    #   return
+
     $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-      $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
+      $scope._dataFresh = (toState.name == 'contributions')
+        # $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
       return
 
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
       #console.log leafletEvent
       return
 
+    $scope.$watch "Contribution.currentContribution", (data) ->
+      $scope.updateGeoJSON(data) # update the map to only show marker from the selected topic
+      return
+
+    $scope.$watch "geojson.data", (data) ->
+      if $scope._dataFresh == true
+        if data.features and data.features.length > 0
+          leafletData.getMap('map_main').then (map) ->
+            bounds = L.geoJson(data).getBounds()
+            map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
+            $scope._dataFresh = false
+            return
+      return
 
 ]

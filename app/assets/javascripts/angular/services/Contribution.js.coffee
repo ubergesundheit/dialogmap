@@ -4,11 +4,32 @@ angular.module('SustainabilityApp').factory 'Contribution', [
   '$rootScope'
   'contributionTransformer'
   'User'
-  '$queue'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $queue) ->
+  '$state'
+  '$q'
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
+
+
+    resource.getContributions = (id) ->
+      contribution = $q.defer()
+      found = false
+      id = parseInt(id) if id?
+      (contribution.resolve(elem); found = true; break) for elem in resource.parent_contributions when elem.id is id
+      if found == false
+        # search the whole tree...
+        for parent in resource.parent_contributions
+          (contribution.resolve(child); found = true; break) for child in parent.childContributions when child.id is id
+
+        # if all fails.. fetch the missing contribution/s
+        # the interceptor will take care of appending it to the correct parent
+        # and making the contribution fancy
+        if found == false
+          resource.get(id).then (data) ->
+            contribution.resolve(data)
+            return
+      contribution.promise
 
     resource.parent_contributions = []
 
@@ -22,7 +43,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       # now update the tree
       if !contribution.parentId? # the contribution is a topic/parent
         replaced = false
-        (elem = contribution; replaced = true) for elem in resource.parent_contributions when elem.id is contribution.id
+        (elem = contribution; replaced = true; break) for elem in resource.parent_contributions when elem.id is contribution.id
         unless replaced
           resource.parent_contributions.push contribution
       else
@@ -52,29 +73,9 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     # Methods for Contribution collection
     resource.setCurrentContribution = (id) ->
       resource.currentContribution = undefined
-      found = false
-      id = parseInt(id)
-      # search only parents
-      (resource.currentContribution = elem; found = true) for elem in resource.parent_contributions when elem.id is id
-      if found == false
-        # search the whole tree...
-        for parent in resource.parent_contributions
-          (resource.currentContribution = child; found = true) for child in parent.childContributions when child.id is id
-
-        # if all fails.. fetch the missing contribution.
-        # the interceptor will take care of appending it to the correct parent
-        if found == false
-          resource.get({id: id}).then (data) ->
-            resource.setCurrentContribution(id)
-            return
-
-      return
-
-    $rootScope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-      if toState.name is 'contribution'
-        resource.setCurrentContribution(toParams.id)
-      else if toState.name is 'contributions'
-        resource.currentContribution = undefined
+      resource.getContributions(id).then (contribution) ->
+        resource.currentContribution = contribution
+        return
       return
 
     # Methods for creating a Contribution
@@ -182,8 +183,6 @@ angular.module('SustainabilityApp').factory 'Contribution', [
       else
         User._unauthorized()
       return
-
-    resource.get()
 
     resource
 ]
