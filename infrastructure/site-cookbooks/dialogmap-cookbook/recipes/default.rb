@@ -19,7 +19,7 @@ include_recipe 'dialogmap-cookbook::users'
 # create directories for users
 include_recipe 'dialogmap-cookbook::apps_dir'
 
-# include_recipe 'dialogmap-cookbook::shared_files'
+include_recipe 'dialogmap-cookbook::shared_files'
 
 include_recipe 'dialogmap-cookbook::postgresql'
 include_recipe 'dialogmap-cookbook::pg_user'
