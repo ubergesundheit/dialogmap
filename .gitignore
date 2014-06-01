@@ -10,3 +10,10 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore vagrant stuff
+.vagrant
+
+# Ignore chef stuff
+infrastructure/cookbooks/
+infrastructure/nodes/localhost.json

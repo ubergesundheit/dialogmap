@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp').service "contributionTransformer", [
+angular.module('DialogMapApp').service "contributionTransformer", [
   "leafletData"
   "propertiesHelper"
   "descriptionTagHelper"

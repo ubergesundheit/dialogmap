@@ -1,0 +1,35 @@
+server {
+  server_name <%= @hostname %>;
+  listen 80;
+
+  root <%= @root_path %>;
+
+  passenger_enabled on;
+
+<% if @ssl_key && @ssl_cert -%>
+  ssl on;
+  ssl_certificate <%= @ssl_cert %>;
+  ssl_certificate_key <%= @ssl_key %>;
+  ssl_protocols SSLv3 TLSv1;
+  ssl_ciphers ECDHE-RSA-AES256-SHA384:AES256-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH:!AESGCM;
+  ssl_prefer_server_ciphers on;
+<% end -%>
+
+  access_log <%= @log_dir %>/<%= @appname %>-access.log combined;
+  error_log <%= @log_dir %>/<%= @appname %>-error.log;
+
+  rewrite_log on;
+
+  # use the application's 500.html page
+  error_page 500 502 503 504 /500.html;
+
+  # restrict upload size to 25 mb
+  client_max_body_size 25M;
+
+  location ~ ^/(assets)/ {
+    gzip_static on;
+    expires max;
+    add_header Cache-Control public;
+  }
+
+}

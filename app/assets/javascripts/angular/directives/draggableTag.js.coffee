@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive 'draggableTag', [ 'editable.dragHelperService', (drag) ->
+angular.module("DialogMapApp").directive 'draggableTag', [ 'editable.dragHelperService', (drag) ->
   restrict: 'C'
   link: (scope, element, attrs) ->
     console.log scope

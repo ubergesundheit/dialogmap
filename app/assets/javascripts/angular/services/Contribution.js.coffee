@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp').factory 'Contribution', [
+angular.module('DialogMapApp').factory 'Contribution', [
   'railsResourceFactory'
   'leafletData'
   '$rootScope'
@@ -137,7 +137,7 @@ angular.module('SustainabilityApp').factory 'Contribution', [
     resource.startAddMarker = ->
       @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
-        resource._currentDrawHandler = new L.Draw.Marker(map)
+        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon({})})
         resource._currentDrawHandler.enable()
         return
       return

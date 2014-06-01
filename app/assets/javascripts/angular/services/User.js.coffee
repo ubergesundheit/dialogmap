@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp')
+angular.module('DialogMapApp')
 .config [
   "AuthProvider"
   (AuthProvider) ->

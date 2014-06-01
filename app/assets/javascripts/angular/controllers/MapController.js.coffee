@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").controller "MapController", [
+angular.module("DialogMapApp").controller "MapController", [
   "$scope"
   "leafletData"
   "Contribution"
@@ -21,11 +21,7 @@ angular.module("SustainabilityApp").controller "MapController", [
         lng: 7.62
         zoom: 14
       controls:
-        draw:
-          options:
-            draw:
-              polyline: false
-              circle: false
+        draw: true
       events:
         map:
           enable: ['moveend','draw:created','click','popupopen']

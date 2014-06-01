@@ -1,0 +1,4 @@
+site :opscode
+
+cookbook "nginx", path: "site-cookbooks/nginx"
+cookbook "dialogmap-cookbook", path: "site-cookbooks/dialogmap-cookbook"

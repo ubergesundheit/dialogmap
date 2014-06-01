@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive 'popupInput', ->
+angular.module("DialogMapApp").directive 'popupInput', ->
   restrict: 'AE'
   #require: 'ngModel'
   transclude: true

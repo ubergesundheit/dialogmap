@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module RailsMasterthesisApp
+module DialogMap
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -20,6 +20,6 @@ module RailsMasterthesisApp
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :de
     config.action_mailer.default_url_options = { host: 'localhost:3000' }
-    config.angular_templates.module_name = 'SustainabilityApp'
+    config.angular_templates.module_name = 'DialogMapApp'
   end
 end
