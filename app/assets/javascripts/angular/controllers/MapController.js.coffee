@@ -21,11 +21,7 @@ angular.module("DialogMapApp").controller "MapController", [
         lng: 7.62
         zoom: 14
       controls:
-        draw:
-          options:
-            draw:
-              polyline: false
-              circle: false
+        draw: true
       events:
         map:
           enable: ['moveend','draw:created','click','popupopen']
