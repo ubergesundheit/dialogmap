@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive 'descriptionArea', [
+angular.module("DialogMapApp").directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'

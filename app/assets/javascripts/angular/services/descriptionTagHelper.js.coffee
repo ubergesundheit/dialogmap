@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp').service "descriptionTagHelper", ->
+angular.module('DialogMapApp').service "descriptionTagHelper", ->
   @featureReferenceTypeIndicatorHtml = (text, icon_type) ->
     "<span contenteditable=\"false\" class=\"userselect_none\"><span contenteditable=\"false\" class=\"userselect_none contribution-icon #{icon_type}\"></span>(#{text})</span>"
   @createTagTitleNode = (contenteditable) ->

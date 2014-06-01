@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").controller "SidebarController", [
+angular.module("DialogMapApp").controller "SidebarController", [
   "$scope"
   "Contribution"
   "User"

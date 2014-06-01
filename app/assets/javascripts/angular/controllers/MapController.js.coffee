@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").controller "MapController", [
+angular.module("DialogMapApp").controller "MapController", [
   "$scope"
   "leafletData"
   "Contribution"

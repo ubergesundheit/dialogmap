@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").directive 'droptarget', ->
+angular.module("DialogMapApp").directive 'droptarget', ->
   restrict: 'AE'
   link: (scope, element, attrs, controller) ->
     element[0].addEventListener(

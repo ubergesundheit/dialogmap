@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp').factory 'Contribution', [
+angular.module('DialogMapApp').factory 'Contribution', [
   'railsResourceFactory'
   'leafletData'
   '$rootScope'

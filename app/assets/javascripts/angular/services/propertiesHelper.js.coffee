@@ -1,4 +1,4 @@
-angular.module('SustainabilityApp').service "propertiesHelper", ->
+angular.module('DialogMapApp').service "propertiesHelper", ->
   @createProperties = (title,type) ->
     properties = { "title": title }
     if type == "Point"

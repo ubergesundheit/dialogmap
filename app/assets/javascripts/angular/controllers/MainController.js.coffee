@@ -1,4 +1,4 @@
-angular.module("SustainabilityApp").controller "MainController", [
+angular.module("DialogMapApp").controller "MainController", [
   "$scope"
   ($scope) ->
 
