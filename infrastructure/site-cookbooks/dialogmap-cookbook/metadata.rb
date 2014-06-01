@@ -13,7 +13,7 @@ depends 'curl'
 depends 'git'
 
 depends 'database'
-depends 'mysql'
+depends 'postgresql'
 
 depends 'rbenv'
 
