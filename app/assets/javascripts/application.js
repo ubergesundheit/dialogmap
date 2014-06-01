@@ -18,7 +18,7 @@
 //= require angular-devise
 //= require angular-queue
 //= require angular-ui-router
-//= require ng-contenteditable
+// require ng-contenteditable
 //= require ngDialog
 //= require mapbox
 //= require angular-leaflet-directive
