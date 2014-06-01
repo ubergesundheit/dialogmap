@@ -1,6 +1,7 @@
 class CreateFeatures < ActiveRecord::Migration
   def change
-    #enable_extension "hstore"
+    enable_extension "postgis"
+    enable_extension "hstore"
     create_table :features do |t|
       t.belongs_to :contribution
 

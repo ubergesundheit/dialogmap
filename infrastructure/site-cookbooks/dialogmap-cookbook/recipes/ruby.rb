@@ -1,6 +1,7 @@
 # Install and setup Ruby environment
 include_recipe "rbenv::default"
 include_recipe "rbenv::ruby_build"
+include_recipe "rbenv::rbenv_vars"
 
 rbenv_ruby node["ruby"]["version"] do
   global(node["ruby"]["version"])
