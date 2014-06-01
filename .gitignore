@@ -13,3 +13,7 @@
 
 # Ignore vagrant stuff
 .vagrant
+
+# Ignore chef stuff
+infrastructure/cookbooks/
+infrastructure/nodes/localhost.json
