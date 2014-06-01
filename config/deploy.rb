@@ -4,7 +4,7 @@ lock '3.2.1'
 set :application, 'dialog_map'
 set :repo_url, 'git@github.com:ubergesundheit/masterthesis.git'
 
-set :branch, 'chef'
+set :branch, 'master'
 
 set :deploy_to, '/home/apps/dialog-map'
 
@@ -49,6 +49,9 @@ namespace :deploy do
   after :publishing, :restart
 
   before :starting, :chown_apps_dir_to_deploy
-  before :restart, :chown_apps_dir_to_apps
+  after :log_revision, :chown_apps_dir_to_apps
+
+  before :migrate, :dbuser_to_superuser
+  after :migrate, :dbuser_from_superuser
 
 end
