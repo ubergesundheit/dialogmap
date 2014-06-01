@@ -48,6 +48,10 @@ end
 group :deployment do
   gem 'knife-solo'
   gem 'berkshelf'
+  gem 'capistrano'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-rails'
+  gem 'capistrano-bundler'
 end
 
 # Use ActiveModel has_secure_password
