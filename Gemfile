@@ -22,7 +22,6 @@ gem 'angular_rails_csrf'
 gem 'angular-rails-templates', github: 'whitehat101/angular-rails-templates'
 gem 'rails-assets-angular-devise'
 gem 'rails-assets-ngDialog'
-gem 'rails-assets-angular-queue'
 gem 'rails-assets-angular-ui-router'
 
 gem 'jquery-rails'
