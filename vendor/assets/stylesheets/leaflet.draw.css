@@ -23,12 +23,12 @@
 }
 
 .leaflet-draw-toolbar a {
-	background-image: url('spritesheet.png');
+	background-image: asset-url('spritesheet.png');
 	background-repeat: no-repeat;
 }
 
 .leaflet-retina .leaflet-draw-toolbar a {
-	background-image: url('spritesheet-2x.png');
+	background-image: asset-url('spritesheet-2x.png');
 	background-size: 270px 30px;
 }
 
