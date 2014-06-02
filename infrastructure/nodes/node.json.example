@@ -1,0 +1,34 @@
+{
+  "app": {
+    "appname": "dialog-map",
+    "hostname": "localhost"
+  },
+  "users": {
+    "deploy_keys": [
+      "ssh-rsa A...n user@example.com"
+    ],
+    "admin_keys": [
+      "ssh-rsa A...n user@example.com"
+    ]
+  },
+  "postgresql": {
+    "version": "9.3",
+    "db_root_password": "SECUREpasswordFORpostgresDATABASEuser",
+    "database":
+      {
+        "password": "pgpass"
+      }
+  },
+  "ruby": {
+    "version": "2.1.2"
+  },
+  "nginx": {
+    "version": "1.7.1",
+    "passenger": {
+      "version": "4.0.44"
+    }
+  },
+  "run_list": [
+    "dialogmap-cookbook"
+  ]
+}
