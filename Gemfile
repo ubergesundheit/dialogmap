@@ -31,7 +31,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 gem 'spring',        group: :development
 
-gem 'activerecord-postgis-adapter', github: 'barelyknown/activerecord-postgis-adapter', branch: 'rails-4-1'
+gem 'activerecord-postgis-adapter'#, github: 'barelyknown/activerecord-postgis-adapter', branch: 'rails-4-1'
 
 gem 'rgeo'
 gem 'rgeo-geojson'

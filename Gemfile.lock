@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/barelyknown/activerecord-postgis-adapter.git
-  revision: d9ae73154e0ec3a357549ec3dc048b15ee1703fd
-  branch: rails-4-1
-  specs:
-    activerecord-postgis-adapter (0.6.5.nonrelease)
-      rgeo-activerecord (~> 0.5.0)
-
-GIT
   remote: git://github.com/whitehat101/angular-rails-templates.git
   revision: 4543a1e210f54a4cb26e5428e36617a04b1147ea
   specs:
@@ -50,6 +42,9 @@ GEM
       activemodel (= 4.1.1)
       activesupport (= 4.1.1)
       arel (~> 5.0.0)
+    activerecord-postgis-adapter (2.0.1)
+      activerecord (~> 4.0)
+      rgeo-activerecord (~> 1.0.0)
     activesupport (4.1.1)
       i18n (~> 0.6, >= 0.6.9)
       json (~> 1.7, >= 1.7.7)
@@ -265,10 +260,9 @@ GEM
       mime-types (>= 1.16)
     retryable (1.3.5)
     rgeo (0.3.20)
-    rgeo-activerecord (0.5.0)
-      activerecord (>= 3.0.3)
-      arel (>= 2.0.6)
-      rgeo (>= 0.3.20)
+    rgeo-activerecord (1.0.0)
+      activerecord (~> 4.0)
+      rgeo (~> 0.3.20)
     rgeo-geojson (0.2.3)
       rgeo (>= 0.3.7)
     ridley (3.1.0)
@@ -348,7 +342,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers
-  activerecord-postgis-adapter!
+  activerecord-postgis-adapter
   angular-rails-templates!
   angular_rails_csrf
   angularjs-rails
