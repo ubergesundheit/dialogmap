@@ -20,7 +20,7 @@ class Feature < ActiveRecord::Base
 
   scope :within, -> (bbox_string) {
     bbox_array = bbox_string.split(",")
-    factory = rgeo_factory_for_column(:geom)
+    factory = RGeo::Geographic.spherical_factory(:srid => 4326)
     sw = factory.point(bbox_array[0], bbox_array[1])
     ne = factory.point(bbox_array[2], bbox_array[3])
     window = RGeo::Cartesian::BoundingBox.create_from_points(sw, ne).to_geometry
