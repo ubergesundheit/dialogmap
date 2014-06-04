@@ -15,6 +15,7 @@ angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialo
             "leafletData"
             "$rootScope"
             (Contribution, leafletData, $rootScope) ->
+              Contribution.abort()
               Contribution.currentContribution = undefined
               Contribution.getContributions()
             ]
