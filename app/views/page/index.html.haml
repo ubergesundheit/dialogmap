@@ -2,10 +2,14 @@
 %div{ ng_controller: "MainController"}
   #map{ ng_controller: "MapController" }
     %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
-  #sidebar{ ng_controller: "SidebarController" }
-    #user{ ng_include: "'sidebar_user.html'" }
-    %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
-    #new-topic-container
-    #contributions-scroller
-      = image_tag("loading.gif", class: "loading", ng_show: "loading")
-      .view{ ui_view: true }
+  #ui_container{ ng_controller: "SidebarController" }
+    #map_backbutton{ ng_show: "$state.is('contribution') && !loading", ui_sref: "contributions" }
+      = fa_icon "arrow-circle-o-left", class: "backbutton_icon"
+      %span.backtext zurück
+    #sidebar
+      #user{ ng_include: "'sidebar_user.html'" }
+      %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
+      #new-topic-container
+      #contributions-scroller
+        = image_tag("loading.gif", class: "loading", ng_show: "loading")
+        .view{ ui_view: true }

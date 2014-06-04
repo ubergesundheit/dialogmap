@@ -20,8 +20,8 @@ h3
   position: absolute
   margin: 10px
   padding: 10px
-  width: 25%
-  min-width: 400px
+  // width: 25%
+  width: 400px
   background-color: $sidebar-background
   top: 0
   bottom: 0
@@ -119,3 +119,24 @@ button
 
 .highlight
   +box-shadow(yellow 0 0 4px, yellow 0 0 2px 2px inset)
+
+#map_backbutton
+  display: block
+  position: absolute
+  bottom: 10px
+  right: calc(0% + 420px)
+  width: 130px
+  height: 170px
+  text-align: center
+  cursor: pointer
+  color: darken($sidebar-background, 10)
+  &:hover
+    text-shadow: 0px 0px 3px $sidebar-background
+  .backtext
+    font-size: 20px
+    display: block
+    color: darken($sidebar-background, 20)
+  .backbutton_icon
+    font-size: 150px
+    line-height: 130px
+    margin-top: 20px
