@@ -1,5 +1,4 @@
 class ContributionSerializer < ActiveModel::Serializer
-  self.root = false
   attributes :id, :title, :description, :parent_id, :created_at,
     :updated_at, :references
     has_many :features, :child_contributions
