@@ -59,12 +59,6 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
       closeNode.setAttribute('type', box_type)
       closeNode.addEventListener('click', clickDelete)
       closeNode.setAttribute('ng-click', 'clickDelete()')
-    else # the element is displayed as static
-      replacementNode.className = "#{replacementNode.className}"
-      textNode.className = "#{textNode.className}"
-      replacementNode.setAttribute('ng-click', 'wumbo()')
-      textNode.setAttribute('ng-show', 'Contribution.composing')
-      iconNode.setAttribute('ng-click', 'wumbo(contribution.id)')
 
     replacementNode.appendChild(iconNode)
     replacementNode.appendChild(textNode)
