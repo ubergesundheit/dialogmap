@@ -22,12 +22,18 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     tagTitleNode.setAttribute('title', url)
     tagTitleNode.appendChild(linkNode)
     tagTitleNode
+  # text = text or node
+  # icon_type = css class
+  # box_type = css class
+  # clickDelete = function for clicking delete button
+  # clickExistingUrlReference = function used by url references for opening the url window etc..
   @createReplacementNode = (text, icon_type, box_type, clickDelete, clickExistingUrlReference) ->
     replacementNode = document.createElement('div')
     replacementNode.className = "contribution-description-tag #{box_type}_tag"
     replacementNode.setAttribute('contenteditable', 'false')
     replacementNode.setAttribute('type', box_type)
-    replacementNode.setAttribute('type_id',(if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
+    if clickDelete?
+      replacementNode.setAttribute('type_id',(if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
 
     iconNode = document.createElement('span')
     iconNode.className = "contribution-icon #{icon_type}"
@@ -42,7 +48,7 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     if clickExistingUrlReference?
       textNode.addEventListener('click', clickExistingUrlReference)
 
-    if clickDelete?
+    if clickDelete? # the element is a "fresh element".. show the delete button
       closeNode = document.createElement('a')
       closeNode.appendChild(document.createTextNode('×'))
       closeNode.className = 'tag-close'
@@ -53,6 +59,12 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
       closeNode.setAttribute('type', box_type)
       closeNode.addEventListener('click', clickDelete)
       closeNode.setAttribute('ng-click', 'clickDelete()')
+    else # the element is displayed as static
+      replacementNode.className = "#{replacementNode.className}"
+      textNode.className = "#{textNode.className}"
+      replacementNode.setAttribute('ng-click', 'wumbo()')
+      textNode.setAttribute('ng-show', 'Contribution.composing')
+      iconNode.setAttribute('ng-click', 'wumbo(contribution.id)')
 
     replacementNode.appendChild(iconNode)
     replacementNode.appendChild(textNode)
