@@ -1,0 +1,6 @@
+.contribution-description-tag.feature_reference_tag.static_tag{ ng_click: "highlightRelated(tag.id)"}
+  %span.contribution-icon.reference
+  %span.tag-title.static_tag
+    {{ tag.title }}
+    %span.userselect_none.contribution-icon{ class: "{{tag.referenceTo.geometry.type}}"}
+    ({{ tag.referenceTo.properties.title }})

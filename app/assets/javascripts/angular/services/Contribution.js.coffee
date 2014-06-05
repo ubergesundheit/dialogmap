@@ -34,8 +34,6 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.parent_contributions = []
 
     _replaceOrAppendContribution = (contribution) ->
-      # transform the contributions into a fancy contributions. uuh!
-      contribution = contributionTransformer.createFancyContributionFromRaw contribution
       if contribution.childContributions or contribution.childContributions.length > 0
         for child in contribution.childContributions
           child = contributionTransformer.createFancyContributionFromRaw(child)

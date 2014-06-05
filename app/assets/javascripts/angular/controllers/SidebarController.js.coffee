@@ -23,8 +23,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
         Contribution.start(id)
         return
 
-      highlightRelated: () ->
-        console.log 'wasda', e
+      highlightRelated: (id) ->
+        console.log 'wasda', id
         return
 
     $scope.$on '$stateChangeStart', (event) ->

@@ -42,32 +42,26 @@ angular.module('DialogMapApp').service "contributionTransformer", [
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->
         id = parseInt(match.split("").slice(2,match.length-2).join(""))
-        feature = f for f in contribution.features when f.id is id
-        descriptionTagHelper
-          .createReplacementNode(feature.properties.title, feature.geometry.type, 'feature')
-          .outerHTML
+        "<div feature-tag=\"#{id}\" type=\"feature\"></div>"
 
       featureReferenceReplacer = (match, offset, string) ->
         id = parseInt(match.split("").slice(2,match.length-2).join(""))
-        reference = r for r in contribution.references when r.refId is id
-        descriptionTagHelper
-          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference')
-          .outerHTML
+        "<div feature-tag=\"#{id}\" type=\"feature_reference\"></div>"
 
       urlReferenceReplacer = (match, offset, string) ->
         ref = match.split('|')
-        text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
+        title = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
         url = decodeURIComponent(ref[0].slice(2))
-
-        descriptionTagHelper
-          .createReplacementNode(descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference')
-          .outerHTML
+        "<div feature-tag=\"true\" type=\"url_reference\" title=\"#{title}\" url=\"#{url}\"></div>"
 
       contribution.description = contribution.description.replace(/%\[\d+\]%/g, featureReplacer)
       contribution.description = contribution.description.replace(/#\[\d+\]#/g, featureReferenceReplacer)
       contribution.description = contribution.description.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
+      contribution.description = "<div>#{contribution.description}</div>"
 
       contribution
+    @createFancyContributionDescription = (description) ->
+      @createFancyContributionFromRaw({ description: description}).description
 
     return
 ]
