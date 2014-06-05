@@ -12,7 +12,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       name: 'contribution'
 
 
-    resource.getContributions = (id) ->
+    resource.getContribution = (id) ->
       contribution = $q.defer()
       found = false
       id = parseInt(id) if id?
@@ -71,7 +71,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     # Methods for Contribution collection
     resource.setCurrentContribution = (id) ->
       resource.currentContribution = undefined
-      resource.getContributions(id).then (contribution) ->
+      resource.getContribution(id).then (contribution) ->
         resource.currentContribution = contribution
         return
       return
