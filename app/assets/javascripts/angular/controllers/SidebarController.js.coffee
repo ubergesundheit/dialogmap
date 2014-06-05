@@ -4,7 +4,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
   "User"
   "$compile"
   "$state"
-  ($scope, Contribution, User, $compile, $state) ->
+  "$rootScope"
+  ($scope, Contribution, User, $compile, $state, $rootScope) ->
     angular.extend $scope,
       Contribution: Contribution
       User: User
@@ -23,8 +24,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
         Contribution.start(id)
         return
 
-      highlightRelated: (id) ->
-        console.log 'wasda', id
+      highlightRelated: (feature_id) ->
+        $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
     $scope.$on '$stateChangeStart', (event) ->

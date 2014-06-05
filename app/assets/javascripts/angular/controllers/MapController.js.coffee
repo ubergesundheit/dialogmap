@@ -14,7 +14,11 @@ angular.module("DialogMapApp").controller "MapController", [
       return
     angular.extend $scope,
       Contribution: Contribution
-      currContrib: Contribution.currentContribution
+      # layer for highlights
+      highlightsLayer: L.layerGroup()
+      clearHighlights: ->
+        $scope.highlightsLayer.clearLayers()
+        return
       # leaflet-directive stuff
       muenster:
         lat: 51.96
@@ -137,6 +141,25 @@ angular.module("DialogMapApp").controller "MapController", [
             map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
             $scope._dataFresh = false
             return
+      return
+
+    $scope.$on 'highlightFeature', (evt, data) ->
+      $scope.clearHighlights()
+      # find the layer to highlight..
+      highlightFeature = f for f in $scope.geojson.data.features when f.id is data.feature_id
+      if highlightFeature.geometry.type is 'Polygon'
+        highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature)
+        highlightPolygon.opacity = 0.0
+        $scope.highlightsLayer.addLayer(highlightPolygon)
+      else # the feature is a Marker..
+        highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 25 })
+        $scope.highlightsLayer.addLayer(highlightCircle)
+      return
+
+
+    # add a layer for highlighting features to the map..
+    leafletData.getMap('map_main').then (map) ->
+      $scope.highlightsLayer.addTo(map)
       return
 
 ]
