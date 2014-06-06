@@ -148,11 +148,11 @@ angular.module("DialogMapApp").controller "MapController", [
       # find the layer to highlight..
       highlightFeature = f for f in $scope.geojson.data.features when f.id is data.feature_id
       if highlightFeature.geometry.type is 'Polygon'
-        highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature)
+        highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature, undefined, undefined, { className: 'highlight'})
         highlightPolygon.opacity = 0.0
         $scope.highlightsLayer.addLayer(highlightPolygon)
       else # the feature is a Marker..
-        highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 25 })
+        highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 20, className: 'highlight' })
         $scope.highlightsLayer.addLayer(highlightCircle)
       return
 
