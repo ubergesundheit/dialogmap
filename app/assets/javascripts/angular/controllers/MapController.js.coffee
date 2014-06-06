@@ -156,6 +156,7 @@ angular.module("DialogMapApp").controller "MapController", [
         $scope.highlightsLayer.addLayer(highlightCircle)
       return
 
+    $scope.$on 'resetHighlightFeature', $scope.clearHighlights
 
     # add a layer for highlighting features to the map..
     leafletData.getMap('map_main').then (map) ->

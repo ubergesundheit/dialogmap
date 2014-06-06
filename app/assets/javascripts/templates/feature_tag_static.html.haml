@@ -1,4 +1,4 @@
-.contribution-description-tag.feature_tag.static_tag{ ng_mouseover: "highlightRelated(tag.id)"}
+.contribution-description-tag.feature_tag.static_tag{ ng_mouseover: "highlightRelated(tag.id)", ng_mouseleave: "resetHighlight()" }
   %span.contribution-icon{ class: "{{tag.geometry.type}}"}
   %span.tag-title.static_tag
     {{ tag.properties.title }}

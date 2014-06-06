@@ -28,6 +28,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
         $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
+      resetHighlight: ->
+        $rootScope.$broadcast('resetHighlightFeature')
+        return
+
     $scope.$on '$stateChangeStart', (event) ->
       $scope.loading = true
       return
