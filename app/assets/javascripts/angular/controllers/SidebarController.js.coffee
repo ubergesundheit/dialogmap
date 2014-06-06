@@ -24,11 +24,19 @@ angular.module("DialogMapApp").controller "SidebarController", [
         Contribution.start(id)
         return
 
-      highlightRelated: (feature_id) ->
+      highlightRelated: (feature_id, $event) ->
+        target = angular.element($event.target)
+        while target.is('span')
+          target = angular.element(target.parent())
+        target.addClass('highlight')
         $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
-      resetHighlight: ->
+      resetHighlight: ($event) ->
+        target = angular.element($event.target)
+        while target.is('span')
+          target = angular.element(target.parent())
+        target.removeClass('highlight')
         $rootScope.$broadcast('resetHighlightFeature')
         return
 
