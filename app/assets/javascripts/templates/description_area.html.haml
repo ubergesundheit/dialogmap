@@ -6,4 +6,4 @@
   %a{ id: "create-feature-reference", class: "button feature-reference", href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference()" }
   %a{ id: "create-url-reference", class: "button url-reference", href: "", title: "Link einfügen", ng_click: "clickUrlReference()" }
 %div{ class: "url-input" }
-  %input{ id: "url-input-field", value: "http://" }
+  %input{ id: "url-input-field", value: "http://", ui_keypress: "{13:'urlOnKeyEnterCallback($event)'}" }

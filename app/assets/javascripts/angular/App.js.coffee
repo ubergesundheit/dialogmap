@@ -1,5 +1,5 @@
 L.Icon.Default.imagePath = 'assets/'
-angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialog", "ngSanitize", "ui.router"]
+angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialog", "ngSanitize", "ui.router", "ui.keypress"]
 .config [
   "$stateProvider"
   "$urlRouterProvider"

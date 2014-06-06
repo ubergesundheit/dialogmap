@@ -48,6 +48,10 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           disableDescriptionArea()
           showUrlInput(getClickPositionWithOffset(e), decodeURIComponent(scope.internal.clickedUrlReference))
           return
+        urlOnKeyEnterCallback: ($event) ->
+          leaveUrlInputMode()
+          $event.preventDefault()
+          return
 
       # Events for Feature creation
       leafletData.getMap('map_main').then (map) ->
