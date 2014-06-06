@@ -26,9 +26,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
         # the interceptor will take care of appending it to the correct parent
         # and making the contribution fancy
         if found == false
-          resource.get(id).then (data) ->
-            contribution.resolve(data)
-            return
+          resource.get(id).then contribution.resolve
       contribution.promise
 
     resource.parent_contributions = []
