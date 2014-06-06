@@ -52,5 +52,15 @@ angular.module("DialogMapApp").controller "SidebarController", [
       $scope.loading = false
       return
 
+    $scope.$on 'highlightFeatureFromMap', (event, data) ->
+      id = data.feature_id
+      angular.element(".contribution-description-tag[feature-tag=#{id}]").addClass('highlight')
+      return
+
+    $scope.$on 'resetHighlightFromMap', (event, data) ->
+      id = data.feature_id
+      angular.element(".contribution-description-tag[feature-tag=#{id}]").removeClass('highlight')
+      return
+
     return
 ]

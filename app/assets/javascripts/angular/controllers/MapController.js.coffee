@@ -2,7 +2,8 @@ angular.module("DialogMapApp").controller "MapController", [
   "$scope"
   "leafletData"
   "Contribution"
-  ($scope, leafletData, Contribution) ->
+  "$rootScope"
+  ($scope, leafletData, Contribution, $rootScope) ->
     # use of L.activearea plugin in order to set the vieport to the visible area
     leafletData.getMap('map_main').then (map) ->
       map.setActiveArea
@@ -16,9 +17,32 @@ angular.module("DialogMapApp").controller "MapController", [
       Contribution: Contribution
       # layer for highlights
       highlightsLayer: L.layerGroup()
-      clearHighlights: ->
+      clearHighlights: (evt) ->
         $scope.highlightsLayer.clearLayers()
+        # called by the mouseout of the geojson..
+        if evt? and evt.type? and evt.type is 'mouseout'
+          $rootScope.$broadcast 'resetHighlightFromMap', { feature_id: evt.target.feature.id }
         return
+      highlightFeature: (evt, data) ->
+        $scope.clearHighlights()
+        # event is a leaflet Event
+        if !data?
+          highlightFeature = evt.target.toGeoJSON()
+          # also send an event to highlight the corresponding description tag
+          $rootScope.$broadcast 'highlightFeatureFromMap', { feature_id: highlightFeature.id }
+        else # event is a angular event
+          # find the layer to highlight..
+          highlightFeature = f for f in $scope.geojson.data.features when f.id is data.feature_id
+
+        if highlightFeature.geometry.type is 'Polygon'
+          highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature, undefined, undefined, { className: 'highlight'})
+          highlightPolygon.opacity = 0.0
+          $scope.highlightsLayer.addLayer(highlightPolygon)
+        else # the feature is a Marker..
+          highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 20, className: 'highlight' })
+          $scope.highlightsLayer.addLayer(highlightCircle)
+        return
+
       # leaflet-directive stuff
       muenster:
         lat: 51.96
@@ -40,6 +64,8 @@ angular.module("DialogMapApp").controller "MapController", [
         onEachFeature: (feature, layer) ->
           layer.bindPopup L.mapbox.marker.createPopup(feature),
             closeButton: false
+          layer.on 'mouseover', $scope.highlightFeature
+          layer.on 'mouseout', $scope.clearHighlights
           layer.on 'click', (evt) ->
             if Contribution.addingFeatureReference == true
               feature = evt.target.feature
@@ -143,18 +169,7 @@ angular.module("DialogMapApp").controller "MapController", [
             return
       return
 
-    $scope.$on 'highlightFeature', (evt, data) ->
-      $scope.clearHighlights()
-      # find the layer to highlight..
-      highlightFeature = f for f in $scope.geojson.data.features when f.id is data.feature_id
-      if highlightFeature.geometry.type is 'Polygon'
-        highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature, undefined, undefined, { className: 'highlight'})
-        highlightPolygon.opacity = 0.0
-        $scope.highlightsLayer.addLayer(highlightPolygon)
-      else # the feature is a Marker..
-        highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 20, className: 'highlight' })
-        $scope.highlightsLayer.addLayer(highlightCircle)
-      return
+    $scope.$on 'highlightFeature', $scope.highlightFeature
 
     $scope.$on 'resetHighlightFeature', $scope.clearHighlights
 
