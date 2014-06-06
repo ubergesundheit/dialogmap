@@ -52,7 +52,6 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
       closeNode = document.createElement('a')
       closeNode.appendChild(document.createTextNode('×'))
       closeNode.className = 'tag-close'
-      closeNode.setAttribute('href','')
       closeNode.setAttribute('contenteditable', 'false')
       closeNode.setAttribute('draggable', 'false')
       closeNode.setAttribute("type_id", (if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
