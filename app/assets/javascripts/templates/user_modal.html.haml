@@ -66,4 +66,5 @@
 
 #modal_user{ ng_show: "authenticated" }
   {{ user.email }}
+  %button{ ng_click: "closeThisDialog()" } Ok
   %button{ ng_click: "performLogout()" } Ausloggen
