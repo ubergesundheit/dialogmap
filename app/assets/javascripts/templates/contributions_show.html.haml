@@ -7,4 +7,5 @@
     %h3 {{ contribution.title }}
     .contribution-description{ contribution_description: "contribution.description" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
-      Antworten anzeigen
+      Antworten
+      %span{ ng_show: "contribution.childContributions.length > 0" } anzeigen ({{contribution.childContributions.length}})

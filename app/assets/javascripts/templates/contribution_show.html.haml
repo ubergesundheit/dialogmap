@@ -14,13 +14,17 @@
         schrieb am
         {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
       .contribution-description{ contribution_description: "contribution.description" }
+      .contribution-links{ ng_show: "contribution.user.id === User.user.id" }
+        %a Beitrag bearbeiten
   %span{ ng_hide: "Contribution.currentContribution.childContributions" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }
-    %button.contribution-replybutton{ ng_click: "startContributionHere(Contribution.currentContribution.id)", ng_hide: "Contribution.composing" }
+    -# %button.contribution-replybutton{ ng_click: "startContributionHere(Contribution.currentContribution.id)", ng_hide: "Contribution.composing" }
       Antwort verfassen
-  %a.contribution-links{ ui_sref: "contributions" }
-    zurück
+  .contribution-links{ ng_hide: "Contribution.composing" }
+    %a{ ng_hide: "Contribution.composing", ng_click: "startContributionHere(Contribution.currentContribution.id)" } Antwort verfassen
+    &#448;
+    %a{ ui_sref: "contributions" } zurück
 .contribution{ ng_hide: "loading || Contribution.currentContribution" }
   Dieser Beitrag wurde nicht gefunden :(
   %a.contribution-links{ ui_sref: "contributions" }
