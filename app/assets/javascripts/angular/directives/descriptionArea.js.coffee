@@ -2,7 +2,8 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
-  (Contribution, leafletData, descriptionTagHelper) ->
+  '$compile'
+  (Contribution, leafletData, descriptionTagHelper, $compile) ->
     restrict: 'AE'
     require: 'ngModel'
     transclude: true
@@ -10,7 +11,6 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
     templateUrl: 'description_area.html'
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
-        internal: {}
         clickMarker: (e) ->
           Contribution.startAddMarker()
           replaceSelectedText(scope.selection, 'marker', 'feature')
@@ -52,6 +52,44 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           leaveUrlInputMode()
           $event.preventDefault()
           return
+
+      # this should only happening if a contribution is edited..
+      if scope.ngModel?
+        featureReplacer = (match, offset, string) ->
+          id = parseInt(match.split("").slice(2,match.length-2).join(""))
+          feature = f for f in Contribution.features when f.id is id
+          descriptionTagHelper
+            .createNodeForEdit(id, feature.properties.title, feature.geometry.type, 'feature', scope.clickDelete)
+            .outerHTML
+
+        featureReferenceReplacer = (match, offset, string) ->
+          id = parseInt(match.split("").slice(2,match.length-2).join(""))
+          reference = r for r in Contribution.references when r.refId is id
+          descriptionTagHelper
+            .createNodeForEdit(id, descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference', scope.clickDelete)
+            .outerHTML
+
+        urlReferenceReplacer = (match, offset, string) ->
+          ref = match.split('|')
+          text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
+          url = decodeURIComponent(ref[0].slice(2))
+          descriptionTagHelper
+            .createNodeForEdit(url, descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference', scope.clickDelete, scope.clickExistingUrlReference)
+            .outerHTML
+
+        transformedDescription = scope.ngModel.description
+
+        transformedDescription = transformedDescription.replace(/%\[\d+\]%/g, featureReplacer)
+        transformedDescription = transformedDescription.replace(/#\[\d+\]#/g, featureReferenceReplacer)
+        transformedDescription = transformedDescription.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
+
+        transformedDescription = $compile("<div>#{transformedDescription}</div>")(scope)
+
+        scope.internal =
+          description: transformedDescription
+        element.find('#contribution_description_text').html(transformedDescription)
+      else
+        scope.internal = {}
 
       # Events for Feature creation
       leafletData.getMap('map_main').then (map) ->

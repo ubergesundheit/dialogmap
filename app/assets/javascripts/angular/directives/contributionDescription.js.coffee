@@ -6,8 +6,6 @@ angular.module("DialogMapApp").directive 'contributionDescription', [
     restrict: 'AE'
     scope: true
     link: (scope, element, attr, controller) ->
-      element.addClass('ng-binding').data('$binding', attr.contributionDescription)
-
       parsed = $parse(attr.contributionDescription);
       getStringValue = ->  (parsed(scope) || '').toString()
 

@@ -14,8 +14,9 @@
         schrieb am
         {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
       .contribution-description{ contribution_description: "contribution.description" }
-      .contribution-links{ ng_show: "contribution.user.id === User.user.id" }
-        %a Beitrag bearbeiten
+      .contribution_input_replace{ :"data-id" => "{{contribution.id}}" }
+      .contribution-links{ ng_show: "contribution.user.id === User.user.id && !Contribution.composing" }
+        %a{ ng_click: "startContributionEdit(contribution.id)"} Beitrag bearbeiten
   %span{ ng_hide: "Contribution.currentContribution.childContributions" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }

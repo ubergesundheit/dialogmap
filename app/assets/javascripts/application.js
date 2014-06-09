@@ -17,10 +17,8 @@
 //= require angular-sanitize
 //= require angularjs/rails/resource
 //= require angular-devise
-// require angular-queue
 //= require angular-ui-router
 //= require keypress
-// require ng-contenteditable
 //= require ngDialog
 //= require mapbox
 //= require angular-leaflet-directive

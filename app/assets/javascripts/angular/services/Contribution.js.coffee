@@ -32,11 +32,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.parent_contributions = []
 
     _replaceOrAppendContribution = (contribution) ->
-      if contribution.childContributions? or contribution.childContributions.length > 0
-        for child in contribution.childContributions
-          child = contributionTransformer.createFancyContributionFromRaw(child)
-
-      # now update the tree
+      # update the tree
       if !contribution.parentId? # the contribution is a topic/parent
         replaced = false
         (elem = contribution; replaced = true; break) for elem in resource.parent_contributions when elem.id is contribution.id
@@ -81,6 +77,12 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.features = {}
     resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
+
+    resource.setContributionForEdit = (id) ->
+      resource.getContribution(id).then (contrib) ->
+        angular.extend resource, contrib
+        return
+      return
 
     resource.start = (parent_id) ->
       $rootScope.$broadcast('Contribution.start')
