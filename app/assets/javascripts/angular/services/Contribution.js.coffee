@@ -43,12 +43,15 @@ angular.module('DialogMapApp').factory 'Contribution', [
         for parent in resource.parent_contributions
           if parent.id is contribution.parentId
             replaced = false
-            for child in parent.childContributions
+            for child, i in parent.childContributions
               if child.id is contribution.id
-                child = contribution
+                parent.childContributions[i] = contribution
                 replaced = true
+                break
             unless replaced
               parent.childContributions.push contribution
+        # also update the current Contribution
+        resource.setCurrentContribution(resource.currentContribution.id)
       return
 
     resource.addInterceptor
@@ -160,8 +163,11 @@ angular.module('DialogMapApp').factory 'Contribution', [
       $rootScope.$broadcast('Contribution.reset')
       @title = ''
       @description = ''
+      @references_attributes = undefined
       @references = []
-      @features = {}
+      @features_attributes = undefined
+      @features =
+      @id = undefined
       @parent_contribution = undefined
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()
@@ -172,12 +178,24 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.submit = ->
       if User.isAuthenticated()
         $rootScope.$broadcast('Contribution.submit_start')
+        # this is a defered because the method internally uses the map which
+        # is fetched by a deferred
         contributionTransformer.createContributionForSubmit(@).then (contribution) ->
-          resource.abort()
-          new resource(contribution).create().then (data) ->
-            $rootScope.$broadcast('Contribution.submitted', data)
+          if resource.id?
+            # update
+            contribution.id = resource.id
+            contribution.parent_id = resource.parentId
+            new resource(contribution).update().then (data) ->
+              $rootScope.$broadcast('Contribution.submitted', data)
+              return
+            resource.abort()
             return
-          return
+          else
+            resource.abort()
+            new resource(contribution).create().then (data) ->
+              $rootScope.$broadcast('Contribution.submitted', data)
+              return
+            return
       else
         User._unauthorized()
       return

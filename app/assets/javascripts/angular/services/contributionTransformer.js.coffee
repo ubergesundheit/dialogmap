@@ -8,6 +8,8 @@ angular.module('DialogMapApp').service "contributionTransformer", [
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
         descr = descr.replace(/^(<br>)*(<\/br>)*/,"")
+        descr = descr.replace(/^<div class="ng-scope">/, "")
+        descr = descr.replace(/<\/div>$/, "")
         el = document.createElement('div')
         el.innerHTML = descr
         tags = Array.prototype.slice.call(el.getElementsByClassName('contribution-description-tag'))

@@ -37,14 +37,14 @@ class Api::ContributionsController < Api::BaseController
   # PATCH/PUT /contributions/1
   # PATCH/PUT /contributions/1.json
   def update
-    respond_to do |format|
+    if current_user == @contribution.user
       if @contribution.update(contribution_params)
-        format.html { redirect_to @contribution, notice: 'Contribution was successfully updated.' }
-        format.json { render :show, status: :ok, location: @contribution }
+        render json: @contribution
       else
-        format.html { render :edit }
-        format.json { render json: @contribution.errors, status: :unprocessable_entity }
+        render json: @contribution.errors, status: :unprocessable_entity
       end
+    else
+      render json: { error: 'you are not allowed to do that' }, status: :forbidden
     end
   end
 

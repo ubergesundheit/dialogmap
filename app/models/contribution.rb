@@ -11,6 +11,8 @@ class Contribution < ActiveRecord::Base
 
   after_create :transform_description
 
+  default_scope { order('created_at ASC') }
+
   scope :within, -> (bbox_string) {
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })
   }
