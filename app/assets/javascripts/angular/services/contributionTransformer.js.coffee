@@ -38,6 +38,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
 
         descr = descr.replace(/^<div class="ng-scope">/, "")
         descr = descr.replace(/<\/div>$/, "")
+        descr = descr.replace(/<div class="ng-scope"><\/div>/g,"")
 
         {
           title: contribution.title

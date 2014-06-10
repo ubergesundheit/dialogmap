@@ -10,7 +10,7 @@ class Contribution < ActiveRecord::Base
 
   validates_presence_of :description, :user_id
 
-  after_create :transform_description
+  after_save :transform_description
 
   default_scope { order('created_at ASC') }
 
@@ -49,9 +49,8 @@ class Contribution < ActiveRecord::Base
 
       # create a hash that contains the substitutions
       substitutions = self.features.map { |f| [ "%[#{f.leaflet_id}]%", "%[#{f.id}]%" ]}.to_h
-      #substitute..
-      self.description.gsub! /%\[\d+\]%/, substitutions
-      self.save
+      # substitute..
+      self.save if self.description.gsub! Regexp.new("%\\[(#{self.features.map { |f| f.leaflet_id }.join('|')})\\]%"), substitutions
     end
 
 end
