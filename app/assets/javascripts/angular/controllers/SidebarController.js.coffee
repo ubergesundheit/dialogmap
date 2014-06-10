@@ -25,12 +25,11 @@ angular.module("DialogMapApp").controller "SidebarController", [
         return
 
       startContributionEdit: (id) ->
-        console.log id
         Contribution.setContributionForEdit(id)
 
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
-        angular.element(".contribution_input_replace[data-id=#{id}]").append inputAreaHtml
+        angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
         Contribution.start(id)
         return
 

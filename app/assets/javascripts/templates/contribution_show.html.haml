@@ -7,6 +7,9 @@
     {{ Contribution.currentContribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
+  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
+  .contribution-links{ ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
+    %a{ ng_click: "startContributionEdit(Contribution.currentContribution.id)"} Beitrag bearbeiten
   .children-contributions.contribution-list{ ng_repeat: "contribution in Contribution.currentContribution.childContributions", ng_show: "Contribution.currentContribution.childContributions" }
     .contribution
       .contribution-info
@@ -14,7 +17,7 @@
         schrieb am
         {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
       .contribution-description{ contribution_description: "contribution.description" }
-      .contribution_input_replace{ :"data-id" => "{{contribution.id}}" }
+      .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit" }
       .contribution-links{ ng_show: "contribution.user.id === User.user.id && !Contribution.composing" }
         %a{ ng_click: "startContributionEdit(contribution.id)"} Beitrag bearbeiten
   %span{ ng_hide: "Contribution.currentContribution.childContributions" }
