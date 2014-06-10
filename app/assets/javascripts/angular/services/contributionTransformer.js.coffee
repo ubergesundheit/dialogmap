@@ -8,8 +8,6 @@ angular.module('DialogMapApp').service "contributionTransformer", [
         features_attributes = []
         descr = contribution.description.replace(new RegExp(String.fromCharCode(160), "g"), " ").replace(/&nbsp;/g, " ")
         descr = descr.replace(/^(<br>)*(<\/br>)*/,"")
-        descr = descr.replace(/^<div class="ng-scope">/, "")
-        descr = descr.replace(/<\/div>$/, "")
         el = document.createElement('div')
         el.innerHTML = descr
         tags = Array.prototype.slice.call(el.getElementsByClassName('contribution-description-tag'))
@@ -21,7 +19,10 @@ angular.module('DialogMapApp').service "contributionTransformer", [
             if type == 'feature'
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
-              geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type)
+              if Object.keys(geojson.properties).length is 0
+                geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type)
+              else
+                geojson.properties.contributionId = undefined
               features_attributes.push { geojson: geojson, leaflet_id: id }
               descr = descr.replace(tag.outerHTML, "%[#{id}]%")
             else if type == 'feature_reference'
@@ -33,6 +34,10 @@ angular.module('DialogMapApp').service "contributionTransformer", [
               descr = descr.replace(tag.outerHTML, "#[#{id}]#")
             else if type == 'url_reference'
               descr = descr.replace(tag.outerHTML, "&[#{id}|#{encodeURIComponent(tag_title)}]&")
+            return
+
+        descr = descr.replace(/^<div class="ng-scope">/, "")
+        descr = descr.replace(/<\/div>$/, "")
 
         {
           title: contribution.title
