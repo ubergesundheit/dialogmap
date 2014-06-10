@@ -7328,7 +7328,8 @@ var PointToGeoJSON = {
 	toGeoJSON: function () {
 		return L.GeoJSON.getFeature(this, {
 			type: 'Point',
-			coordinates: L.GeoJSON.latLngToCoords(this.getLatLng())
+			coordinates: L.GeoJSON.latLngToCoords(this.getLatLng())//,
+      //properties: this.options.properties
 		});
 	}
 };

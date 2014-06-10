@@ -53,11 +53,18 @@ class Feature < ActiveRecord::Base
     props
   end
 
+  def update_from_geojson(geojson)
+    self.geojson = geojson
+    decode_geojson_from_params
+    self.save!
+  end
+
   private
     def decode_geojson_from_params
       geojson = RGeo::GeoJSON.decode(self.geojson, :json_parser => :json)
       self.geom = geojson.geometry
       self.properties = geojson.properties
+      self.id = geojson.properties["id"] if geojson.properties["id"] != nil
       self.errors.add(:geojson, "invalid GeoJSON") unless self.geom
     end
 

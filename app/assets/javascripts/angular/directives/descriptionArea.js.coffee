@@ -54,7 +54,7 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           return
 
       # this should only happening if a contribution is edited..
-      if scope.ngModel?
+      if scope.ngModel.description != ""
         featureReplacer = (match, offset, string) ->
           id = parseInt(match.split("").slice(2,match.length-2).join(""))
           feature = f for f in Contribution.features when f.id is id
@@ -82,6 +82,44 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
         transformedDescription = transformedDescription.replace(/%\[\d+\]%/g, featureReplacer)
         transformedDescription = transformedDescription.replace(/#\[\d+\]#/g, featureReferenceReplacer)
         transformedDescription = transformedDescription.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
+
+        # now make the features of this contribution editable..
+        leafletData.getMap('map_main').then (map) ->
+          for f in Contribution.features
+            leaflet_layer = L.GeoJSON.geometryToLayer(f)
+
+            leaflet_layer.enableEditing = ->
+              if typeof leaflet_layer.editToolbar is "undefined"
+                leaflet_layer.editToolbar = new L.EditToolbar.Edit(map,
+                  featureGroup: L.featureGroup([leaflet_layer])
+                  selectedPathOptions:
+                    color: "#fe57a1"
+                    opacity: 0.6
+                    dashArray: "10, 10"
+                    fill: not 0
+                    fillColor: "#fe57a1"
+                    fillOpacity: 0.1
+                    maintainColor: true
+                )
+              leaflet_layer.editToolbar.enable()
+              leaflet_layer.on("dragend", ->
+                leaflet_layer.editToolbar.save()
+                return
+              )
+              leaflet_layer.on("edit", ->
+                leaflet_layer.editToolbar.save()
+                return
+              )
+
+              return
+
+            leaflet_layer._leaflet_id = f.id
+            leaflet_layer.options.properties =  f.properties
+            map.drawControl.options.edit.featureGroup.addLayer leaflet_layer
+            map.drawControl.enableEditing()
+
+
+          return
 
         transformedDescription = $compile("<div>#{transformedDescription}</div>")(scope)
 

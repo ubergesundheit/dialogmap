@@ -166,7 +166,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @references_attributes = undefined
       @references = []
       @features_attributes = undefined
-      @features =
+      @features = {}
       @id = undefined
       @parent_contribution = undefined
       leafletData.getMap('map_main').then (map) ->
