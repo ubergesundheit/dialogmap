@@ -74,7 +74,7 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
           url = decodeURIComponent(ref[0].slice(2))
           descriptionTagHelper
-            .createNodeForEdit(url, descriptionTagHelper.createTagTitleNodeForUrlReference(text,url),'reference','url_reference', scope.clickDelete, scope.clickExistingUrlReference)
+            .createNodeForEdit(url, text, 'reference','url_reference', scope.clickDelete, scope.clickExistingUrlReference)
             .outerHTML
 
         transformedDescription = scope.ngModel.description
@@ -143,6 +143,24 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
         scope.internal =
           description: transformedDescription
         element.find('#contribution_description_text').html(transformedDescription)
+
+        element.find('.tag-title').on 'blur keyup change', (e) ->
+          parent = angular.element(e.target.parentElement)
+          tag_type = parent.attr('type')
+          id = parseInt(parent.attr('type_id'))
+          text = e.target.childNodes[0].textContent
+          if tag_type is 'feature'
+            # find the feature and change the name!
+            leafletData.getMap('map_main').then (map) ->
+              map.drawControl.options.edit.featureGroup.eachLayer (f) ->
+                if f._leaflet_id is id
+                  f.options.properties.title = text
+                return
+              return
+          else if tag_type is 'feature_reference'
+            (r.title = text; break) for r in Contribution.references when r.refId is id
+          return
+
       else
         scope.internal = {}
 

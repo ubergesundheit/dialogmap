@@ -4,7 +4,8 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
   @createTagTitleNode = (contenteditable) ->
     tagTitleNode = document.createElement('span')
     tagTitleNode.className = "tag-title"
-    tagTitleNode.setAttribute('contenteditable', (if contenteditable then 'true' else 'false'))
+    # tagTitleNode.setAttribute('contenteditable', (if contenteditable then 'true' else 'false'))
+    tagTitleNode.setAttribute('contenteditable', 'true')
     tagTitleNode
   @createTagTitleNodeForFeatureReference = (reference) ->
     tagTitleNode = @createTagTitleNode(false)
@@ -24,9 +25,10 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     tagTitleNode
   @createNodeForEdit = (id, text, icon_type, box_type, clickDelete, clickExistingUrlReference) ->
     node = @createReplacementNode(text, icon_type, box_type, clickDelete, clickExistingUrlReference)
-    node.setAttribute('type_id', id)
+    node.setAttribute('type_id', encodeURIComponent(id))
     # this is most hopefully always the closenode..
-    node.lastElementChild.setAttribute('type_id', id)
+    if clickDelete?
+      node.lastElementChild.setAttribute('type_id', encodeURIComponent(id))
 
     node
   # text = text or node
@@ -53,16 +55,18 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
 
     if clickExistingUrlReference?
       textNode.addEventListener('click', clickExistingUrlReference)
+      textNode.setAttribute('ng-click', 'clickExistingUrlReference($event)')
 
-    closeNode = document.createElement('a')
-    closeNode.appendChild(document.createTextNode('×'))
-    closeNode.className = 'tag-close'
-    closeNode.setAttribute('contenteditable', 'false')
-    closeNode.setAttribute('draggable', 'false')
-    closeNode.setAttribute("type_id", (if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
-    closeNode.setAttribute('type', box_type)
-    closeNode.addEventListener('click', clickDelete)
-    closeNode.setAttribute('ng-click', 'clickDelete($event)')
+    if clickDelete?
+      closeNode = document.createElement('a')
+      closeNode.appendChild(document.createTextNode('×'))
+      closeNode.className = 'tag-close'
+      closeNode.setAttribute('contenteditable', 'false')
+      closeNode.setAttribute('draggable', 'false')
+      closeNode.setAttribute("type_id", (if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
+      closeNode.setAttribute('type', box_type)
+      closeNode.addEventListener('click', clickDelete)
+      closeNode.setAttribute('ng-click', 'clickDelete($event)')
 
     replacementNode.appendChild(iconNode)
     replacementNode.appendChild(textNode)
