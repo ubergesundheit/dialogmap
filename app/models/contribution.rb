@@ -6,7 +6,7 @@ class Contribution < ActiveRecord::Base
   has_many :child_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
 
   accepts_nested_attributes_for :features, reject_if: :features_exist
-  accepts_nested_attributes_for :references
+  accepts_nested_attributes_for :references, reject_if: :references_exist
 
   validates_presence_of :description, :user_id
 
@@ -30,14 +30,30 @@ class Contribution < ActiveRecord::Base
 
   private
 
+    def references_exist(reference_attr)
+      if reference_attr["id"]
+        id = reference_attr["id"]
+        reference = self.references.find(id)
+        unless reference == nil
+          reference.update(reference_attr)
+          true
+        end
+        false
+      else
+        false
+      end
+    end
+
     def features_exist(feature_attr)
       if feature_attr["geojson"] != nil and feature_attr["geojson"]["properties"] != nil and feature_attr["geojson"]["properties"]["id"] != nil
         id = feature_attr["geojson"]["properties"]["id"]
         feature = self.features.find(id)
         unless feature == nil
           feature.update_from_geojson(feature_attr["geojson"])
+          true
+        else
+          false
         end
-        true
       else
         false
       end
