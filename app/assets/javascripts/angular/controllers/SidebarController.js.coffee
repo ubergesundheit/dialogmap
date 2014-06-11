@@ -41,12 +41,12 @@ angular.module("DialogMapApp").controller "SidebarController", [
         $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
-      resetHighlight: ($event) ->
+      resetHighlight: (feature_id, $event) ->
         target = angular.element($event.target)
         while target.is('span')
           target = angular.element(target.parent())
         target.removeClass('highlight')
-        $rootScope.$broadcast('resetHighlightFeature')
+        $rootScope.$broadcast('resetHighlightFeature', { feature_id: feature_id })
         return
 
     $scope.$on '$stateChangeStart', (event) ->
