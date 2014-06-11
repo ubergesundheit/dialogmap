@@ -113,12 +113,29 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
 
               return
 
+            leaflet_layer.disableEditing = ->
+              if leaflet_layer.editToolbar?
+                leaflet_layer.editToolbar.disable()
+                leaflet_layer.editToolbar = undefined
+              return
+
             leaflet_layer._leaflet_id = f.id
             leaflet_layer.options.properties =  f.properties
             map.drawControl.options.edit.featureGroup.addLayer leaflet_layer
             map.drawControl.enableEditing()
 
+          return
 
+        scope.$on 'Contribution.submit_start', ->
+          leafletData.getMap('map_main').then (map) ->
+            map.drawControl.disableEditing()
+            return
+          return
+
+        scope.$on 'Contribution.reset', ->
+          leafletData.getMap('map_main').then (map) ->
+            map.drawControl.disableEditing()
+            return
           return
 
         transformedDescription = $compile("<div>#{transformedDescription}</div>")(scope)

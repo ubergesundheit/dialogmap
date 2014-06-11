@@ -35,7 +35,11 @@ angular.module('DialogMapApp').factory 'Contribution', [
       # update the tree
       if !contribution.parentId? # the contribution is a topic/parent
         replaced = false
-        (elem = contribution; replaced = true; break) for elem in resource.parent_contributions when elem.id is contribution.id
+        for elem,i in resource.parent_contributions
+          if elem.id is contribution.id
+            resource.parent_contributions[i] = contribution
+            replaced = true
+            break
         unless replaced
           resource.parent_contributions.push contribution
       else
@@ -50,7 +54,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
                 break
             unless replaced
               parent.childContributions.push contribution
-        # also update the current Contribution
+      # also update the current Contribution
+      if resource.currentContribution?
         resource.setCurrentContribution(resource.currentContribution.id)
       return
 
