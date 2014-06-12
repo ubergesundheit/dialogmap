@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20140612162359) do
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "deleted"
+    t.boolean  "deleted",       default: false, null: false
     t.string   "delete_reason"
   end
 
