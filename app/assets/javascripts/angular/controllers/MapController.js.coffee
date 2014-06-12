@@ -23,7 +23,7 @@ angular.module("DialogMapApp").controller "MapController", [
           if evt? and evt.type? and evt.type is 'mouseout'
             map.geojson_layer.resetStyle(evt.target)
             $scope.highlightsLayer.clearLayers()
-            $rootScope.$broadcast 'resetHighlightFromMap', { feature_id: evt.target.feature.id }
+            $rootScope.$broadcast 'resetHighlight', { feature_id: evt.target.feature.id }
           else
             (map.geojson_layer.resetStyle(f); break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
             $scope.highlightsLayer.clearLayers()
@@ -35,7 +35,7 @@ angular.module("DialogMapApp").controller "MapController", [
           if !data?
             highlightFeature = evt.target
             # also send an event to highlight the corresponding description tag
-            $rootScope.$broadcast 'highlightFeatureFromMap', { feature_id: highlightFeature.feature.id }
+            $rootScope.$broadcast 'highlightFeature', { feature_id: highlightFeature.feature.id }
           else # event is a angular event
             # find the layer to highlight..
             (highlightFeature = f; break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
@@ -179,7 +179,7 @@ angular.module("DialogMapApp").controller "MapController", [
 
     $scope.$on 'highlightFeature', $scope.highlightFeature
 
-    $scope.$on 'resetHighlightFeature', $scope.clearHighlights
+    $scope.$on 'resetHighlight', $scope.clearHighlights
 
     # add a layer for highlighting features to the map..
     leafletData.getMap('map_main').then (map) ->
