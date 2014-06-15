@@ -11,16 +11,30 @@
   .contribution-links{ ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
     %a{ ng_click: "startContributionEdit(Contribution.currentContribution.id)"} Beitrag bearbeiten
   .children-contributions.contribution-list{ ng_repeat: "contribution in Contribution.currentContribution.childContributions", ng_show: "Contribution.currentContribution.childContributions" }
-    .contribution
+    .contribution{ ng_hide: "contribution.deleting", ng_class: "{deleted: contribution.deleted}" }
       .contribution-info
         {{ contribution.user.email }}
         schrieb am
-        {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
+        {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss" }}
       .contribution-description{ contribution_description: "contribution.description" }
+      .contribution-info.info-below{ ng_show: "contribution.createdAt !== contribution.updatedAt || contribution.deleted" }
+        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} am {{ contribution.updatedAt | date: "dd.MM.yy 'um' HH:mm:ss" }}
+        %span{ ng_show: "contribution.deleteReason" }
+          %br
+          Grund: {{ contribution.deleteReason }}
       .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit" }
-      .contribution-links{ ng_show: "contribution.user.id === User.user.id && !Contribution.composing" }
+      .contribution-links{ ng_show: "contribution.user.id === User.user.id && !Contribution.composing", ng_hide: "contribution.deleted || contribution.deleting" }
         %a{ ng_click: "startContributionEdit(contribution.id)"} Beitrag bearbeiten
-  %span{ ng_hide: "Contribution.currentContribution.childContributions" }
+        &#448;
+        %a{ ng_click: "contribution.deleting = true" } Beitrag löschen
+    .contribution.delete{ ng_show: "contribution.deleting" }
+      %h3 Beitrag wirklich löschen?
+      %br
+      %input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 50 Zeichen)", maxlength: "50" }
+      %br
+      %a.delete-no{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined" } Nein
+      %a{ ng_click: "Contribution.delete(contribution.id, contribution.delete_reason_draft)" } Ja
+  %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }
     -# %button.contribution-replybutton{ ng_click: "startContributionHere(Contribution.currentContribution.id)", ng_hide: "Contribution.composing" }

@@ -38,6 +38,11 @@ input, button
   border: solid $darker-grey 1px
   padding: 4px
 
+a
+  cursor: pointer
+  color: blue
+  text-decoration: underline
+
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
   color: $darker-grey
@@ -98,14 +103,13 @@ button
   .contribution-info
     font-size: 13px
     color: lighten($darker-grey,15)
+  .info-below
+    width: 100%
+    text-align: right
   .contribution-description
     line-height: 24px
   .contribution-links
     float: right
-    a
-      cursor: pointer
-      color: blue
-      text-decoration: underline
   .children-contributions
     // width: 98%
     padding-left: 5px
@@ -114,6 +118,15 @@ button
       border-bottom: 0px solid lighten($darker-grey,15)
       &:hover
         background-color: darken($sidebar-background,1)
+
+.delete
+  background-color: rgb(222, 177, 144)
+  text-align: center
+  a
+    width: 50px
+    display: inline-block
+  &:hover
+    background-color: rgb(222, 177, 144) !important
 
 .highlight
   border: 2px solid orange !important
@@ -125,6 +138,11 @@ button
   stroke: orange
   stroke-opacity: 1
   fill: rgba(0,0,0,0)
+
+.deleted
+  color: dimgrey
+  .contribution-description
+    text-decoration: line-through
 
 #map_backbutton
   display: block

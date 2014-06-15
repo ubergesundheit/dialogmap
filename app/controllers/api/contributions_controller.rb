@@ -51,10 +51,14 @@ class Api::ContributionsController < Api::BaseController
   # DELETE /contributions/1
   # DELETE /contributions/1.json
   def destroy
-    @contribution.destroy
-    respond_to do |format|
-      format.html { redirect_to contributions_url }
-      format.json { head :no_content }
+    if current_user == @contribution.user
+      if @contribution.update({ deleted: true })
+        render json: @contribution
+      else
+        render json: @contribution.errors, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'you are not allowed to do that' }, status: :forbidden
     end
   end
 
@@ -86,6 +90,8 @@ class Api::ContributionsController < Api::BaseController
         :title,
         :description,
         :parent_id,
+        :delete_reason,
+        :deleted,
         features_attributes: [
           {
             geojson: [
