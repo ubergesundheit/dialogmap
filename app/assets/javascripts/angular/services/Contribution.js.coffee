@@ -108,6 +108,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.removeFeature = (leaflet_id) ->
       @features = Object.keys(@features).filter (feature) -> feature isnt parseInt(leaflet_id)
       leafletData.getMap('map_main').then (map) ->
+        map.drawControl.options.edit.featureGroup.getLayer(leaflet_id).disableEditing()
         map.drawControl.options.edit.featureGroup.removeLayer leaflet_id
         if map.drawControl.options.edit.featureGroup.getLayers().length == 0
           map.drawControl.disableEditing()
