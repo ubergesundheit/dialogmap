@@ -1,0 +1,22 @@
+#app_info_button
+  display: block
+  position: absolute
+  bottom: 25px
+  left: 25px
+  cursor: pointer
+  font-size: 10px
+  line-height: 20px
+  width: 20px
+  height: 20px
+  color: $lighter-grey
+  background-color: lighten($darker-grey, 25)
+  text-align: center
+  +border-radius(10px)
+  &:hover
+    background-color: lighten($darker-grey, 40)
+
+.app-info
+  text-align: center
+  .fa-heart
+    color: lightcoral
+    margin: 0px 2px

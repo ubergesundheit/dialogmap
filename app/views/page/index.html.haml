@@ -6,6 +6,8 @@
     #map_backbutton{ ng_show: "$state.is('contribution') && !loading", ui_sref: "contributions" }
       = fa_icon "arrow-circle-o-left", class: "backbutton_icon"
       %span.backtext zurück
+    = fa_icon "info", id: 'app_info_button', ng_dialog: "app_info_modal.html", ng_dialog_class: "ngdialog-theme-default", ng_dialog_close_previous: true
+
     #sidebar
       #user{ ng_include: "'sidebar_user.html'" }
       %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
