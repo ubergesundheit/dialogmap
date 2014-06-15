@@ -37,24 +37,28 @@ class Api::ContributionsController < Api::BaseController
   # PATCH/PUT /contributions/1
   # PATCH/PUT /contributions/1.json
   def update
-    respond_to do |format|
+    if current_user == @contribution.user
       if @contribution.update(contribution_params)
-        format.html { redirect_to @contribution, notice: 'Contribution was successfully updated.' }
-        format.json { render :show, status: :ok, location: @contribution }
+        render json: @contribution
       else
-        format.html { render :edit }
-        format.json { render json: @contribution.errors, status: :unprocessable_entity }
+        render json: @contribution.errors, status: :unprocessable_entity
       end
+    else
+      render json: { error: 'you are not allowed to do that' }, status: :forbidden
     end
   end
 
   # DELETE /contributions/1
   # DELETE /contributions/1.json
   def destroy
-    @contribution.destroy
-    respond_to do |format|
-      format.html { redirect_to contributions_url }
-      format.json { head :no_content }
+    if current_user == @contribution.user
+      if @contribution.update({ deleted: true })
+        render json: @contribution
+      else
+        render json: @contribution.errors, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'you are not allowed to do that' }, status: :forbidden
     end
   end
 
@@ -86,6 +90,8 @@ class Api::ContributionsController < Api::BaseController
         :title,
         :description,
         :parent_id,
+        :delete_reason,
+        :deleted,
         features_attributes: [
           {
             geojson: [
@@ -101,7 +107,7 @@ class Api::ContributionsController < Api::BaseController
           },
           :leaflet_id
         ],
-        references_attributes: [ :type, :ref_id, :title ]
+        references_attributes: [ :type, :ref_id, :title, :id ]
       ).tap do |whitelisted|
         whitelisted['features_attributes'].try(:each_index) do |i|
           whitelisted['features_attributes'][i]['geojson']['geometry']['coordinates'] = params['contribution']['features_attributes'][i]['geojson']['geometry']['coordinates']

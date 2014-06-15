@@ -24,6 +24,15 @@ angular.module("DialogMapApp").controller "SidebarController", [
         Contribution.start(id)
         return
 
+      startContributionEdit: (id) ->
+        Contribution.setContributionForEdit(id)
+
+        angular.element('.composing_container').remove()
+        inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
+        angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
+        Contribution.start(id)
+        return
+
       highlightRelated: (feature_id, $event) ->
         target = angular.element($event.target)
         while target.is('span')
@@ -32,12 +41,12 @@ angular.module("DialogMapApp").controller "SidebarController", [
         $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
-      resetHighlight: ($event) ->
+      resetHighlight: (feature_id, $event) ->
         target = angular.element($event.target)
         while target.is('span')
           target = angular.element(target.parent())
         target.removeClass('highlight')
-        $rootScope.$broadcast('resetHighlightFeature')
+        $rootScope.$broadcast('resetHighlight', { feature_id: feature_id })
         return
 
     $scope.$on '$stateChangeStart', (event) ->
@@ -52,12 +61,12 @@ angular.module("DialogMapApp").controller "SidebarController", [
       $scope.loading = false
       return
 
-    $scope.$on 'highlightFeatureFromMap', (event, data) ->
+    $scope.$on 'highlightFeature', (event, data) ->
       id = data.feature_id
       angular.element(".contribution-description-tag[feature-tag=#{id}]").addClass('highlight')
       return
 
-    $scope.$on 'resetHighlightFromMap', (event, data) ->
+    $scope.$on 'resetHighlight', (event, data) ->
       id = data.feature_id
       angular.element(".contribution-description-tag[feature-tag=#{id}]").removeClass('highlight')
       return

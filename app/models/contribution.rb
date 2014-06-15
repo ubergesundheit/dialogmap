@@ -5,11 +5,14 @@ class Contribution < ActiveRecord::Base
   belongs_to :parent, :class_name => "Contribution"
   has_many :child_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
 
-  accepts_nested_attributes_for :features, :references
+  accepts_nested_attributes_for :features, reject_if: :features_exist
+  accepts_nested_attributes_for :references, reject_if: :references_exist
 
   validates_presence_of :description, :user_id
 
-  after_create :transform_description
+  after_save :transform_description
+
+  default_scope { order('created_at ASC') }
 
   scope :within, -> (bbox_string) {
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })
@@ -26,15 +29,44 @@ class Contribution < ActiveRecord::Base
   # end
 
   private
+
+    def references_exist(reference_attr)
+      if reference_attr["id"]
+        id = reference_attr["id"]
+        reference = self.references.find(id)
+        unless reference == nil
+          reference.update(reference_attr)
+          true
+        end
+        false
+      else
+        false
+      end
+    end
+
+    def features_exist(feature_attr)
+      if feature_attr["geojson"] != nil and feature_attr["geojson"]["properties"] != nil and feature_attr["geojson"]["properties"]["id"] != nil
+        id = feature_attr["geojson"]["properties"]["id"]
+        feature = self.features.find(id)
+        unless feature == nil
+          feature.update_from_geojson(feature_attr["geojson"])
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    end
+
     def transform_description
       # when creating contributions, the description contains references to
       # features that don't exist yet..
 
       # create a hash that contains the substitutions
       substitutions = self.features.map { |f| [ "%[#{f.leaflet_id}]%", "%[#{f.id}]%" ]}.to_h
-      #substitute..
-      self.description.gsub! /%\[\d+\]%/, substitutions
-      self.save
+      # substitute..
+      self.save if self.description.gsub! Regexp.new("%\\[(#{self.features.map { |f| f.leaflet_id }.join('|')})\\]%"), substitutions
     end
 
 end

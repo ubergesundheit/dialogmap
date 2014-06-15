@@ -2,7 +2,8 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
-  (Contribution, leafletData, descriptionTagHelper) ->
+  '$compile'
+  (Contribution, leafletData, descriptionTagHelper, $compile) ->
     restrict: 'AE'
     require: 'ngModel'
     transclude: true
@@ -10,7 +11,6 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
     templateUrl: 'description_area.html'
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
-        internal: {}
         clickMarker: (e) ->
           Contribution.startAddMarker()
           replaceSelectedText(scope.selection, 'marker', 'feature')
@@ -52,6 +52,117 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           leaveUrlInputMode()
           $event.preventDefault()
           return
+
+      # this should only happening if a contribution is edited..
+      if scope.ngModel.description != ""
+        featureReplacer = (match, offset, string) ->
+          id = parseInt(match.split("").slice(2,match.length-2).join(""))
+          feature = f for f in Contribution.features when f.id is id
+          descriptionTagHelper
+            .createNodeForEdit(id, feature.properties.title, feature.geometry.type, 'feature')
+            .outerHTML
+
+        featureReferenceReplacer = (match, offset, string) ->
+          id = parseInt(match.split("").slice(2,match.length-2).join(""))
+          reference = r for r in Contribution.references when r.refId is id
+          descriptionTagHelper
+            .createNodeForEdit(id, descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference')
+            .outerHTML
+
+        urlReferenceReplacer = (match, offset, string) ->
+          ref = match.split('|')
+          text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
+          url = decodeURIComponent(ref[0].slice(2))
+          descriptionTagHelper
+            .createNodeForEdit(url, text, 'reference','url_reference', scope.clickExistingUrlReference)
+            .outerHTML
+
+        transformedDescription = scope.ngModel.description
+
+        transformedDescription = transformedDescription.replace(/%\[\d+\]%/g, featureReplacer)
+        transformedDescription = transformedDescription.replace(/#\[\d+\]#/g, featureReferenceReplacer)
+        transformedDescription = transformedDescription.replace(/&\[[0-9a-zA-Z-_.!~*'\(\)%]+\|[^\[&]+\]&/g, urlReferenceReplacer)
+
+        # now make the features of this contribution editable..
+        leafletData.getMap('map_main').then (map) ->
+          for f in Contribution.features
+            leaflet_layer = L.GeoJSON.geometryToLayer(f)
+
+            leaflet_layer.enableEditing = ->
+              if typeof leaflet_layer.editToolbar is "undefined"
+                leaflet_layer.editToolbar = new L.EditToolbar.Edit(map,
+                  featureGroup: L.featureGroup([leaflet_layer])
+                  selectedPathOptions:
+                    color: "#fe57a1"
+                    opacity: 0.6
+                    dashArray: "10, 10"
+                    fill: not 0
+                    fillColor: "#fe57a1"
+                    fillOpacity: 0.1
+                    maintainColor: true
+                )
+              leaflet_layer.editToolbar.enable()
+              leaflet_layer.on("dragend", ->
+                leaflet_layer.editToolbar.save()
+                return
+              )
+              leaflet_layer.on("edit", ->
+                leaflet_layer.editToolbar.save()
+                return
+              )
+
+              return
+
+            leaflet_layer.disableEditing = ->
+              if leaflet_layer.editToolbar?
+                leaflet_layer.editToolbar.disable()
+                leaflet_layer.editToolbar = undefined
+              return
+
+            leaflet_layer._leaflet_id = f.id
+            leaflet_layer.options.properties =  f.properties
+            map.drawControl.options.edit.featureGroup.addLayer leaflet_layer
+            map.drawControl.enableEditing()
+
+          return
+
+        scope.$on 'Contribution.submit_start', ->
+          leafletData.getMap('map_main').then (map) ->
+            map.drawControl.disableEditing()
+            return
+          return
+
+        scope.$on 'Contribution.reset', ->
+          leafletData.getMap('map_main').then (map) ->
+            map.drawControl.disableEditing()
+            return
+          return
+
+        transformedDescription = $compile("<div>#{transformedDescription}</div>")(scope)
+
+        scope.internal =
+          description: transformedDescription
+        element.find('#contribution_description_text').html(transformedDescription)
+
+        element.find('.tag-title').on 'blur keyup change', (e) ->
+          parent = angular.element(e.target.parentElement)
+          tag_type = parent.attr('type')
+          id = parseInt(parent.attr('type_id'))
+          text = e.target.childNodes[0].textContent
+          if tag_type is 'feature'
+            # find the feature and change the name!
+            leafletData.getMap('map_main').then (map) ->
+              map.drawControl.options.edit.featureGroup.eachLayer (f) ->
+                if f._leaflet_id is id
+                  f.options.properties.title = text
+                return
+              return
+          else if tag_type is 'feature_reference'
+            (r.title = text; break) for r in Contribution.references when r.refId is id
+          return
+
+      else
+        scope.internal = {}
 
       # Events for Feature creation
       leafletData.getMap('map_main').then (map) ->

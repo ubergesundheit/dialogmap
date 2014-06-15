@@ -17,30 +17,38 @@ angular.module("DialogMapApp").controller "MapController", [
       Contribution: Contribution
       # layer for highlights
       highlightsLayer: L.layerGroup()
-      clearHighlights: (evt) ->
-        $scope.highlightsLayer.clearLayers()
-        # called by the mouseout of the geojson..
-        if evt? and evt.type? and evt.type is 'mouseout'
-          $rootScope.$broadcast 'resetHighlightFromMap', { feature_id: evt.target.feature.id }
+      clearHighlights: (evt, data) ->
+        leafletData.getMap('map_main').then (map) ->
+          # called by the mouseout of the geojson..
+          if evt? and evt.type? and evt.type is 'mouseout'
+            map.geojson_layer.resetStyle(evt.target)
+            $scope.highlightsLayer.clearLayers()
+            $rootScope.$broadcast 'resetHighlight', { feature_id: evt.target.feature.id }
+          else
+            (map.geojson_layer.resetStyle(f); break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
+            $scope.highlightsLayer.clearLayers()
+          return
         return
       highlightFeature: (evt, data) ->
-        $scope.clearHighlights()
         # event is a leaflet Event
-        if !data?
-          highlightFeature = evt.target.toGeoJSON()
-          # also send an event to highlight the corresponding description tag
-          $rootScope.$broadcast 'highlightFeatureFromMap', { feature_id: highlightFeature.id }
-        else # event is a angular event
-          # find the layer to highlight..
-          highlightFeature = f for f in $scope.geojson.data.features when f.id is data.feature_id
+        leafletData.getMap('map_main').then (map) ->
+          if !data?
+            highlightFeature = evt.target
+            # also send an event to highlight the corresponding description tag
+            $rootScope.$broadcast 'highlightFeature', { feature_id: highlightFeature.feature.id }
+          else # event is a angular event
+            # find the layer to highlight..
+            (highlightFeature = f; break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
 
-        if highlightFeature.geometry.type is 'Polygon'
-          highlightPolygon = L.GeoJSON.geometryToLayer(highlightFeature, undefined, undefined, { className: 'highlight'})
-          highlightPolygon.opacity = 0.0
-          $scope.highlightsLayer.addLayer(highlightPolygon)
-        else # the feature is a Marker..
-          highlightCircle = L.circleMarker([highlightFeature.geometry.coordinates[1],highlightFeature.geometry.coordinates[0]], { radius: 20, className: 'highlight' })
-          $scope.highlightsLayer.addLayer(highlightCircle)
+          if  highlightFeature instanceof L.Polygon
+            highlightFeature.setStyle
+              weight: 6
+              color: 'orange'
+              fillOpacity: 0.7
+          else # the feature is a Marker..
+            highlightCircle = L.circleMarker(highlightFeature.getLatLng(), { radius: 20, className: 'highlight' })
+            $scope.highlightsLayer.addLayer(highlightCircle)
+          return
         return
 
       # leaflet-directive stuff
@@ -171,7 +179,7 @@ angular.module("DialogMapApp").controller "MapController", [
 
     $scope.$on 'highlightFeature', $scope.highlightFeature
 
-    $scope.$on 'resetHighlightFeature', $scope.clearHighlights
+    $scope.$on 'resetHighlight', $scope.clearHighlights
 
     # add a layer for highlighting features to the map..
     leafletData.getMap('map_main').then (map) ->

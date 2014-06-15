@@ -1,5 +1,5 @@
 L.Icon.Default.imagePath = 'assets'
-angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialog", "ngSanitize", "ui.router", "ui.keypress"]
+angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialog", "ngSanitize", "ui.router", "ui.keypress", "angularMoment"]
 .config [
   "$stateProvider"
   "$urlRouterProvider"
@@ -37,9 +37,11 @@ angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialo
   '$rootScope'
   '$state'
   '$stateParams'
-  ($rootScope, $state, $stateParams) ->
+  'amMoment'
+  ($rootScope, $state, $stateParams, amMoment) ->
     # It's very handy to add references to $state and $stateParams to the $rootScope
     # so that you can access them from any scope within your applications
     $rootScope.$state = $state
     $rootScope.$stateParams = $stateParams
+    amMoment.changeLanguage('de')
   ]

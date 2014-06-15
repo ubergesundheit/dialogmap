@@ -4,7 +4,8 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
   @createTagTitleNode = (contenteditable) ->
     tagTitleNode = document.createElement('span')
     tagTitleNode.className = "tag-title"
-    tagTitleNode.setAttribute('contenteditable', (if contenteditable then 'true' else 'false'))
+    # tagTitleNode.setAttribute('contenteditable', (if contenteditable then 'true' else 'false'))
+    tagTitleNode.setAttribute('contenteditable', 'true')
     tagTitleNode
   @createTagTitleNodeForFeatureReference = (reference) ->
     tagTitleNode = @createTagTitleNode(false)
@@ -22,6 +23,10 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     tagTitleNode.setAttribute('title', url)
     tagTitleNode.appendChild(linkNode)
     tagTitleNode
+  @createNodeForEdit = (id, text, icon_type, box_type, clickExistingUrlReference) ->
+    node = @createReplacementNode(text, icon_type, box_type, undefined, clickExistingUrlReference)
+    node.setAttribute('type_id', encodeURIComponent(id))
+    node
   # text = text or node
   # icon_type = css class
   # box_type = css class
@@ -32,8 +37,7 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     replacementNode.className = "contribution-description-tag #{box_type}_tag"
     replacementNode.setAttribute('contenteditable', 'false')
     replacementNode.setAttribute('type', box_type)
-    if clickDelete?
-      replacementNode.setAttribute('type_id',(if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
+    replacementNode.setAttribute('type_id',(if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
 
     iconNode = document.createElement('span')
     iconNode.className = "contribution-icon #{icon_type}"
@@ -47,8 +51,9 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
 
     if clickExistingUrlReference?
       textNode.addEventListener('click', clickExistingUrlReference)
+      textNode.setAttribute('ng-click', 'clickExistingUrlReference($event)')
 
-    if clickDelete? # the element is a "fresh element".. show the delete button
+    if clickDelete?
       closeNode = document.createElement('a')
       closeNode.appendChild(document.createTextNode('×'))
       closeNode.className = 'tag-close'
@@ -57,7 +62,7 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
       closeNode.setAttribute("type_id", (if box_type is 'url_reference' then 'http%3A%2F%2F' else 'new'))
       closeNode.setAttribute('type', box_type)
       closeNode.addEventListener('click', clickDelete)
-      closeNode.setAttribute('ng-click', 'clickDelete()')
+      closeNode.setAttribute('ng-click', 'clickDelete($event)')
 
     replacementNode.appendChild(iconNode)
     replacementNode.appendChild(textNode)

@@ -25,7 +25,6 @@ angular.module('DialogMapApp')
   (Auth, ngDialog, $rootScope) ->
     _user = {}
 
-    _user.currentUser = undefined
     _user.isAuthenticated = Auth.isAuthenticated
     _user._off = undefined
     _user._dialogOpen = false
@@ -47,6 +46,7 @@ angular.module('DialogMapApp')
       scope.loading = false
       scope.user =
         email: user.email
+        id: user.id
       _user.user = scope.user
       scope.authenticated = _user.isAuthenticated()
       # _user._off = $rootScope.$on 'devise:unauthorized', _user._unauthorized

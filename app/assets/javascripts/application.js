@@ -17,11 +17,12 @@
 //= require angular-sanitize
 //= require angularjs/rails/resource
 //= require angular-devise
-// require angular-queue
 //= require angular-ui-router
 //= require keypress
-// require ng-contenteditable
 //= require ngDialog
+//= require moment
+//= require moment/lang/de
+//= require angular-moment
 //= require mapbox
 //= require angular-leaflet-directive
 //= require L.activearea.js
