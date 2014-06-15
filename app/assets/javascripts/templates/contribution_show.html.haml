@@ -4,7 +4,7 @@
   .contribution-info
     {{ Contribution.currentContribution.user.email }}
     schrieb am
-    {{ Contribution.currentContribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
+    {{ Contribution.currentContribution.createdAt | amCalendar}}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
@@ -15,10 +15,10 @@
       .contribution-info
         {{ contribution.user.email }}
         schrieb am
-        {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss" }}
+        {{ contribution.createdAt | amCalendar }}
       .contribution-description{ contribution_description: "contribution.description" }
       .contribution-info.info-below{ ng_show: "contribution.createdAt !== contribution.updatedAt || contribution.deleted" }
-        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} am {{ contribution.updatedAt | date: "dd.MM.yy 'um' HH:mm:ss" }}
+        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} am {{ contribution.updatedAt | amCalendar }}
         %span{ ng_show: "contribution.deleteReason" }
           %br
           Grund: {{ contribution.deleteReason }}

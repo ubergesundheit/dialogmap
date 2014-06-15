@@ -243,8 +243,12 @@ GEM
     rails-assets-angular (1.2.16)
     rails-assets-angular-devise (0.3.0)
       rails-assets-angular (~> 1.2.0)
+    rails-assets-angular-moment (0.7.1)
+      rails-assets-angular (>= 1.0.0, < 1.4.0)
+      rails-assets-moment (>= 2.0.0, < 2.7.0)
     rails-assets-angular-ui-router (0.2.10)
       rails-assets-angular (>= 1.0.8)
+    rails-assets-moment (2.6.0)
     rails-assets-ngDialog (0.1.7)
       rails-assets-angular (~> 1)
     rails-i18n (4.0.2)
@@ -367,6 +371,7 @@ DEPENDENCIES
   pry-rails
   rails (= 4.1.1)
   rails-assets-angular-devise
+  rails-assets-angular-moment
   rails-assets-angular-ui-router
   rails-assets-ngDialog
   rails-i18n

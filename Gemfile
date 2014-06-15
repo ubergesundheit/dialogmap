@@ -24,6 +24,7 @@ gem 'angular-rails-templates', github: 'whitehat101/angular-rails-templates'
 gem 'rails-assets-angular-devise'
 gem 'rails-assets-ngDialog'
 gem 'rails-assets-angular-ui-router'
+gem 'rails-assets-angular-moment'
 
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'

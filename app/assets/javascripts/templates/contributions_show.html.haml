@@ -2,8 +2,8 @@
   .contribution
     .contribution-info
       {{ contribution.user.email }}
-      schrieb am
-      {{ contribution.createdAt | date: "dd.MM.yy 'um' HH:mm:ss"}}
+      schrieb
+      {{ contribution.createdAt | amCalendar}}
     %h3 {{ contribution.title }}
     .contribution-description{ contribution_description: "contribution.description" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
