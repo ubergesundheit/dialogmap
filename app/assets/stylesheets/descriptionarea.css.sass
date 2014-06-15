@@ -1,5 +1,5 @@
 .url-input
-  background-color: #EFEFEF
+  background-color: $light-grey
   position: absolute
   padding: 5px
   @include border-radius(5px)
@@ -10,7 +10,7 @@
   display: none
   position: absolute
   width: 127.33px
-  background-color: #EFEFEF
+  background-color: $light-grey
   padding: 5px
   @include border-radius(5px)
   @include single-box-shadow
@@ -31,7 +31,7 @@
   .url-reference
     background-position: -302px -2px
   .divider
-    background-color: rgb(70,70,70)
+    background-color: $darker-grey
     width: 1px
     height: 22px
     display: inline-block
@@ -48,7 +48,7 @@
   margin-left: 2px
   margin-right: 2px
   white-space: nowrap
-  border: solid 1px #505050
+  border: solid 1px $tag-border-color
   @include user-select(none)
   .tag-title
     color: $lighter-grey
@@ -79,13 +79,13 @@
   background-color: #CCCCCC
 
 .feature_tag
-  background-color: #69B687
+  background-color: $feature-tag-color
 
 .feature_reference_tag
-  background-color: #C17751
+  background-color: $feature-reference-tag-color
 
 .url_reference_tag
-  background-color: #6AACD4
+  background-color: $url-tag-color
 
 .static_tag
   cursor: pointer

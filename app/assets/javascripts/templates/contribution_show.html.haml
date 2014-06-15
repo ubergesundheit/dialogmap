@@ -18,7 +18,7 @@
         {{ contribution.createdAt | amCalendar }}
       .contribution-description{ contribution_description: "contribution.description" }
       .contribution-info.info-below{ ng_show: "contribution.createdAt !== contribution.updatedAt || contribution.deleted" }
-        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} {{ contribution.updatedAt | amCalendar }}
+        {{ contribution.updatedAt | amCalendar }} {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }}
         %span{ ng_show: "contribution.deleteReason" }
           %br
           Grund: {{ contribution.deleteReason }}
