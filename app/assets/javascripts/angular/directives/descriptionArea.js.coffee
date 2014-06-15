@@ -59,14 +59,14 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           id = parseInt(match.split("").slice(2,match.length-2).join(""))
           feature = f for f in Contribution.features when f.id is id
           descriptionTagHelper
-            .createNodeForEdit(id, feature.properties.title, feature.geometry.type, 'feature', scope.clickDelete)
+            .createNodeForEdit(id, feature.properties.title, feature.geometry.type, 'feature')
             .outerHTML
 
         featureReferenceReplacer = (match, offset, string) ->
           id = parseInt(match.split("").slice(2,match.length-2).join(""))
           reference = r for r in Contribution.references when r.refId is id
           descriptionTagHelper
-            .createNodeForEdit(id, descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference', scope.clickDelete)
+            .createNodeForEdit(id, descriptionTagHelper.createTagTitleNodeForFeatureReference(reference), 'reference', 'feature_reference')
             .outerHTML
 
         urlReferenceReplacer = (match, offset, string) ->
@@ -74,7 +74,7 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           text = decodeURIComponent(ref[1].slice(0, ref[1].length-2))
           url = decodeURIComponent(ref[0].slice(2))
           descriptionTagHelper
-            .createNodeForEdit(url, text, 'reference','url_reference', scope.clickDelete, scope.clickExistingUrlReference)
+            .createNodeForEdit(url, text, 'reference','url_reference', scope.clickExistingUrlReference)
             .outerHTML
 
         transformedDescription = scope.ngModel.description

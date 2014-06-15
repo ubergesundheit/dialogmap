@@ -23,13 +23,9 @@ angular.module('DialogMapApp').service "descriptionTagHelper", ->
     tagTitleNode.setAttribute('title', url)
     tagTitleNode.appendChild(linkNode)
     tagTitleNode
-  @createNodeForEdit = (id, text, icon_type, box_type, clickDelete, clickExistingUrlReference) ->
-    node = @createReplacementNode(text, icon_type, box_type, clickDelete, clickExistingUrlReference)
+  @createNodeForEdit = (id, text, icon_type, box_type, clickExistingUrlReference) ->
+    node = @createReplacementNode(text, icon_type, box_type, undefined, clickExistingUrlReference)
     node.setAttribute('type_id', encodeURIComponent(id))
-    # this is most hopefully always the closenode..
-    if clickDelete?
-      node.lastElementChild.setAttribute('type_id', encodeURIComponent(id))
-
     node
   # text = text or node
   # icon_type = css class
