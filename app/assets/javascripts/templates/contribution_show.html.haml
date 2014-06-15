@@ -23,7 +23,7 @@
           %br
           Grund: {{ contribution.deleteReason }}
       .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit" }
-      .contribution-links{ ng_show: "contribution.user.id === User.user.id && !Contribution.composing", ng_hide: "contribution.deleted || contribution.deleting" }
+      .contribution-links{ ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
         %a{ ng_click: "startContributionEdit(contribution.id)"} Beitrag bearbeiten
         &#448;
         %a{ ng_click: "contribution.deleting = true" } Beitrag löschen
