@@ -3,7 +3,7 @@
     zurück
   .contribution-info
     {{ Contribution.currentContribution.user.email }}
-    schrieb am
+    schrieb
     {{ Contribution.currentContribution.createdAt | amCalendar}}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
@@ -14,11 +14,11 @@
     .contribution{ ng_hide: "contribution.deleting", ng_class: "{deleted: contribution.deleted}" }
       .contribution-info
         {{ contribution.user.email }}
-        schrieb am
+        schrieb
         {{ contribution.createdAt | amCalendar }}
       .contribution-description{ contribution_description: "contribution.description" }
       .contribution-info.info-below{ ng_show: "contribution.createdAt !== contribution.updatedAt || contribution.deleted" }
-        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} am {{ contribution.updatedAt | amCalendar }}
+        {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }} {{ contribution.updatedAt | amCalendar }}
         %span{ ng_show: "contribution.deleteReason" }
           %br
           Grund: {{ contribution.deleteReason }}
