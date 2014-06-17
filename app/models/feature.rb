@@ -1,3 +1,4 @@
+require 'color'
 class Feature < ActiveRecord::Base
   # see api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html#method-i-inheritance_column
   self.inheritance_column = 'inheritance_column'
@@ -57,6 +58,17 @@ class Feature < ActiveRecord::Base
     self.geojson = geojson
     decode_geojson_from_params
     self.save!
+  end
+
+  def lighten_colors
+    value = 65
+    self.update({
+      :"marker-color" => Color::RGB.by_hex(self.send("marker-color")).lighten_by(value).html
+      }) unless self.send("marker-color") == nil
+    self.update({
+        stroke: Color::RGB.by_hex(self.stroke).lighten_by(value).html,
+        fill: Color::RGB.by_hex(self.fill).lighten_by(value).html
+      }) unless self.stroke == nil or self.fill == nil
   end
 
   private

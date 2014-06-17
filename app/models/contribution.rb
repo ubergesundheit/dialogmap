@@ -10,6 +10,8 @@ class Contribution < ActiveRecord::Base
 
   validates_presence_of :description, :user_id
 
+  before_save :lighten_features_colors, if: :about_to_be_deleted?
+
   after_save :transform_description
 
   default_scope { order('created_at ASC') }
@@ -29,6 +31,14 @@ class Contribution < ActiveRecord::Base
   # end
 
   private
+
+    def about_to_be_deleted?
+      self.deleted
+    end
+
+    def lighten_features_colors
+      self.features.each { |f| f.lighten_colors }
+    end
 
     def references_exist(reference_attr)
       if reference_attr["id"]

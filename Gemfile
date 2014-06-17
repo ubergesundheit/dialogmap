@@ -25,6 +25,8 @@ gem 'rails-assets-ngDialog'
 gem 'rails-assets-angular-ui-router'
 gem 'rails-assets-angular-moment'
 
+gem 'color'
+
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 
