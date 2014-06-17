@@ -146,9 +146,12 @@ a
   fill: rgba(0,0,0,0)
 
 .deleted
-  color: dimgrey
-  .contribution-description
+  color: dimgrey !important
+  .contribution-description, .tag-title
     text-decoration: line-through
+  .contribution-description-tag
+    +opacity(0.5)
+
 
 #map_backbutton
   display: block
