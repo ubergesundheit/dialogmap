@@ -60,10 +60,14 @@
           //var map = new L.mapbox.map(element[0],null, leafletMapDefaults.getMapCreationDefaults(attrs.id));
           _leafletMap.resolve(map);
           if (!isDefined(attrs.center)) {
+            // map.setView([
+            //   defaults.center.lat,
+            //   defaults.center.lng
+            // ], defaults.center.zoom);
             map.setView([
-              defaults.center.lat,
-              defaults.center.lng
-            ], defaults.center.zoom);
+              51.96,
+              7.62
+            ], 14);
           }
           // If no layers nor tiles defined, set the default tileLayer
           if (!isDefined(attrs.tiles) && !isDefined(attrs.layers)) {
@@ -100,214 +104,214 @@
       };
     }
   ]);
-  angular.module('leaflet-directive').directive('center', [
-    '$log',
-    '$q',
-    '$location',
-    'leafletMapDefaults',
-    'leafletHelpers',
-    'leafletBoundsHelpers',
-    function ($log, $q, $location, leafletMapDefaults, leafletHelpers, leafletBoundsHelpers) {
-      var isDefined = leafletHelpers.isDefined, isNumber = leafletHelpers.isNumber, isSameCenterOnMap = leafletHelpers.isSameCenterOnMap, safeApply = leafletHelpers.safeApply, isValidCenter = leafletHelpers.isValidCenter, isEmpty = leafletHelpers.isEmpty, isUndefinedOrEmpty = leafletHelpers.isUndefinedOrEmpty;
-      var shouldInitializeMapWithBounds = function (bounds, center) {
-        return isDefined(bounds) && !isEmpty(bounds) && isUndefinedOrEmpty(center);
-      };
-      var notifyCenterChangedToBounds = function (scope) {
-        scope.$broadcast('boundsChanged');
-      };
-      var notifyCenterUrlHashChanged = function (scope, map, attrs) {
-        if (!isDefined(attrs.urlHashCenter)) {
-          return;
-        }
-        var center = map.getCenter();
-        var centerUrlHash = center.lat.toFixed(4) + ':' + center.lng.toFixed(4) + ':' + map.getZoom();
-        var search = $location.search();
-        if (!isDefined(search.c) || search.c !== centerUrlHash) {
-          //$log.debug("notified new center...");
-          scope.$emit('centerUrlHash', centerUrlHash);
-        }
-      };
-      var _leafletCenter;
-      return {
-        restrict: 'A',
-        scope: false,
-        replace: false,
-        require: 'leaflet',
-        controller: function () {
-          _leafletCenter = $q.defer();
-          this.getCenter = function () {
-            return _leafletCenter.promise;
-          };
-        },
-        link: function (scope, element, attrs, controller) {
-          var leafletScope = controller.getLeafletScope(), centerModel = leafletScope.center;
-          controller.getMap().then(function (map) {
-            var defaults = leafletMapDefaults.getDefaults(attrs.id);
-            if (attrs.center.search('-') !== -1) {
-              $log.error('The "center" variable can\'t use a "-" on his key name: "' + attrs.center + '".');
-              map.setView([
-                defaults.center.lat,
-                defaults.center.lng
-              ], defaults.center.zoom);
-              return;
-            } else if (shouldInitializeMapWithBounds(leafletScope.bounds, centerModel)) {
-              map.fitBounds(leafletBoundsHelpers.createLeafletBounds(leafletScope.bounds));
-              centerModel = map.getCenter();
-              safeApply(leafletScope, function (scope) {
-                scope.center = {
-                  lat: map.getCenter().lat,
-                  lng: map.getCenter().lng,
-                  zoom: map.getZoom(),
-                  autoDiscover: false
-                };
-              });
-              safeApply(leafletScope, function (scope) {
-                var mapBounds = map.getBounds();
-                var newScopeBounds = {
-                    northEast: {
-                      lat: mapBounds._northEast.lat,
-                      lng: mapBounds._northEast.lng
-                    },
-                    southWest: {
-                      lat: mapBounds._southWest.lat,
-                      lng: mapBounds._southWest.lng
-                    }
-                  };
-                scope.bounds = newScopeBounds;
-              });
-            } else if (!isDefined(centerModel)) {
-              $log.error('The "center" property is not defined in the main scope');
-              map.setView([
-                defaults.center.lat,
-                defaults.center.lng
-              ], defaults.center.zoom);
-              return;
-            } else if (!(isDefined(centerModel.lat) && isDefined(centerModel.lng)) && !isDefined(centerModel.autoDiscover)) {
-              angular.copy(defaults.center, centerModel);
-            }
-            var urlCenterHash, mapReady;
-            if (attrs.urlHashCenter === 'yes') {
-              var extractCenterFromUrl = function () {
-                var search = $location.search();
-                var centerParam;
-                if (isDefined(search.c)) {
-                  var cParam = search.c.split(':');
-                  if (cParam.length === 3) {
-                    centerParam = {
-                      lat: parseFloat(cParam[0]),
-                      lng: parseFloat(cParam[1]),
-                      zoom: parseInt(cParam[2], 10)
-                    };
-                  }
-                }
-                return centerParam;
-              };
-              urlCenterHash = extractCenterFromUrl();
-              leafletScope.$on('$locationChangeSuccess', function (event) {
-                var scope = event.currentScope;
-                //$log.debug("updated location...");
-                var urlCenter = extractCenterFromUrl();
-                if (isDefined(urlCenter) && !isSameCenterOnMap(urlCenter, map)) {
-                  //$log.debug("updating center model...", urlCenter);
-                  scope.center = {
-                    lat: urlCenter.lat,
-                    lng: urlCenter.lng,
-                    zoom: urlCenter.zoom
-                  };
-                }
-              });
-            }
-            leafletScope.$watch('center', function (center) {
-              //$log.debug("updated center model...");
-              // The center from the URL has priority
-              if (isDefined(urlCenterHash)) {
-                angular.copy(urlCenterHash, center);
-                urlCenterHash = undefined;
-              }
-              if (!isValidCenter(center) && center.autoDiscover !== true) {
-                $log.warn('[AngularJS - Leaflet] invalid \'center\'');
-                //map.setView([defaults.center.lat, defaults.center.lng], defaults.center.zoom);
-                return;
-              }
-              if (center.autoDiscover === true) {
-                if (!isNumber(center.zoom)) {
-                  map.setView([
-                    defaults.center.lat,
-                    defaults.center.lng
-                  ], defaults.center.zoom);
-                }
-                if (isNumber(center.zoom) && center.zoom > defaults.center.zoom) {
-                  map.locate({
-                    setView: true,
-                    maxZoom: center.zoom
-                  });
-                } else if (isDefined(defaults.maxZoom)) {
-                  map.locate({
-                    setView: true,
-                    maxZoom: defaults.maxZoom
-                  });
-                } else {
-                  map.locate({ setView: true });
-                }
-                return;
-              }
-              if (mapReady && isSameCenterOnMap(center, map)) {
-                //$log.debug("no need to update map again.");
-                return;
-              }
-              //$log.debug("updating map center...", center);
-              map.setView([
-                center.lat,
-                center.lng
-              ], center.zoom);
-              notifyCenterChangedToBounds(leafletScope, map);
-            }, true);
-            map.whenReady(function () {
-              mapReady = true;
-            });
-            map.on('moveend', function () {
-              // Resolve the center after the first map position
-              _leafletCenter.resolve();
-              notifyCenterUrlHashChanged(leafletScope, map, attrs);
-              //$log.debug("updated center on map...");
-              if (isSameCenterOnMap(centerModel, map)) {
-                //$log.debug("same center in model, no need to update again.");
-                return;
-              }
-              safeApply(leafletScope, function (scope) {
-                //$log.debug("updating center model...", map.getCenter(), map.getZoom());
-                scope.center = {
-                  lat: map.getCenter().lat,
-                  lng: map.getCenter().lng,
-                  zoom: map.getZoom(),
-                  autoDiscover: false
-                };
-                notifyCenterChangedToBounds(leafletScope, map);
-              });
-            });
-            if (centerModel.autoDiscover === true) {
-              map.on('locationerror', function () {
-                $log.warn('[AngularJS - Leaflet] The Geolocation API is unauthorized on this page.');
-                if (isValidCenter(centerModel)) {
-                  map.setView([
-                    centerModel.lat,
-                    centerModel.lng
-                  ], centerModel.zoom);
-                  notifyCenterChangedToBounds(leafletScope, map);
-                } else {
-                  map.setView([
-                    defaults.center.lat,
-                    defaults.center.lng
-                  ], defaults.center.zoom);
-                  notifyCenterChangedToBounds(leafletScope, map);
-                }
-              });
-            }
-          });
-        }
-      };
-    }
-  ]);
+  // angular.module('leaflet-directive').directive('center', [
+  //   '$log',
+  //   '$q',
+  //   '$location',
+  //   'leafletMapDefaults',
+  //   'leafletHelpers',
+  //   'leafletBoundsHelpers',
+  //   function ($log, $q, $location, leafletMapDefaults, leafletHelpers, leafletBoundsHelpers) {
+  //     var isDefined = leafletHelpers.isDefined, isNumber = leafletHelpers.isNumber, isSameCenterOnMap = leafletHelpers.isSameCenterOnMap, safeApply = leafletHelpers.safeApply, isValidCenter = leafletHelpers.isValidCenter, isEmpty = leafletHelpers.isEmpty, isUndefinedOrEmpty = leafletHelpers.isUndefinedOrEmpty;
+  //     var shouldInitializeMapWithBounds = function (bounds, center) {
+  //       return isDefined(bounds) && !isEmpty(bounds) && isUndefinedOrEmpty(center);
+  //     };
+  //     var notifyCenterChangedToBounds = function (scope) {
+  //       scope.$broadcast('boundsChanged');
+  //     };
+  //     var notifyCenterUrlHashChanged = function (scope, map, attrs) {
+  //       if (!isDefined(attrs.urlHashCenter)) {
+  //         return;
+  //       }
+  //       var center = map.getCenter();
+  //       var centerUrlHash = center.lat.toFixed(4) + ':' + center.lng.toFixed(4) + ':' + map.getZoom();
+  //       var search = $location.search();
+  //       if (!isDefined(search.c) || search.c !== centerUrlHash) {
+  //         //$log.debug("notified new center...");
+  //         scope.$emit('centerUrlHash', centerUrlHash);
+  //       }
+  //     };
+  //     var _leafletCenter;
+  //     return {
+  //       restrict: 'A',
+  //       scope: false,
+  //       replace: false,
+  //       require: 'leaflet',
+  //       controller: function () {
+  //         _leafletCenter = $q.defer();
+  //         this.getCenter = function () {
+  //           return _leafletCenter.promise;
+  //         };
+  //       },
+  //       link: function (scope, element, attrs, controller) {
+  //         var leafletScope = controller.getLeafletScope(), centerModel = leafletScope.center;
+  //         controller.getMap().then(function (map) {
+  //           var defaults = leafletMapDefaults.getDefaults(attrs.id);
+  //           if (attrs.center.search('-') !== -1) {
+  //             $log.error('The "center" variable can\'t use a "-" on his key name: "' + attrs.center + '".');
+  //             map.setView([
+  //               defaults.center.lat,
+  //               defaults.center.lng
+  //             ], defaults.center.zoom);
+  //             return;
+  //           } else if (shouldInitializeMapWithBounds(leafletScope.bounds, centerModel)) {
+  //             map.fitBounds(leafletBoundsHelpers.createLeafletBounds(leafletScope.bounds));
+  //             centerModel = map.getCenter();
+  //             safeApply(leafletScope, function (scope) {
+  //               scope.center = {
+  //                 lat: map.getCenter().lat,
+  //                 lng: map.getCenter().lng,
+  //                 zoom: map.getZoom(),
+  //                 autoDiscover: false
+  //               };
+  //             });
+  //             safeApply(leafletScope, function (scope) {
+  //               var mapBounds = map.getBounds();
+  //               var newScopeBounds = {
+  //                   northEast: {
+  //                     lat: mapBounds._northEast.lat,
+  //                     lng: mapBounds._northEast.lng
+  //                   },
+  //                   southWest: {
+  //                     lat: mapBounds._southWest.lat,
+  //                     lng: mapBounds._southWest.lng
+  //                   }
+  //                 };
+  //               scope.bounds = newScopeBounds;
+  //             });
+  //           } else if (!isDefined(centerModel)) {
+  //             $log.error('The "center" property is not defined in the main scope');
+  //             map.setView([
+  //               defaults.center.lat,
+  //               defaults.center.lng
+  //             ], defaults.center.zoom);
+  //             return;
+  //           } else if (!(isDefined(centerModel.lat) && isDefined(centerModel.lng)) && !isDefined(centerModel.autoDiscover)) {
+  //             angular.copy(defaults.center, centerModel);
+  //           }
+  //           var urlCenterHash, mapReady;
+  //           if (attrs.urlHashCenter === 'yes') {
+  //             var extractCenterFromUrl = function () {
+  //               var search = $location.search();
+  //               var centerParam;
+  //               if (isDefined(search.c)) {
+  //                 var cParam = search.c.split(':');
+  //                 if (cParam.length === 3) {
+  //                   centerParam = {
+  //                     lat: parseFloat(cParam[0]),
+  //                     lng: parseFloat(cParam[1]),
+  //                     zoom: parseInt(cParam[2], 10)
+  //                   };
+  //                 }
+  //               }
+  //               return centerParam;
+  //             };
+  //             urlCenterHash = extractCenterFromUrl();
+  //             leafletScope.$on('$locationChangeSuccess', function (event) {
+  //               var scope = event.currentScope;
+  //               //$log.debug("updated location...");
+  //               var urlCenter = extractCenterFromUrl();
+  //               if (isDefined(urlCenter) && !isSameCenterOnMap(urlCenter, map)) {
+  //                 //$log.debug("updating center model...", urlCenter);
+  //                 scope.center = {
+  //                   lat: urlCenter.lat,
+  //                   lng: urlCenter.lng,
+  //                   zoom: urlCenter.zoom
+  //                 };
+  //               }
+  //             });
+  //           }
+  //           leafletScope.$watch('center', function (center) {
+  //             //$log.debug("updated center model...");
+  //             // The center from the URL has priority
+  //             if (isDefined(urlCenterHash)) {
+  //               angular.copy(urlCenterHash, center);
+  //               urlCenterHash = undefined;
+  //             }
+  //             if (!isValidCenter(center) && center.autoDiscover !== true) {
+  //               $log.warn('[AngularJS - Leaflet] invalid \'center\'');
+  //               //map.setView([defaults.center.lat, defaults.center.lng], defaults.center.zoom);
+  //               return;
+  //             }
+  //             if (center.autoDiscover === true) {
+  //               if (!isNumber(center.zoom)) {
+  //                 map.setView([
+  //                   defaults.center.lat,
+  //                   defaults.center.lng
+  //                 ], defaults.center.zoom);
+  //               }
+  //               if (isNumber(center.zoom) && center.zoom > defaults.center.zoom) {
+  //                 map.locate({
+  //                   setView: true,
+  //                   maxZoom: center.zoom
+  //                 });
+  //               } else if (isDefined(defaults.maxZoom)) {
+  //                 map.locate({
+  //                   setView: true,
+  //                   maxZoom: defaults.maxZoom
+  //                 });
+  //               } else {
+  //                 map.locate({ setView: true });
+  //               }
+  //               return;
+  //             }
+  //             if (mapReady && isSameCenterOnMap(center, map)) {
+  //               //$log.debug("no need to update map again.");
+  //               return;
+  //             }
+  //             //$log.debug("updating map center...", center);
+  //             map.setView([
+  //               center.lat,
+  //               center.lng
+  //             ], center.zoom);
+  //             notifyCenterChangedToBounds(leafletScope, map);
+  //           }, true);
+  //           map.whenReady(function () {
+  //             mapReady = true;
+  //           });
+  //           map.on('moveend', function () {
+  //             // Resolve the center after the first map position
+  //             _leafletCenter.resolve();
+  //             notifyCenterUrlHashChanged(leafletScope, map, attrs);
+  //             //$log.debug("updated center on map...");
+  //             if (isSameCenterOnMap(centerModel, map)) {
+  //               //$log.debug("same center in model, no need to update again.");
+  //               return;
+  //             }
+  //             safeApply(leafletScope, function (scope) {
+  //               //$log.debug("updating center model...", map.getCenter(), map.getZoom());
+  //               scope.center = {
+  //                 lat: map.getCenter().lat,
+  //                 lng: map.getCenter().lng,
+  //                 zoom: map.getZoom(),
+  //                 autoDiscover: false
+  //               };
+  //               notifyCenterChangedToBounds(leafletScope, map);
+  //             });
+  //           });
+  //           if (centerModel.autoDiscover === true) {
+  //             map.on('locationerror', function () {
+  //               $log.warn('[AngularJS - Leaflet] The Geolocation API is unauthorized on this page.');
+  //               if (isValidCenter(centerModel)) {
+  //                 map.setView([
+  //                   centerModel.lat,
+  //                   centerModel.lng
+  //                 ], centerModel.zoom);
+  //                 notifyCenterChangedToBounds(leafletScope, map);
+  //               } else {
+  //                 map.setView([
+  //                   defaults.center.lat,
+  //                   defaults.center.lng
+  //                 ], defaults.center.zoom);
+  //                 notifyCenterChangedToBounds(leafletScope, map);
+  //               }
+  //             });
+  //           }
+  //         });
+  //       }
+  //     };
+  //   }
+  // ]);
   angular.module('leaflet-directive').directive('tiles', [
     '$log',
     'leafletData',
@@ -641,68 +645,68 @@
       };
     }
   ]);
-  angular.module('leaflet-directive').directive('bounds', [
-    '$log',
-    '$timeout',
-    'leafletHelpers',
-    'leafletBoundsHelpers',
-    function ($log, $timeout, leafletHelpers, leafletBoundsHelpers) {
-      return {
-        restrict: 'A',
-        scope: false,
-        replace: false,
-        require: [
-          'leaflet',
-          'center'
-        ],
-        link: function (scope, element, attrs, controller) {
-          var isDefined = leafletHelpers.isDefined, createLeafletBounds = leafletBoundsHelpers.createLeafletBounds, leafletScope = controller[0].getLeafletScope(), mapController = controller[0];
-          var emptyBounds = function (bounds) {
-            if (bounds._southWest.lat === 0 && bounds._southWest.lng === 0 && bounds._northEast.lat === 0 && bounds._northEast.lng === 0) {
-              return true;
-            }
-            return false;
-          };
-          mapController.getMap().then(function (map) {
-            leafletScope.$on('boundsChanged', function (event) {
-              var scope = event.currentScope;
-              var bounds = map.getBounds();
-              $log.debug('updated map bounds...', bounds);
-              if (emptyBounds(bounds)) {
-                return;
-              }
-              var newScopeBounds = {
-                  northEast: {
-                    lat: bounds._northEast.lat,
-                    lng: bounds._northEast.lng
-                  },
-                  southWest: {
-                    lat: bounds._southWest.lat,
-                    lng: bounds._southWest.lng
-                  }
-                };
-              if (!angular.equals(scope.bounds, newScopeBounds)) {
-                $log.debug('Need to update scope bounds.');
-                scope.bounds = newScopeBounds;
-              }
-            });
-            leafletScope.$watch('bounds', function (bounds) {
-              $log.debug('updated bounds...', bounds);
-              if (!isDefined(bounds)) {
-                $log.error('[AngularJS - Leaflet] Invalid bounds');
-                return;
-              }
-              var leafletBounds = createLeafletBounds(bounds);
-              if (leafletBounds && !map.getBounds().equals(leafletBounds)) {
-                $log.debug('Need to update map bounds.');
-                map.fitBounds(leafletBounds);
-              }
-            }, true);
-          });
-        }
-      };
-    }
-  ]);
+  // angular.module('leaflet-directive').directive('bounds', [
+  //   '$log',
+  //   '$timeout',
+  //   'leafletHelpers',
+  //   'leafletBoundsHelpers',
+  //   function ($log, $timeout, leafletHelpers, leafletBoundsHelpers) {
+  //     return {
+  //       restrict: 'A',
+  //       scope: false,
+  //       replace: false,
+  //       require: [
+  //         'leaflet',
+  //         'center'
+  //       ],
+  //       link: function (scope, element, attrs, controller) {
+  //         var isDefined = leafletHelpers.isDefined, createLeafletBounds = leafletBoundsHelpers.createLeafletBounds, leafletScope = controller[0].getLeafletScope(), mapController = controller[0];
+  //         var emptyBounds = function (bounds) {
+  //           if (bounds._southWest.lat === 0 && bounds._southWest.lng === 0 && bounds._northEast.lat === 0 && bounds._northEast.lng === 0) {
+  //             return true;
+  //           }
+  //           return false;
+  //         };
+  //         mapController.getMap().then(function (map) {
+  //           leafletScope.$on('boundsChanged', function (event) {
+  //             var scope = event.currentScope;
+  //             var bounds = map.getBounds();
+  //             $log.debug('updated map bounds...', bounds);
+  //             if (emptyBounds(bounds)) {
+  //               return;
+  //             }
+  //             var newScopeBounds = {
+  //                 northEast: {
+  //                   lat: bounds._northEast.lat,
+  //                   lng: bounds._northEast.lng
+  //                 },
+  //                 southWest: {
+  //                   lat: bounds._southWest.lat,
+  //                   lng: bounds._southWest.lng
+  //                 }
+  //               };
+  //             if (!angular.equals(scope.bounds, newScopeBounds)) {
+  //               $log.debug('Need to update scope bounds.');
+  //               scope.bounds = newScopeBounds;
+  //             }
+  //           });
+  //           leafletScope.$watch('bounds', function (bounds) {
+  //             $log.debug('updated bounds...', bounds);
+  //             if (!isDefined(bounds)) {
+  //               $log.error('[AngularJS - Leaflet] Invalid bounds');
+  //               return;
+  //             }
+  //             var leafletBounds = createLeafletBounds(bounds);
+  //             if (leafletBounds && !map.getBounds().equals(leafletBounds)) {
+  //               $log.debug('Need to update map bounds.');
+  //               map.fitBounds(leafletBounds);
+  //             }
+  //           }, true);
+  //         });
+  //       }
+  //     };
+  //   }
+  // ]);
   angular.module('leaflet-directive').directive('markers', [
     '$log',
     '$rootScope',

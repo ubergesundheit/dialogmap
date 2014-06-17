@@ -1,7 +1,7 @@
 .activearea
 %div{ ng_controller: "MainController"}
   #map{ ng_controller: "MapController" }
-    %leaflet{ id: "map_main", center: "muenster", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
+    %leaflet{ id: "map_main", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
   #ui_container{ ng_controller: "SidebarController" }
     #map_backbutton{ ng_show: "$state.is('contribution') && !loading", ui_sref: "contributions" }
       = fa_icon "arrow-circle-o-left", class: "backbutton_icon"

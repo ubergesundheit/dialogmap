@@ -29,7 +29,7 @@ angular.module "DialogMapApp", ["leaflet-directive", "rails", "Devise", "ngDialo
             "Contribution"
             "$stateParams"
             (Contribution, $stateParams) ->
-              Contribution.setCurrentContribution($stateParams.id)
+              Contribution.fetchAndSetCurrentContribution($stateParams.id)
               return
             ]
 ] #<leaflet center='muenster' controls='controls' event-broadcast='events' geojson='geojson' id='map_main' tiles='tiles'></leaflet>

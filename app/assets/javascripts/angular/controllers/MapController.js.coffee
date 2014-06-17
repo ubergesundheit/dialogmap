@@ -52,10 +52,6 @@ angular.module("DialogMapApp").controller "MapController", [
         return
 
       # leaflet-directive stuff
-      muenster:
-        lat: 51.96
-        lng: 7.62
-        zoom: 14
       controls:
         draw: true
       events:
@@ -85,54 +81,45 @@ angular.module("DialogMapApp").controller "MapController", [
           return
       _dataFresh: true
 
-      updateGeoJSON: (skip_reload, bbox_string) ->
-        updateGeoJSONinScope = ->
-          includeChildren = $scope.$state.is 'contribution'
-          # decide which source to use
-          if Contribution.currentContribution?
-            contributions = [Contribution.currentContribution]
-          else if Contribution.parent_contributions?
-            contributions = Contribution.parent_contributions
-
-          # transform the array to a feature collection
-          fCollection =
-            type: 'FeatureCollection'
-            features: []
-          pushFeaturesToCollection = (features) ->
-            for f in features
-              do ->
-                fCollection.features.push f
-                return
-          for contribution in contributions
+      updateGeoJSONFromData: (contributions, includeChildren, focusFeatures) ->
+        # transform the array to a feature collection
+        fCollection =
+          type: 'FeatureCollection'
+          features: []
+        pushFeaturesToCollection = (features) ->
+          for f in features
             do ->
-              # add the parents features to the map..
-              if contribution.features.length > 0
-                pushFeaturesToCollection contribution.features
-
-              # add the features of the children to to the map
-              if includeChildren and contribution.childContributions?
-                for child in contribution.childContributions
-                  do ->
-                    if child.features.length > 0
-                      pushFeaturesToCollection child.features
-                    return
-
+              fCollection.features.push f
               return
-          # Update the scope
+        for contribution in contributions
+          do ->
+            # add the parents features to the map..
+            if contribution.features.length > 0
+              pushFeaturesToCollection contribution.features
+
+            # add the features of the children to to the map
+            if includeChildren and contribution.childContributions?
+              for child in contribution.childContributions
+                do ->
+                  if child.features.length > 0
+                    pushFeaturesToCollection child.features
+                  return
+
+            return
+        # Update the scope
+        if !angular.equals($scope.geojson.data, fCollection)
           $scope.geojson =
             style: $scope.geojson.style
             onEachFeature: $scope.geojson.onEachFeature
             pointToLayer: $scope.geojson.pointToLayer
             data: fCollection
-          return
 
-        if !skip_reload? #reload the map!
-          Contribution.query({bbox: bbox_string}).then  ->
-            updateGeoJSONinScope()
-            return
-        else
-          updateGeoJSONinScope()
-          $scope._dataFresh = true
+          if focusFeatures == true
+            leafletData.getMap('map_main').then (map) ->
+              bounds = L.geoJson($scope.geojson.data).getBounds()
+              console.log JSON.stringify bounds
+              map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
+              return
         return
 
       removeDraftFeature: (leaflet_id) ->
@@ -140,41 +127,18 @@ angular.module("DialogMapApp").controller "MapController", [
         return
 
     # init stuff
-    $scope.$on 'Contribution.submitted', (evt, data) ->
-      $scope.updateGeoJSON(true)
+    $scope.$on 'map.updateFeatures', (evt, data) ->
+      $scope.updateGeoJSONFromData(data.contributions, data.includeChildren, data.focusFeatures)
       return
 
     $scope.$on 'leafletDirectiveMap.moveend', (evt, leafletEvent) ->
       if $scope.$state.is 'contributions'
         bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
-        $scope.updateGeoJSON(undefined,bbox_string)
-      return
-
-    # $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-    #     $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
-    #   return
-
-    $scope.$on '$stateChangeSuccess', (event, toState, toParams) ->
-      $scope._dataFresh = (toState.name == 'contributions')
-        # $scope.updateGeoJSON(true) # update the map to only show marker from the selected topic
+        Contribution.query({bbox: bbox_string})
       return
 
     $scope.$on 'leafletDirectiveMap.click', (evt, leafletEvent) ->
       #console.log leafletEvent
-      return
-
-    $scope.$watch "Contribution.currentContribution", (data) ->
-      $scope.updateGeoJSON(data) # update the map to only show marker from the selected topic
-      return
-
-    $scope.$watch "geojson.data", (data) ->
-      if $scope._dataFresh == true
-        if data.features and data.features.length > 0
-          leafletData.getMap('map_main').then (map) ->
-            bounds = L.geoJson(data).getBounds()
-            map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
-            $scope._dataFresh = false
-            return
       return
 
     $scope.$on 'highlightFeature', $scope.highlightFeature

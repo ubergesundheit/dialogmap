@@ -66,15 +66,26 @@ angular.module('DialogMapApp').factory 'Contribution', [
 
         ( _replaceOrAppendContribution(c) )for c in resultData
 
+        if !result.config.url.match(/\/api\/contributions\/\d+/) or !resource.currentContribution?
+          $rootScope.$broadcast 'map.updateFeatures',
+            contributions: resource.parent_contributions,
+            focusFeatures: !(result.config.params? and result.config.params.bbox?)
+
         result
 
     resource.currentContribution = undefined
 
-    # Methods for Contribution collection
     resource.setCurrentContribution = (id) ->
-      resource.currentContribution = undefined
       resource.getContribution(id).then (contribution) ->
         resource.currentContribution = contribution
+        $rootScope.$broadcast('map.updateFeatures', { contributions: [resource.currentContribution], includeChildren: true, focusFeatures: true})
+        return
+      return
+
+    # Methods for Contribution collection
+    resource.fetchAndSetCurrentContribution = (id) ->
+      resource.get({id: id}).then ->
+        resource.setCurrentContribution(id)
         return
       return
 
