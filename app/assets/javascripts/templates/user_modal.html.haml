@@ -49,8 +49,8 @@
         %span{ ng_show: "register_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
         %span{ ng_show: "errors.password_confirmation", ng_repeat: "error in errors.password_confirmation"} {{ error }}
     .button_container
-      %button{ class: "sign_in",  ng_click: "performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
-      %button.abort{ ng_click: "closeThisDialog()" } Abbrechen
+      %a.btn.btn--s.btn--green.user-button{ class: "sign_in",  ng_click: "performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
+      %a.btn.btn--s.btn--red.user-button{ ng_click: "closeThisDialog()" } Abbrechen
 
   %form{ id: "login_form", name: "login_form", novalidate: true, ng_hide: "showLoginTab" }
     .field_label_container
@@ -61,10 +61,10 @@
     %input{ name: "password", class: "password", ng_model: "loginCredentials.password", type: "password" }
     .field_error_container
     .button_container
-      %button{ class: "sign_in", ng_click: "performLogin()" } Anmelden
-      %button.abort{ ng_click: "closeThisDialog()" } Abbrechen
+      %a.btn.btn--s.btn--green.user-button{ class: "sign_in", ng_click: "performLogin()" } Anmelden
+      %a.btn.btn--s.btn--red.user-button{ ng_click: "closeThisDialog()" } Abbrechen
 
 #modal_user{ ng_show: "authenticated" }
   {{ user.email }}
-  %button{ ng_click: "closeThisDialog()" } Ok
-  %button{ ng_click: "performLogout()" } Ausloggen
+  %a.btn.btn--s{ ng_click: "closeThisDialog()" } Ok
+  %a.btn.btn--s{ ng_click: "performLogout()" } Ausloggen

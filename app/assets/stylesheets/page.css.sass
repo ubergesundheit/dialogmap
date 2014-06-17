@@ -50,6 +50,9 @@ a
   color: blue
   text-decoration: underline
 
+.new-topic-btn
+  clear: both
+
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
   color: $darker-grey
@@ -57,12 +60,6 @@ a
   border: solid $darker-grey 1px
   background-color: $lighter-grey
   font-size: 12pt
-
-button
-  @include sassy-button("glass", 5px, 16px, #8cbe5f)
-
-.abort
-  +sassy-button-gradient("glass", firebrick)
 
 .ngdialog.ngdialog-theme-default .ngdialog-content
   font-family: $default-font-family

@@ -294,8 +294,6 @@ GEM
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
-    sassy-buttons (0.2.6)
-      compass (>= 0.12.2)
     sawyer (0.5.4)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
@@ -378,7 +376,6 @@ DEPENDENCIES
   rgeo
   rgeo-geojson
   sass-rails (~> 4.0.3)
-  sassy-buttons
   sdoc (~> 0.4.0)
   sentry-raven!
   spring

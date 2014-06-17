@@ -10,7 +10,8 @@
 
     #sidebar
       #user{ ng_include: "'sidebar_user.html'" }
-      %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
+      %a.btn.btn--full.btn--green.new-topic-btn{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
+      -# %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
       #new-topic-container
       #contributions-scroller
         = image_tag("loading.gif", class: "loading", ng_show: "loading")

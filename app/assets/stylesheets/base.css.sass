@@ -1,9 +1,19 @@
+$darker-grey: #303030
+$light-grey: #DEDEDE
+$lighter-grey: #FAFAFA
+$default-font-family: 'lato', sans-serif
+
+$sidebar-background: #93C054
+
+$tag-border-color: #505050
+$feature-tag-color: rgba(81, 191, 65, 1) // #87D37C
+$feature-reference-tag-color: #C17751
+$url-tag-color: #6AACD4
+
+
 @import "compass/reset"
-// @import "compass/css3/box-shadow"
-// @import "compass/css3/box-sizing"
-// @import "compass/css3/user-interface"
 @import "compass"
-//@import url(http://fonts.googleapis.com/css?family=Lato:400,700)
+
 @font-face
   font-family: 'Lato'
   font-style: normal
@@ -22,24 +32,11 @@
   font-weight: 400
   src: local('Lato Italic'), local('Lato-Italic'), url(//themes.googleusercontent.com/static/fonts/lato/v7/oUan5VrEkpzIazlUe5ieaA.woff) format('woff')
 
-
-@import "sassy-buttons"
 @import font-awesome
+@import btns
 
 
 *,
 *:before,
 *:after
   +box-sizing(border-box)
-
-$darker-grey: #303030
-$light-grey: #DEDEDE
-$lighter-grey: #FAFAFA
-$default-font-family: 'lato', sans-serif
-
-$sidebar-background: #b2d192
-
-$tag-border-color: #505050
-$feature-tag-color: #69B687
-$feature-reference-tag-color: #C17751
-$url-tag-color: #6AACD4
