@@ -1,23 +1,38 @@
-angular.module("DialogMapApp").controller "SidebarController", [
+angular.module("DialogMapApp")
+.filter 'strToHex', [ "stringToColor", (stringToColor)  ->
+  (input) ->
+    stringToColor.hex(input) || ""
+]
+.controller "SidebarController", [
   "$scope"
   "Contribution"
   "User"
   "$compile"
   "$state"
   "$rootScope"
-  ($scope, Contribution, User, $compile, $state, $rootScope) ->
+  "stringToColor"
+  "$http"
+  ($scope, Contribution, User, $compile, $state, $rootScope, stringToColor, $http) ->
     angular.extend $scope,
       Contribution: Contribution
       User: User
       selectOpts:
-        data: Contribution.categories#
+        data: []
         multiple: false
-        createSearchChoice: (term) ->
-          {id: term, text: "Neu: #{term}"}
       startNewTopic: ->
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
         angular.element('#new-topic-container').append(inputAreaHtml)
+        # fetch categories from server
+        $http.get('/api/contributions/categories')
+          .success (data, status, headers, config) ->
+            angular.element('.category_input').select2({
+              data: data
+              multiple: false
+              createSearchChoice: (term) ->
+                {id: term, text: "Neue Kategorie: #{term}"}
+            })
+            return
         Contribution.start()
         return
 

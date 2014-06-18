@@ -22,6 +22,8 @@ class Contribution < ActiveRecord::Base
 
   scope :only_parents, -> { where(parent: nil) }
 
+  scope :categories, -> { unscoped.select(:category).distinct }
+
   def user
     User.find(self.user_id)
   end

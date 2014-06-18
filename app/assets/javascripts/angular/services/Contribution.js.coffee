@@ -97,8 +97,6 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
     resource.category = ""
-    resource.categories = [{id:"hans", text:"hans"}, {id:"wurst", text: "wurst"}]
-
 
     resource.setContributionForEdit = (id) ->
       resource.getContribution(id).then (contrib) ->

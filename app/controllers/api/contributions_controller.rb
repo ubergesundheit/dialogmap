@@ -62,6 +62,11 @@ class Api::ContributionsController < Api::BaseController
     end
   end
 
+  # GET /contributions/categories
+  def categories
+    render json: Contribution.categories.map { |c| { id: c.category, text: c.category } unless c.category == "" }.compact
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution
