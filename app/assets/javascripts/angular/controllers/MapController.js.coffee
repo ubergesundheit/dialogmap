@@ -117,7 +117,6 @@ angular.module("DialogMapApp").controller "MapController", [
           if focusFeatures == true
             leafletData.getMap('map_main').then (map) ->
               bounds = L.geoJson($scope.geojson.data).getBounds()
-              console.log JSON.stringify bounds
               map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
               return
         return
