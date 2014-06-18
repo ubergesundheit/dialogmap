@@ -91,5 +91,9 @@ angular.module("DialogMapApp")
       angular.element(".contribution-description-tag[feature-tag=#{id}]").removeClass('highlight')
       return
 
+    $scope.$on 'Contribution.reset', ->
+      angular.element('.category_input').select2('destroy')
+      return
+
     return
 ]
