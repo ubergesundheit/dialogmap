@@ -59,7 +59,7 @@ angular.module("DialogMapApp").controller "MapController", [
           enable: ['moveend','draw:created','click','popupopen']
           logic: 'emit'
       tiles:
-        url: '//osm-bright-ms.herokuapp.com/v2/osmbright/{z}/{x}/{y}.png'
+        url: '/tiles/{z}/{x}/{z}.png'
       # contains all geofeatures
       geojson:
         data: { "type": "FeatureCollection", "features": [] }
