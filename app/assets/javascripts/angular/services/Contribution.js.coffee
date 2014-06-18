@@ -96,6 +96,9 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.features = {}
     resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
+    resource.category = ""
+    resource.categories = [{id:"hans", text:"hans"}, {id:"wurst", text: "wurst"}]
+
 
     resource.setContributionForEdit = (id) ->
       resource.getContribution(id).then (contrib) ->
@@ -186,6 +189,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @features = {}
       @id = undefined
       @parent_contribution = undefined
+      @category = ""
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()
         map.drawControl.options.edit.featureGroup.clearLayers()

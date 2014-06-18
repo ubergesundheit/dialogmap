@@ -9,6 +9,11 @@ angular.module("DialogMapApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
+      selectOpts:
+        data: Contribution.categories#
+        multiple: false
+        createSearchChoice: (term) ->
+          {id: term, text: "Neu: #{term}"}
       startNewTopic: ->
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)

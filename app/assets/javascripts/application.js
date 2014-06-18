@@ -13,6 +13,7 @@
 //= require tracking
 //= require jquery
 //= require jquery_ujs
+//= require select2
 //= require angular
 //= require angular-sanitize
 //= require angularjs/rails/resource
@@ -23,6 +24,7 @@
 //= require moment
 //= require moment/lang/de
 //= require angular-moment
+//= require angular-ui-select2
 //= require mapbox
 //= require angular-leaflet-directive
 //= require L.activearea.js
