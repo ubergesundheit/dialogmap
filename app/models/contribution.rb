@@ -22,7 +22,12 @@ class Contribution < ActiveRecord::Base
 
   scope :only_parents, -> { where(parent: nil) }
 
-  scope :categories, -> { unscoped.select(:category).distinct }
+  # returns categories as cat because of the hstore_accessor gem I am using..
+  scope :categories, -> { unscoped.select("(properties -> 'category') AS cat").distinct }
+
+  hstore_accessor :properties,
+    category: :string,
+    category_color: :string
 
   def user
     User.find(self.user_id)
