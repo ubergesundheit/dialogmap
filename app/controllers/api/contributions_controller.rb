@@ -64,7 +64,7 @@ class Api::ContributionsController < Api::BaseController
 
   # GET /contributions/categories
   def categories
-    render json: Contribution.categories.map { |c| { id: c.category, text: c.category } unless c.category == "" }.compact
+    render json: Contribution.unscoped.map { |c| { id: c.category, text: c.category } unless c.category == nil }.compact.uniq
   end
 
   private

@@ -16,9 +16,6 @@ angular.module("DialogMapApp")
     angular.extend $scope,
       Contribution: Contribution
       User: User
-      selectOpts:
-        data: []
-        multiple: false
       createSearchChoice: (term) ->
         {id: term, text: "Neue Kategorie: #{term}"}
       format: (state) ->
@@ -73,6 +70,13 @@ angular.module("DialogMapApp")
         target.removeClass('highlight')
         $rootScope.$broadcast('resetHighlight', { feature_id: feature_id })
         return
+
+    $scope.selectOpts =
+      data: []
+      multiple: false
+      createSearchChoice: $scope.createSearchChoice
+      formatResult: $scope.format
+      formatSelection: $scope.format
 
     $scope.$on '$stateChangeStart', (event) ->
       $scope.loading = true

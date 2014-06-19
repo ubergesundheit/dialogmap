@@ -22,7 +22,12 @@ class Contribution < ActiveRecord::Base
 
   scope :only_parents, -> { where(parent: nil) }
 
-  scope :categories, -> { unscoped.select(:category).distinct }
+  #scope :categories, -> { unscoped.select(:category).distinct }
+  # scope :categories, -> { unscoped.map { |c| c.category unless c == nil }.uniq }
+
+  hstore_accessor :properties,
+    category: :string,
+    category_color: :string
 
   def user
     User.find(self.user_id)
