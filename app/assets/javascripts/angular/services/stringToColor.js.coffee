@@ -13,6 +13,6 @@ angular.module('DialogMapApp').service "stringToColor", ->
 
     hash = Math.abs(hash) % 16777215
 
-    hash.toString(16)
+    "##{hash.toString(16)}"
 
   return

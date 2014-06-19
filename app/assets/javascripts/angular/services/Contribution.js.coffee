@@ -6,7 +6,9 @@ angular.module('DialogMapApp').factory 'Contribution', [
   'User'
   '$state'
   '$q'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q) ->
+  'propertiesHelper'
+  'stringToColor'
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q, propertiesHelper, stringToColor) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
@@ -156,7 +158,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.startAddMarker = ->
       @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
-        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon({})})
+        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(resource.category.id)))})
         resource._currentDrawHandler.enable()
         return
       return

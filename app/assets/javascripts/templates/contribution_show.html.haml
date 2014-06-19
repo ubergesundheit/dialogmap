@@ -6,8 +6,8 @@
     schrieb
     {{ Contribution.currentContribution.createdAt | amCalendar}}
   .contribution-category-container{ title: '{{Contribution.currentContribution.category }}' }
-    .category-color{ style: 'background-color: #{{Contribution.currentContribution.category | strToHex }};'}
-    %span.category-title{ style: 'color: #{{Contribution.currentContribution.category | strToHex }};'} {{Contribution.currentContribution.category }}
+    .category-color{ style: 'background-color: {{Contribution.currentContribution.category | strToHex }};'}
+    %span.category-title{ style: 'color: {{Contribution.currentContribution.category | strToHex }};'} {{Contribution.currentContribution.category }}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }

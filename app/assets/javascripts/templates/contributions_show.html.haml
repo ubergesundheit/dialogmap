@@ -5,8 +5,8 @@
       schrieb
       {{ contribution.createdAt | amCalendar}}
     .contribution-category-container{ title: '{{contribution.category }}' }
-      .category-color{ style: 'background-color: #{{contribution.category | strToHex }};'}
-      %span.category-title{ style: 'color: #{{contribution.category | strToHex }};'} {{contribution.category }}
+      .category-color{ style: 'background-color: {{contribution.category | strToHex }};'}
+      %span.category-title{ style: 'color: {{contribution.category | strToHex }};'} {{contribution.category }}
     %h3 {{ contribution.title }}
     .contribution-description{ contribution_description: "contribution.description" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
