@@ -158,7 +158,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.startAddMarker = ->
       @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
-        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(resource.category.id)))})
+        category = (if resource.category? then resource.category.id else '')
+        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(category)))})
         resource._currentDrawHandler.enable()
         return
       return
@@ -233,7 +234,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
         leafletData.getMap('map_main').then (map) ->
           map.drawControl.options.edit.featureGroup.eachLayer (l) ->
             if l._icon?
-              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(resource.category.id)))
+              category = (if resource.category? then resource.category.id else '')
+              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(category)))
               icon = l._icon
               icon.style.display = "none"
               if L.DomUtil.hasClass(icon, "leaflet-edit-marker-selected")
