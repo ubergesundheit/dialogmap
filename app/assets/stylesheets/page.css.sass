@@ -112,11 +112,6 @@ a
     .category-title
       text-transform: uppercase
       font-size: 14px
-    .category-color
-      display: inline-block
-      width: 10px
-      height: 10px
-      +border-radius(5px)
   .contribution-info
     font-size: 13px
     color: lighten($darker-grey,15)
@@ -135,6 +130,13 @@ a
       border-bottom: 0px solid lighten($darker-grey,15)
       &:hover
         background-color: darken($sidebar-background,1)
+
+.category-color
+  display: inline-block
+  width: 10px
+  height: 10px
+  border: 1px solid $darker-grey
+  +border-radius(5px)
 
 .delete
   background-color: rgb(222, 177, 144)

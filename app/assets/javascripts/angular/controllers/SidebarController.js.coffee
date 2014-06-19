@@ -19,6 +19,10 @@ angular.module("DialogMapApp")
       selectOpts:
         data: []
         multiple: false
+      createSearchChoice: (term) ->
+        {id: term, text: "Neue Kategorie: #{term}"}
+      format: (state) ->
+        "<div class='category-color' style='background-color: #{stringToColor.hex(state.id)};'></div>&nbsp;#{state.text}"
       startNewTopic: ->
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
@@ -29,8 +33,9 @@ angular.module("DialogMapApp")
             angular.element('.category_input').select2({
               data: data
               multiple: false
-              createSearchChoice: (term) ->
-                {id: term, text: "Neue Kategorie: #{term}"}
+              createSearchChoice: $scope.createSearchChoice
+              formatResult: $scope.format
+              formatSelection: $scope.format
             })
             return
         Contribution.start()
