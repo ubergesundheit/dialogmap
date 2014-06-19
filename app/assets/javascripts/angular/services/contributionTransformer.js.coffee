@@ -2,7 +2,8 @@ angular.module('DialogMapApp').service "contributionTransformer", [
   "leafletData"
   "propertiesHelper"
   "descriptionTagHelper"
-  (leafletData, propertiesHelper, descriptionTagHelper) ->
+  "stringToColor"
+  (leafletData, propertiesHelper, descriptionTagHelper, stringToColor) ->
     @createContributionForSubmit = (contribution) ->
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
@@ -20,7 +21,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
               if Object.keys(geojson.properties).length is 0
-                geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type)
+                geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type, stringToColor.hex(contribution.category.id))
               else
                 geojson.properties.contributionId = undefined
               features_attributes.push { geojson: geojson, leaflet_id: id }
