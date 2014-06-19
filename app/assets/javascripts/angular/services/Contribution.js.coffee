@@ -227,5 +227,36 @@ angular.module('DialogMapApp').factory 'Contribution', [
         User._unauthorized()
       return
 
+    $rootScope.$watch(
+      -> resource.category
+      (value) ->
+        leafletData.getMap('map_main').then (map) ->
+          map.drawControl.options.edit.featureGroup.eachLayer (l) ->
+            if l._icon?
+              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(resource.category.id)))
+              icon = l._icon
+              icon.style.display = "none"
+              if L.DomUtil.hasClass(icon, "leaflet-edit-marker-selected")
+                L.DomUtil.removeClass icon, "leaflet-edit-marker-selected"
+
+                # Offset as the border will make the icon move.
+                iconMarginTop = parseInt(icon.style.marginTop, 10) + 4
+                iconMarginLeft = parseInt(icon.style.marginLeft, 10) + 4
+                icon.style.marginTop = iconMarginTop + "px"
+                icon.style.marginLeft = iconMarginLeft + "px"
+              else
+                L.DomUtil.addClass icon, "leaflet-edit-marker-selected"
+
+                # Offset as the border will make the icon move.
+                iconMarginTop = parseInt(icon.style.marginTop, 10) - 4
+                iconMarginLeft = parseInt(icon.style.marginLeft, 10) - 4
+                icon.style.marginTop = iconMarginTop + "px"
+                icon.style.marginLeft = iconMarginLeft + "px"
+              icon.style.display = ""
+            return
+          return
+        return
+    )
+
     resource
 ]
