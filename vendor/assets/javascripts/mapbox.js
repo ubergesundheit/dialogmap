@@ -1100,7 +1100,7 @@ L.Util = {
 		var lastId = 0,
 		    key = '_leaflet_id';
 		return function (obj) {
-			obj[key] = obj[key] || ++lastId;
+			obj[key] = obj[key] || --lastId;
 			return obj[key];
 		};
 	}()),
