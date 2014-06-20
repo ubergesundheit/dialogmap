@@ -106,11 +106,15 @@ angular.module('DialogMapApp').factory 'Contribution', [
         return
       return
 
+    # id is the parent_id
     resource.start = (parent_id) ->
       $rootScope.$broadcast('Contribution.start')
       @reset()
       if parent_id?
         @parent_contribution = parent_id
+        resource.getContribution(parent_id).then (parent) ->
+          resource.category = {id: parent.category, text: parent.category}
+          return
       @composing = true
       return
     resource.addFeature = (feature) ->
