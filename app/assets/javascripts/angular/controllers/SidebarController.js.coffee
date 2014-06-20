@@ -43,7 +43,8 @@ angular.module("DialogMapApp")
         Contribution.start()
         return
 
-      startContributionHere: (id) ->
+      # id is the parent_id
+      startAnswer: (id) ->
         angular.element('.composing_container').remove()
 
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
