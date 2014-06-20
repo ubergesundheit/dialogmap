@@ -37,7 +37,7 @@
       %br
       %br
       %a.btn.btn--s.btn--red{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined" } Nein
-      %a.btn.btn--s.btn--green{ ng_click: "Contribution.delete(contribution.id, contribution.delete_reason_draft)" } Ja
+      %a.btn.btn--s.btn--green{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja
   %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }

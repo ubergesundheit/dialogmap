@@ -225,7 +225,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       else
         User._unauthorized()
       return
-    resource.delete = (id, reason) ->
+    resource.disable = (id, reason) ->
       if User.isAuthenticated()
         new resource({id: id, deleted: true, delete_reason: reason}).update()
       else
