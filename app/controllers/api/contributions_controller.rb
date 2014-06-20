@@ -98,6 +98,7 @@ class Api::ContributionsController < Api::BaseController
         :delete_reason,
         :deleted,
         :category,
+        :category_color,
         features_attributes: [
           {
             geojson: [

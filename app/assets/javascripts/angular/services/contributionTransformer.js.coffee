@@ -50,6 +50,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
           references_attributes: contribution.references
           parent_id: contribution.parent_contribution
           category: contribution.category.id
+          category_color: stringToColor.hex(contribution.category.id)
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->

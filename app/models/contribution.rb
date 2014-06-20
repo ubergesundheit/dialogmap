@@ -14,6 +14,8 @@ class Contribution < ActiveRecord::Base
 
   after_save :transform_description
 
+  after_save :update_children
+
   default_scope { order('created_at ASC') }
 
   scope :within, -> (bbox_string) {
@@ -84,6 +86,13 @@ class Contribution < ActiveRecord::Base
       substitutions = self.features.map { |f| [ "%[#{f.leaflet_id}]%", "%[#{f.id}]%" ]}.to_h
       # substitute..
       self.save if self.description.gsub! Regexp.new("%\\[(#{self.features.map { |f| f.leaflet_id }.join('|')})\\]%"), substitutions
+    end
+
+    def update_children
+      self.child_contributions.each do |child|
+        child.update(category: self.category, category_color: self.category_color)
+        child.features.each { |feature| feature.update_color(self.category_color, child.deleted) }
+      end
     end
 
 end
