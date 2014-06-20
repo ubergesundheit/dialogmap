@@ -249,9 +249,16 @@ GEM
       rails-assets-moment (>= 2.0.0, < 2.7.0)
     rails-assets-angular-ui-router (0.2.10)
       rails-assets-angular (>= 1.0.8)
+    rails-assets-angular-ui-select2 (0.0.5)
+      rails-assets-angular (>= 1.2.0)
+      rails-assets-jquery (>= 1.6.4)
+      rails-assets-select2 (~> 3.4)
+    rails-assets-jquery (2.1.1)
     rails-assets-moment (2.6.0)
     rails-assets-ngDialog (0.1.7)
       rails-assets-angular (~> 1)
+    rails-assets-select2 (3.5.0)
+      rails-assets-jquery (>= 1.7.1)
     rails-i18n (4.0.2)
       i18n (~> 0.6)
       rails (>= 4.0)
@@ -373,6 +380,7 @@ DEPENDENCIES
   rails-assets-angular-devise
   rails-assets-angular-moment
   rails-assets-angular-ui-router
+  rails-assets-angular-ui-select2
   rails-assets-ngDialog
   rails-i18n
   rgeo

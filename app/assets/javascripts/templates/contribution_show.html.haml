@@ -5,6 +5,9 @@
     {{ Contribution.currentContribution.user.email }}
     schrieb
     {{ Contribution.currentContribution.createdAt | amCalendar}}
+  .contribution-category-container{ title: '{{Contribution.currentContribution.category }}' }
+    .category-color{ style: 'background-color: {{Contribution.currentContribution.category | strToHex }};'}
+    %span.category-title{ style: 'color: {{Contribution.currentContribution.category | strToHex }};'} {{Contribution.currentContribution.category }}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
@@ -34,14 +37,12 @@
       %br
       %br
       %a.btn.btn--s.btn--red{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined" } Nein
-      %a.btn.btn--s.btn--green{ ng_click: "Contribution.delete(contribution.id, contribution.delete_reason_draft)" } Ja
+      %a.btn.btn--s.btn--green{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja
   %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }
-    -# %button.contribution-replybutton{ ng_click: "startContributionHere(Contribution.currentContribution.id)", ng_hide: "Contribution.composing" }
-      Antwort verfassen
   .contribution-links{ ng_hide: "Contribution.composing" }
-    %a{ ng_hide: "Contribution.composing", ng_click: "startContributionHere(Contribution.currentContribution.id)" } Antwort verfassen
+    %a{ ng_hide: "Contribution.composing", ng_click: "startAnswer(Contribution.currentContribution.id)" } Antwort verfassen
     &#448;
     %a{ ui_sref: "contributions" } zurück
 .contribution{ ng_hide: "loading || Contribution.currentContribution" }

@@ -63,6 +63,23 @@ a
   background-color: $lighter-grey
   font-size: 12pt
 
+.category_input
+  display: block
+
+.select2-container
+  border: solid $darker-grey 1px
+  .select2-choice
+    border-radius: 0px
+    border: 0px
+    background-color: $lighter-grey
+    background-image: none
+    padding-left: 4px
+.select2-arrow
+  background: none !important
+  border-radius: 0px !important
+.select2-drop-active
+  border-color: $darker-grey
+
 .ngdialog.ngdialog-theme-default .ngdialog-content
   font-family: $default-font-family
 
@@ -84,7 +101,7 @@ a
 
 #contributions-scroller
   overflow-y: auto
-  height: 95%
+  height: 92%
   float: right
   width: 100%
   margin-top: 5px
@@ -105,7 +122,11 @@ a
   width: 100%
   &:hover
     background-color: lighten($sidebar-background,5)
-
+  .contribution-category-container
+    .category-title
+      text-transform: uppercase
+      font-size: 14px
+      +stroke(1px, rgba( $darker-grey, 0.2 ))
   .contribution-info
     font-size: 13px
     color: lighten($darker-grey,15)
@@ -124,6 +145,13 @@ a
       border-bottom: 0px solid lighten($darker-grey,15)
       &:hover
         background-color: darken($sidebar-background,1)
+
+.category-color
+  display: inline-block
+  width: 10px
+  height: 10px
+  border: 1px solid rgba( $darker-grey, 0.2 )
+  +border-radius(5px)
 
 .delete
   background-color: rgb(222, 177, 144)

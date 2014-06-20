@@ -71,6 +71,17 @@ class Feature < ActiveRecord::Base
       }) unless self.stroke == nil or self.fill == nil
   end
 
+  def update_color(color, deleted)
+    color = Color::RGB.by_hex(color).lighten_by(65).html if deleted
+    self.update({
+      :"marker-color" => color
+      }) unless self.send("marker-color") == nil
+    self.update({
+        stroke: color,
+        fill: color
+      }) unless self.stroke == nil or self.fill == nil
+  end
+
   private
     def decode_geojson_from_params
       geojson = RGeo::GeoJSON.decode(self.geojson, :json_parser => :json)

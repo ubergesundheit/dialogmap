@@ -2,7 +2,8 @@ angular.module('DialogMapApp').service "contributionTransformer", [
   "leafletData"
   "propertiesHelper"
   "descriptionTagHelper"
-  (leafletData, propertiesHelper, descriptionTagHelper) ->
+  "stringToColor"
+  (leafletData, propertiesHelper, descriptionTagHelper, stringToColor) ->
     @createContributionForSubmit = (contribution) ->
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
@@ -19,10 +20,12 @@ angular.module('DialogMapApp').service "contributionTransformer", [
             if type == 'feature'
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
-              if Object.keys(geojson.properties).length is 0
-                geojson.properties = propertiesHelper.createProperties(tag_title,geojson.geometry.type)
-              else
-                geojson.properties.contributionId = undefined
+              # create the properties
+              props = propertiesHelper.createProperties(tag_title,geojson.geometry.type, stringToColor.hex(contribution.category.id))
+              # append or update the properties
+              angular.extend(geojson.properties, props)
+              # set the contributionId to undefined
+              geojson.properties.contributionId = undefined
               features_attributes.push { geojson: geojson, leaflet_id: id }
               descr = descr.replace(tag.outerHTML, "%[#{id}]%")
             else if type == 'feature_reference'
@@ -46,6 +49,8 @@ angular.module('DialogMapApp').service "contributionTransformer", [
           features_attributes: features_attributes
           references_attributes: contribution.references
           parent_id: contribution.parent_contribution
+          category: contribution.category.id
+          category_color: stringToColor.hex(contribution.category.id)
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->

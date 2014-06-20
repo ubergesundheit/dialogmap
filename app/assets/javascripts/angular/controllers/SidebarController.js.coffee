@@ -1,22 +1,51 @@
-angular.module("DialogMapApp").controller "SidebarController", [
+angular.module("DialogMapApp")
+.filter 'strToHex', [ "stringToColor", (stringToColor)  ->
+  (input) ->
+    stringToColor.hex(input) || ""
+]
+.controller "SidebarController", [
   "$scope"
   "Contribution"
   "User"
   "$compile"
   "$state"
   "$rootScope"
-  ($scope, Contribution, User, $compile, $state, $rootScope) ->
+  "stringToColor"
+  "$http"
+  ($scope, Contribution, User, $compile, $state, $rootScope, stringToColor, $http) ->
     angular.extend $scope,
       Contribution: Contribution
       User: User
+      createSearchChoice: (term) ->
+        {id: term, text: "Neue Kategorie: #{term}"}
+      format: (state) ->
+        "<div class='category-color' style='background-color: #{stringToColor.hex(state.id)};'></div>&nbsp;#{state.text}"
+      initSelect2: ->
+        # fetch categories from server
+        compileAndInit = (response) ->
+          $scope.selectOpts =
+            data: response.data || []
+            multiple: false
+            createSearchChoice: $scope.createSearchChoice
+            formatResult: $scope.format
+            formatSelection: $scope.format
+            placeholder: 'Kategorie'
+          angular.element('input.category_input').attr("ui-select2", "selectOpts")
+          $compile(angular.element('input.category_input'))($scope)
+          return
+        $http.get('/api/contributions/categories').then(compileAndInit, compileAndInit)
+        return
       startNewTopic: ->
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
         angular.element('#new-topic-container').append(inputAreaHtml)
+
+        $scope.initSelect2()
         Contribution.start()
         return
 
-      startContributionHere: (id) ->
+      # id is the parent_id
+      startAnswer: (id) ->
         angular.element('.composing_container').remove()
 
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
@@ -30,6 +59,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
         angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
+        # only initialize the category selector if the contribution is a parent
+        Contribution.getContribution(id).then (c) ->
+          $scope.initSelect2() if !c.parentId?
+          return
         Contribution.start(id)
         return
 
@@ -69,6 +102,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
     $scope.$on 'resetHighlight', (event, data) ->
       id = data.feature_id
       angular.element(".contribution-description-tag[feature-tag=#{id}]").removeClass('highlight')
+      return
+
+    $scope.$on 'Contribution.reset', ->
+      angular.element('.category_input').select2('destroy')
       return
 
     return

@@ -3,8 +3,8 @@ Rails.application.routes.draw do
   devise_for :users, path: "api/users", defaults: { format: :json }
 
   namespace :api, defaults: { format: :json } do
+    get 'contributions/categories', to: 'contributions#categories'
     resources :contributions
-
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

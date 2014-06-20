@@ -62,6 +62,11 @@ class Api::ContributionsController < Api::BaseController
     end
   end
 
+  # GET /contributions/categories
+  def categories
+    render json: Contribution.categories.map{ |c| { id: c.cat, text: c.cat } unless c.cat == nil  }.compact
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution
@@ -92,6 +97,8 @@ class Api::ContributionsController < Api::BaseController
         :parent_id,
         :delete_reason,
         :deleted,
+        :category,
+        :category_color,
         features_attributes: [
           {
             geojson: [
