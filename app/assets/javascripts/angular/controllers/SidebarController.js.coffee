@@ -20,21 +20,26 @@ angular.module("DialogMapApp")
         {id: term, text: "Neue Kategorie: #{term}"}
       format: (state) ->
         "<div class='category-color' style='background-color: #{stringToColor.hex(state.id)};'></div>&nbsp;#{state.text}"
-      startNewTopic: ->
-        angular.element('.composing_container').remove()
-        inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
-        angular.element('#new-topic-container').append(inputAreaHtml)
+      initSelect2: ->
         # fetch categories from server
         $http.get('/api/contributions/categories')
           .success (data, status, headers, config) ->
-            angular.element('.category_input').select2({
+            $scope.selectOpts =
               data: data
               multiple: false
               createSearchChoice: $scope.createSearchChoice
               formatResult: $scope.format
               formatSelection: $scope.format
-            })
+            angular.element('input.category_input').attr("ui-select2", "selectOpts")
+            $compile(angular.element('input.category_input'))($scope)
             return
+        return
+      startNewTopic: ->
+        angular.element('.composing_container').remove()
+        inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
+        angular.element('#new-topic-container').append(inputAreaHtml)
+
+        $scope.initSelect2()
         Contribution.start()
         return
 
@@ -52,6 +57,8 @@ angular.module("DialogMapApp")
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
         angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
+
+        $scope.initSelect2()
         Contribution.start(id)
         return
 
