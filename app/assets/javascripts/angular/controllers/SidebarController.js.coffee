@@ -58,8 +58,10 @@ angular.module("DialogMapApp")
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
         angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
-
-        $scope.initSelect2()
+        # only initialize the category selector if the contribution is a parent
+        Contribution.getContribution(id).then (c) ->
+          $scope.initSelect2() if !c.parentId?
+          return
         Contribution.start(id)
         return
 
