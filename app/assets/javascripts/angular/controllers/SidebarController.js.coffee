@@ -22,17 +22,18 @@ angular.module("DialogMapApp")
         "<div class='category-color' style='background-color: #{stringToColor.hex(state.id)};'></div>&nbsp;#{state.text}"
       initSelect2: ->
         # fetch categories from server
-        $http.get('/api/contributions/categories')
-          .success (data, status, headers, config) ->
-            $scope.selectOpts =
-              data: data
-              multiple: false
-              createSearchChoice: $scope.createSearchChoice
-              formatResult: $scope.format
-              formatSelection: $scope.format
-            angular.element('input.category_input').attr("ui-select2", "selectOpts")
-            $compile(angular.element('input.category_input'))($scope)
-            return
+        compileAndInit = (response) ->
+          $scope.selectOpts =
+            data: response.data || []
+            multiple: false
+            createSearchChoice: $scope.createSearchChoice
+            formatResult: $scope.format
+            formatSelection: $scope.format
+            placeholder: 'Kategorie'
+          angular.element('input.category_input').attr("ui-select2", "selectOpts")
+          $compile(angular.element('input.category_input'))($scope)
+          return
+        $http.get('/api/contributions/categories').then(compileAndInit, compileAndInit)
         return
       startNewTopic: ->
         angular.element('.composing_container').remove()
@@ -80,13 +81,6 @@ angular.module("DialogMapApp")
         target.removeClass('highlight')
         $rootScope.$broadcast('resetHighlight', { feature_id: feature_id })
         return
-
-    $scope.selectOpts =
-      data: []
-      multiple: false
-      createSearchChoice: $scope.createSearchChoice
-      formatResult: $scope.format
-      formatSelection: $scope.format
 
     $scope.$on '$stateChangeStart', (event) ->
       $scope.loading = true
