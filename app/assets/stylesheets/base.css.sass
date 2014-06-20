@@ -36,6 +36,26 @@ $url-tag-color: #6AACD4
 @import btns
 
 
+@mixin stroke($width, $color)
+  $width: $width + 0
+  $shadow: 0 0 0 transparent
+  $i: 0
+  $w: 1
+
+  @while ($i < $width)
+    $i: $i + 1
+    $j: 0
+    $w: $w + 2
+
+    @for $r from 1 through $w
+      @for $c from 1 through $w
+        $x: $c - ceil($w / 2)
+        $y: $r - ceil($w / 2)
+
+        $shadow: #{$shadow}, #{$x}px #{$y}px 0 $color
+
+  text-shadow: $shadow
+
 *,
 *:before,
 *:after
