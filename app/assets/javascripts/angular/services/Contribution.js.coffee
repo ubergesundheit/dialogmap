@@ -106,7 +106,6 @@ angular.module('DialogMapApp').factory 'Contribution', [
         return
       return
 
-    # id is the parent_id
     resource.start = (parent_id) ->
       $rootScope.$broadcast('Contribution.start')
       @reset()
