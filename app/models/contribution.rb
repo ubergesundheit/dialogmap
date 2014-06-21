@@ -25,7 +25,17 @@ class Contribution < ActiveRecord::Base
   scope :only_parents, -> { where(parent: nil) }
 
   # returns categories as cat because of the hstore_accessor gem I am using..
-  scope :categories, -> { unscoped.select("(properties -> 'category') AS cat").distinct }
+  scope :categories, -> {
+    unscoped
+    .select("DISTINCT ON (cat) (properties -> 'category') AS cat, (properties -> 'category_color') AS cat_col")
+    .map{ |c|
+      {
+        id: c.cat,
+        text: c.cat,
+        color: c.cat_col
+      } unless c.cat == nil
+    }.compact
+  }
 
   hstore_accessor :properties,
     category: :string,

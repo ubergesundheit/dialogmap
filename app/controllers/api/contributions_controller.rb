@@ -64,7 +64,7 @@ class Api::ContributionsController < Api::BaseController
 
   # GET /contributions/categories
   def categories
-    render json: Contribution.categories.map{ |c| { id: c.cat, text: c.cat } unless c.cat == nil  }.compact
+    render json: Contribution.categories
   end
 
   private

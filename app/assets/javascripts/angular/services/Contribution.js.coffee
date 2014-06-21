@@ -7,8 +7,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
   '$state'
   '$q'
   'propertiesHelper'
-  'stringToColor'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q, propertiesHelper, stringToColor) ->
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q, propertiesHelper) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
@@ -112,7 +111,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       if parent_id?
         @parent_contribution = parent_id
         resource.getContribution(parent_id).then (parent) ->
-          resource.category = {id: parent.category, text: parent.category}
+          resource.category = parent.category
           return
       @composing = true
       return
@@ -161,8 +160,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.startAddMarker = ->
       @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
-        category = (if resource.category? then resource.category.id else '')
-        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(category)))})
+        category = (if resource.category? then resource.category else { color: "#7e7e7e" })
+        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color))})
         resource._currentDrawHandler.enable()
         return
       return
@@ -237,8 +236,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
         leafletData.getMap('map_main').then (map) ->
           map.drawControl.options.edit.featureGroup.eachLayer (l) ->
             if l._icon?
-              category = (if resource.category? then resource.category.id else '')
-              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',stringToColor.hex(category)))
+              category = (if resource.category? then resource.category else { color: "#7e7e7e" })
+              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color))
               icon = l._icon
               icon.style.display = "none"
               if L.DomUtil.hasClass(icon, "leaflet-edit-marker-selected")

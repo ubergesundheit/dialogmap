@@ -2,8 +2,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
   "leafletData"
   "propertiesHelper"
   "descriptionTagHelper"
-  "stringToColor"
-  (leafletData, propertiesHelper, descriptionTagHelper, stringToColor) ->
+  (leafletData, propertiesHelper, descriptionTagHelper) ->
     @createContributionForSubmit = (contribution) ->
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
@@ -21,7 +20,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
               # create the properties
-              props = propertiesHelper.createProperties(tag_title,geojson.geometry.type, stringToColor.hex(contribution.category.id))
+              props = propertiesHelper.createProperties(tag_title,geojson.geometry.type, contribution.category.color)
               # append or update the properties
               angular.extend(geojson.properties, props)
               # set the contributionId to undefined
@@ -50,7 +49,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
           references_attributes: contribution.references
           parent_id: contribution.parent_contribution
           category: contribution.category.id
-          category_color: stringToColor.hex(contribution.category.id)
+          category_color: contribution.category.color
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->

@@ -1,25 +1,21 @@
-angular.module("DialogMapApp")
-.filter 'strToHex', [ "stringToColor", (stringToColor)  ->
-  (input) ->
-    stringToColor.hex(input) || ""
-]
-.controller "SidebarController", [
+angular.module("DialogMapApp").controller "SidebarController", [
   "$scope"
   "Contribution"
   "User"
   "$compile"
   "$state"
   "$rootScope"
-  "stringToColor"
   "$http"
-  ($scope, Contribution, User, $compile, $state, $rootScope, stringToColor, $http) ->
+  "stringToColor"
+  ($scope, Contribution, User, $compile, $state, $rootScope, $http, stringToColor) ->
     angular.extend $scope,
       Contribution: Contribution
       User: User
       createSearchChoice: (term) ->
         {id: term, text: "Neue Kategorie: #{term}"}
       format: (state) ->
-        "<div class='category-color' style='background-color: #{stringToColor.hex(state.id)};'></div>&nbsp;#{state.text}"
+        state.color = stringToColor.hex(state.id) unless state.color?
+        "<div class='category-color' style='background-color: #{state.color};'></div>&nbsp;#{state.text}"
       initSelect2: ->
         # fetch categories from server
         compileAndInit = (response) ->

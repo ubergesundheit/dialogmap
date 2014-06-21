@@ -8,4 +8,8 @@ class ContributionSerializer < ActiveModel::Serializer
     object.references.as_json(include: :reference_to)
   end
 
+  def category
+    { id: object.category, text: object.category, color: object.category_color }
+  end
+
 end
