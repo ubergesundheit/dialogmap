@@ -7,9 +7,7 @@
   %form{ id: "register_form", name: "register_form", novalidate: true, ng_show: "showLoginTab" }
     .field_label_container
       .field_label E-Mail
-    %input{ id: "email",
-            name: "email",
-            class: "username",
+    %input#email.username{ name: "email",
             ng_class: "{error: register_form.email.$dirty && register_form.email.$invalid}",
             ng_model: "registerCredentials.email",
             type: "email",
@@ -20,9 +18,7 @@
         %span{ ng_show: "register_form.email.$error.email" } muss eine E-Mail Adresse sein
     .field_label_container
       .field_label Passwort
-    %input{ id: "password",
-            name: "password",
-            class: "password",
+    %input#password.password{ name: "password",
             ng_class: "{error: register_form.password.$dirty && register_form.password.$invalid}",
             ng_model: "registerCredentials.password",
             type: "password",
@@ -35,15 +31,14 @@
         %span{ ng_show: "register_form.password.$error.minlength" } muss mindestens 6 Zeichen enthalten
     .field_label_container
       .field_label Passwortwiederholung
-    %input{ id: "password_confirmation",
-            name: "password_confirmation",
-            class: "password",
+    %input#password_confirmation.password{ name: "password_confirmation",
             ng_class: "{error: register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid}",
             ng_model: "registerCredentials.password_confirmation",
             type: "password",
             required: true,
             password_match: "password",
-            ng_minlength: 6 }
+            ng_minlength: 6,
+            ui_keypress: "{13:'performRegister()'}" }
     .field_error_container
       .field_error{ ng_show: "register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid || register_form.password_confirmation.$error.pwmatch || errors.password_confirmation" }
         %span{ ng_show: "register_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
@@ -55,10 +50,10 @@
   %form{ id: "login_form", name: "login_form", novalidate: true, ng_hide: "showLoginTab" }
     .field_label_container
       .field_label E-Mail
-    %input{ name: "email", class: "username", ng_model: "loginCredentials.email" }
+    %input.username{ name: "email", ng_model: "loginCredentials.email" }
     .field_label_container
       .field_label Passwort
-    %input{ name: "password", class: "password", ng_model: "loginCredentials.password", type: "password" }
+    %input.password{ name: "password", ng_model: "loginCredentials.password", type: "password", ui_keypress: "{13:'performLogin()'}" }
     .field_error_container
     .button_container
       %a.btn.btn--s.btn--green.user-button{ class: "sign_in", ng_click: "performLogin()" } Anmelden

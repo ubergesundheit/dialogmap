@@ -19,9 +19,5 @@ angular.module("DialogMapApp").directive 'contributionInput', [
           scope.Contribution.abort()
           scope.thisContribution.composing = false
           return
-        submitThis: ->
-          console.log 'implement me :)'
-          console.log scope.thisContribution
-          return
       return
 ]
