@@ -166,7 +166,7 @@ class Contribution < ActiveRecord::Base
       Feature
         .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",
                Contribution.unscoped.with_category(self.category).where(deleted: true).select(:id))
-        .update_all([%(properties = properties || hstore(ARRAY['stroke',?], ARRAY['fill',?])),
+        .update_all([%(properties = properties || hstore(ARRAY['stroke','fill'], ARRAY[?,?])),
           deleted_color,
           deleted_color])
       # Update Markers
