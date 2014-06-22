@@ -3,7 +3,8 @@ angular.module("DialogMapApp").controller "MapController", [
   "leafletData"
   "Contribution"
   "$rootScope"
-  ($scope, leafletData, Contribution, $rootScope) ->
+  "$timeout"
+  ($scope, leafletData, Contribution, $rootScope, $timeout) ->
     # use of L.activearea plugin in order to set the vieport to the visible area
     leafletData.getMap('map_main').then (map) ->
       map.setActiveArea
@@ -115,10 +116,15 @@ angular.module("DialogMapApp").controller "MapController", [
             data: fCollection
 
           if focusFeatures == true
-            leafletData.getMap('map_main').then (map) ->
-              bounds = L.geoJson($scope.geojson.data).getBounds()
-              map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
+            $timeout ->
+              leafletData.getMap('map_main').then (map) ->
+                bounds = L.geoJson($scope.geojson.data).getBounds()
+                map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
+                return
               return
+            ,0
+            ,false
+
         return
 
       removeDraftFeature: (leaflet_id) ->
