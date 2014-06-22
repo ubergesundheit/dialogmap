@@ -38,6 +38,29 @@ class Contribution < ActiveRecord::Base
     }.compact
   }
 
+  scope :activities, -> {
+    unscoped
+    .select("DISTINCT ON (act) (properties -> 'activity') AS act, (properties -> 'activity_icon') AS icon")
+    .map{ |a|
+      {
+        id: a.act,
+        text: a.act,
+        icon: a.icon
+      } unless a.act == nil
+    }.compact
+  }
+
+  scope :contents, -> {
+    unscoped
+    .select("DISTINCT ON (con) (properties -> 'content') AS con")
+    .map{ |c|
+      {
+        id: c.con,
+        text: c.con
+      } unless c.con == nil
+    }.compact
+  }
+
   hstore_accessor :properties,
     category: :string,
     category_color: :string,

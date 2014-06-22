@@ -69,12 +69,12 @@ class Api::ContributionsController < Api::BaseController
 
   # GET /contributions/contents
   def contents
-    render json: [{id:'!!!', text: '!!!'}, {id: '???', text: '???'}]
+    render json: Contribution.contents
   end
 
   # GET /contributions/activities
   def activities
-    render json: [{id:'schwimmen', text: 'schwimmen', icon: 'swimming'}, {id: 'reiten', text: 'reiten', icon: 'zoo'}]
+    render json: Contribution.activities
   end
 
   private
