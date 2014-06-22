@@ -1,3 +1,4 @@
+require 'color'
 class Contribution < ActiveRecord::Base
   has_many :features
   has_many :references
@@ -14,7 +15,7 @@ class Contribution < ActiveRecord::Base
 
   after_save :transform_description
 
-  after_save :update_children
+  after_save :update_category
 
   default_scope { order('created_at ASC') }
 
@@ -98,11 +99,47 @@ class Contribution < ActiveRecord::Base
       self.save if self.description.gsub! Regexp.new("%\\[(#{self.features.map { |f| f.leaflet_id }.join('|')})\\]%"), substitutions
     end
 
-    def update_children
-      self.child_contributions.each do |child|
-        child.update(category: self.category, category_color: self.category_color)
-        child.features.each { |feature| feature.update_color(self.category_color, child.deleted) }
+    def update_category
+      # Update child contributions
+      if self.category_changed?
+        self.child_contributions
+          .update_all([%(properties = properties || hstore('category',?)),
+                       self.category])
       end
+      # Update the color of all Contributions with the same category
+      Contribution
+        .unscoped
+        .with_category(self.category)
+        .update_all([%(properties = properties || hstore('category_color',?)),
+                     self.category_color])
+
+      deleted_color = Color::RGB.by_hex(self.category_color).lighten_by(65).html
+      # Update deleted Markers
+      Feature
+        .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
+               Contribution.unscoped.with_category(self.category).where(deleted: true).select(:id))
+        .update_all([%(properties = properties || hstore('marker-color',?)),
+          deleted_color])
+      # Update deleted Polygons
+      Feature
+        .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",
+               Contribution.unscoped.with_category(self.category).where(deleted: true).select(:id))
+        .update_all([%(properties = properties || hstore(ARRAY['stroke',?], ARRAY['fill',?])),
+          deleted_color,
+          deleted_color])
+      # Update Markers
+      Feature
+        .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
+               Contribution.unscoped.with_category(self.category).where(deleted: false).select(:id))
+        .update_all([%(properties = properties || hstore('marker-color',?)),
+          self.category_color])
+      # Update Polygons
+      Feature
+        .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",
+               Contribution.unscoped.with_category(self.category).where(deleted: false).select(:id))
+        .update_all([%(properties = properties || hstore(ARRAY['stroke','fill'], ARRAY[?,?])),
+          self.category_color,
+          self.category_color])
     end
 
 end

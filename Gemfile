@@ -46,6 +46,8 @@ gem "active_model_serializers"
 
 gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
 
+gem 'activeadmin', github: 'gregbell/active_admin'
+
 group :development do
   gem 'pry-rails'
 end
