@@ -22,7 +22,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
         "<div class='category-color' style='background-color: #{state.color};'></div>&nbsp;#{state.text}"
       formatActivity: (state) ->
         state.icon = 'circle-stroked' unless state.icon?
-        "#{state.icon}&nbsp;#{state.text}"
+        "<div class=\"maki-icon #{state.icon}\"></div><span class=\"activity-label\">&nbsp;#{state.text}</span>"
       initSelect2: ->
         compileAndInitCategory = (response) ->
           $scope.categorySelectOpts =
