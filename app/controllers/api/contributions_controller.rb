@@ -67,6 +67,16 @@ class Api::ContributionsController < Api::BaseController
     render json: Contribution.categories
   end
 
+  # GET /contributions/contents
+  def contents
+    render json: [{id:'!!!', text: '!!!'}, {id: '???', text: '???'}]
+  end
+
+  # GET /contributions/activities
+  def activities
+    render json: [{id:'schwimmen', text: 'schwimmen', icon: 'swimming'}, {id: 'reiten', text: 'reiten', icon: 'zoo'}]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution

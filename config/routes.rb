@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     get 'contributions/categories', to: 'contributions#categories'
+    get 'contributions/activities', to: 'contributions#activities'
+    get 'contributions/contents', to: 'contributions#contents'
     resources :contributions
   end
 

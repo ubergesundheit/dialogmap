@@ -11,25 +11,54 @@ angular.module("DialogMapApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
-      createSearchChoice: (term) ->
+      createCategorySearchChoice: (term) ->
         {id: term, text: "Neue Kategorie: #{term}"}
-      format: (state) ->
+      createActivitySearchChoice: (term) ->
+        {id: term, text: "Neue Aktivität: #{term}"}
+      createContentSearchChoice: (term) ->
+        {id: term, text: "Neuer Inhalt: #{term}"}
+      formatCategory: (state) ->
         state.color = stringToColor.hex(state.id) unless state.color?
         "<div class='category-color' style='background-color: #{state.color};'></div>&nbsp;#{state.text}"
+      formatActivity: (state) ->
+        state.icon = 'circle-stroked' unless state.icon?
+        "#{state.icon}&nbsp;#{state.text}"
       initSelect2: ->
-        # fetch categories from server
-        compileAndInit = (response) ->
-          $scope.selectOpts =
+        compileAndInitCategory = (response) ->
+          $scope.categorySelectOpts =
             data: response.data || []
             multiple: false
-            createSearchChoice: $scope.createSearchChoice
-            formatResult: $scope.format
-            formatSelection: $scope.format
+            createSearchChoice: $scope.createCategorySearchChoice
+            formatResult: $scope.formatCategory
+            formatSelection: $scope.formatCategory
             placeholder: 'Kategorie'
-          angular.element('input.category_input').attr("ui-select2", "selectOpts")
-          $compile(angular.element('input.category_input'))($scope)
+          angular.element('input#category.category_input').attr("ui-select2", "categorySelectOpts")
+          $compile(angular.element('input#category.category_input'))($scope)
           return
-        $http.get('/api/contributions/categories').then(compileAndInit, compileAndInit)
+        compileAndInitActivity = (response) ->
+          $scope.activitySelectOpts =
+            data: response.data || []
+            multiple: false
+            createSearchChoice: $scope.createActivitySearchChoice
+            formatResult: $scope.formatActivity
+            formatSelection: $scope.formatActivity
+            placeholder: 'Aktivität'
+          angular.element('input#activity.category_input').attr("ui-select2", "activitySelectOpts")
+          $compile(angular.element('input#activity.category_input'))($scope)
+          return
+        compileAndInitContent = (response) ->
+          $scope.contentSelectOpts =
+            data: response.data || []
+            multiple: false
+            createSearchChoice: $scope.createContentSearchChoice
+            placeholder: 'Inhalt'
+          angular.element('input#content.category_input').attr("ui-select2", "contentSelectOpts")
+          $compile(angular.element('input#content.category_input'))($scope)
+          return
+        # fetch items from server
+        $http.get('/api/contributions/categories').then(compileAndInitCategory, compileAndInitCategory)
+        $http.get('/api/contributions/activities').then(compileAndInitActivity, compileAndInitActivity)
+        $http.get('/api/contributions/contents').then(compileAndInitContent, compileAndInitContent)
         return
       startNewTopic: ->
         angular.element('.composing_container').remove()
@@ -101,7 +130,9 @@ angular.module("DialogMapApp").controller "SidebarController", [
       return
 
     $scope.$on 'Contribution.reset', ->
-      angular.element('.category_input').select2('destroy')
+      angular.element('input#category.category_input').select2('destroy')
+      angular.element('input#content.category_input').select2('destroy')
+      angular.element('input#activity.category_input').select2('destroy')
       return
 
     return
