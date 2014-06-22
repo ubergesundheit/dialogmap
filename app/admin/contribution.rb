@@ -1,6 +1,6 @@
 ActiveAdmin.register Contribution do
 
-  permit_params :title, :description, :deleted, :delete_reason, :properties
+  permit_params :title, :description, :deleted, :delete_reason, :properties, :category_color
 
   form do |f|
     f.inputs do
@@ -8,6 +8,8 @@ ActiveAdmin.register Contribution do
       f.input :description
       f.input :deleted
       f.input :delete_reason
+      f.input :category, input_html: { disabled: true }
+      f.input :category_color, input_html: { type: 'color' }
     end
     f.actions
   end
