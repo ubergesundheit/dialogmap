@@ -5,9 +5,12 @@
     {{ Contribution.currentContribution.user.email }}
     schrieb
     {{ Contribution.currentContribution.createdAt | amCalendar}}
-  .contribution-category-container{ title: '{{Contribution.currentContribution.category.id }}' }
+  .contribution-category-container{ title: '{{Contribution.currentContribution.category.id }} | {{Contribution.currentContribution.activity.id }}' }
     .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}" }
     %span.category-title{ ng_style: "{'color': Contribution.currentContribution.category.color}" } {{Contribution.currentContribution.category.id }}
+    %br
+    .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
+    {{ Contribution.currentContribution.activity.id }}
   %h3 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
