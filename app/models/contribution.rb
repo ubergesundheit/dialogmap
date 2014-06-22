@@ -15,7 +15,7 @@ class Contribution < ActiveRecord::Base
 
   after_save :transform_description
 
-  after_save :update_category
+  after_save :update_category_activity_content
 
   default_scope { order('created_at ASC') }
 
@@ -125,12 +125,22 @@ class Contribution < ActiveRecord::Base
       self.save if self.description.gsub! Regexp.new("%\\[(#{self.features.map { |f| f.leaflet_id }.join('|')})\\]%"), substitutions
     end
 
-    def update_category
+    def update_category_activity_content
       # Update child contributions
       if self.category_changed?
         self.child_contributions
           .update_all([%(properties = properties || hstore('category',?)),
                        self.category])
+      end
+      if self.activity_changed?
+        self.child_contributions
+          .update_all([%(properties = properties || hstore('activity',?)),
+                       self.activity])
+      end
+      if self.content_changed?
+        self.child_contributions
+          .update_all([%(properties = properties || hstore('content',?)),
+                       self.content])
       end
       # Update the color of all Contributions with the same category
       Contribution
@@ -138,14 +148,20 @@ class Contribution < ActiveRecord::Base
         .with_category(self.category)
         .update_all([%(properties = properties || hstore('category_color',?)),
                      self.category_color])
+      Contribution
+        .unscoped
+        .with_activity(self.activity)
+        .update_all([%(properties = properties || hstore('activity_icon',?)),
+                     self.activity_icon])
 
       deleted_color = Color::RGB.by_hex(self.category_color).lighten_by(65).html
       # Update deleted Markers
       Feature
         .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
                Contribution.unscoped.with_category(self.category).where(deleted: true).select(:id))
-        .update_all([%(properties = properties || hstore('marker-color',?)),
-          deleted_color])
+        .update_all([%(properties = properties || hstore(ARRAY['marker-color','marker-symbol'], ARRAY[?,?])),
+          deleted_color,
+          self.activity_icon])
       # Update deleted Polygons
       Feature
         .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",
@@ -157,8 +173,9 @@ class Contribution < ActiveRecord::Base
       Feature
         .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
                Contribution.unscoped.with_category(self.category).where(deleted: false).select(:id))
-        .update_all([%(properties = properties || hstore('marker-color',?)),
-          self.category_color])
+        .update_all([%(properties = properties || hstore(ARRAY['marker-color','marker-symbol'], ARRAY[?,?])),
+          self.category_color,
+          self.activity_icon])
       # Update Polygons
       Feature
         .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",

@@ -156,6 +156,8 @@ ActiveAdmin.setup do |config|
 
 
   # == Register Stylesheets & Javascripts
+  Rails.application.config.assets.precompile += %w( maki.css )
+  config.register_stylesheet 'maki.css'
   #
   # We recommend using the built in Active Admin layout and loading
   # up your own stylesheets / javascripts to customize the look

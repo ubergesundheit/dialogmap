@@ -1,6 +1,6 @@
 ActiveAdmin.register Contribution do
 
-  permit_params :title, :description, :deleted, :delete_reason, :properties, :category_color
+  permit_params :title, :description, :deleted, :delete_reason, :properties, :category_color, :activity_icon
 
   index do
     selectable_column
@@ -14,6 +14,9 @@ ActiveAdmin.register Contribution do
     column :category do |color|
       raw("<span class=\"status_tag\" style=\"color: black;border:1px solid black;background:#{color.category_color};\">#{color.category}</span>")
     end
+    column :activity do |activity|
+      raw("<div class=\"maki-icon #{activity.activity_icon}\"></div>#{activity.activity}")
+    end
     actions
   end
 
@@ -25,6 +28,8 @@ ActiveAdmin.register Contribution do
       f.input :delete_reason
       f.input :category, input_html: { disabled: true }
       f.input :category_color, input_html: { type: 'color' }
+      f.input :activity, input_html: { disabled: true }
+      f.input :activity_icon
     end
     f.actions
   end
