@@ -1,6 +1,7 @@
 class ContributionSerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :parent_id, :created_at,
-    :updated_at, :references, :deleted, :delete_reason, :category
+    :updated_at, :references, :deleted, :delete_reason, :category, :activity,
+    :content
     has_many :features, :child_contributions
     has_one :user
 
@@ -10,6 +11,14 @@ class ContributionSerializer < ActiveModel::Serializer
 
   def category
     { id: object.category, text: object.category, color: object.category_color }
+  end
+
+  def activity
+    { id: object.activity, text: object.activity, icon: object.activity_icon }
+  end
+
+  def content
+    { id: object.content, text: object.content }
   end
 
 end

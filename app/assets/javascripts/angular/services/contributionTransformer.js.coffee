@@ -20,7 +20,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
               # create geojson from features and append some properties
               geojson = map.drawControl.options.edit.featureGroup.getLayer(id).toGeoJSON()
               # create the properties
-              props = propertiesHelper.createProperties(tag_title,geojson.geometry.type, contribution.category.color)
+              props = propertiesHelper.createProperties(tag_title,geojson.geometry.type, contribution.category.color, contribution.activity.icon)
               # append or update the properties
               angular.extend(geojson.properties, props)
               # set the contributionId to undefined
@@ -50,6 +50,9 @@ angular.module('DialogMapApp').service "contributionTransformer", [
           parent_id: contribution.parent_contribution
           category: contribution.category.id
           category_color: contribution.category.color
+          activity: contribution.activity.id
+          activity_icon: contribution.activity.icon
+          content: contribution.content.id
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->

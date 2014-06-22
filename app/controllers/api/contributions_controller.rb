@@ -109,6 +109,9 @@ class Api::ContributionsController < Api::BaseController
         :deleted,
         :category,
         :category_color,
+        :activity,
+        :activity_icon,
+        :content,
         features_attributes: [
           {
             geojson: [

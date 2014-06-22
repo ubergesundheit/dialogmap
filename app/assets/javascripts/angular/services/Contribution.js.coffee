@@ -98,6 +98,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.parent_contribution = undefined
     resource._currentDrawHandler = undefined
     resource.category = ""
+    resource.activity = ""
+    resource.content = ""
 
     resource.setContributionForEdit = (id) ->
       resource.getContribution(id).then (contrib) ->
@@ -112,6 +114,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
         @parent_contribution = parent_id
         resource.getContribution(parent_id).then (parent) ->
           resource.category = parent.category
+          resource.activity = parent.activity
+          resource.content = parent.content
           return
       @composing = true
       return
@@ -161,7 +165,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @_startAddFeature()
       leafletData.getMap('map_main').then (map) ->
         category = (if resource.category? then resource.category else { color: "#7e7e7e" })
-        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color))})
+        activity = (if resource.activity? then resource.activity else { icon: "circle-stroked"})
+        resource._currentDrawHandler = new L.Draw.Marker(map, { icon: L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color, activity.icon))})
         resource._currentDrawHandler.enable()
         return
       return
@@ -193,6 +198,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @id = undefined
       @parent_contribution = undefined
       @category = ""
+      @activity = ""
+      @content = ""
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()
         map.drawControl.options.edit.featureGroup.clearLayers()
@@ -230,36 +237,44 @@ angular.module('DialogMapApp').factory 'Contribution', [
         User._unauthorized()
       return
 
-    $rootScope.$watch(
-      -> resource.category
-      (value) ->
-        leafletData.getMap('map_main').then (map) ->
-          map.drawControl.options.edit.featureGroup.eachLayer (l) ->
-            if l._icon?
-              category = (if resource.category? then resource.category else { color: "#7e7e7e" })
-              l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color))
-              icon = l._icon
-              icon.style.display = "none"
-              if L.DomUtil.hasClass(icon, "leaflet-edit-marker-selected")
-                L.DomUtil.removeClass icon, "leaflet-edit-marker-selected"
+    updateFeatures = (value) ->
+      leafletData.getMap('map_main').then (map) ->
+        map.drawControl.options.edit.featureGroup.eachLayer (l) ->
+          if l._icon?
+            category = (if resource.category? then resource.category else { color: "#7e7e7e" })
+            activity = (if resource.activity? then resource.activity else { icon: "circle-stroked"})
+            l.setIcon L.mapbox.marker.icon(propertiesHelper.createProperties('','Point',category.color, activity.icon))
+            icon = l._icon
+            icon.style.display = "none"
+            if L.DomUtil.hasClass(icon, "leaflet-edit-marker-selected")
+              L.DomUtil.removeClass icon, "leaflet-edit-marker-selected"
 
-                # Offset as the border will make the icon move.
-                iconMarginTop = parseInt(icon.style.marginTop, 10) + 4
-                iconMarginLeft = parseInt(icon.style.marginLeft, 10) + 4
-                icon.style.marginTop = iconMarginTop + "px"
-                icon.style.marginLeft = iconMarginLeft + "px"
-              else
-                L.DomUtil.addClass icon, "leaflet-edit-marker-selected"
+              # Offset as the border will make the icon move.
+              iconMarginTop = parseInt(icon.style.marginTop, 10) + 4
+              iconMarginLeft = parseInt(icon.style.marginLeft, 10) + 4
+              icon.style.marginTop = iconMarginTop + "px"
+              icon.style.marginLeft = iconMarginLeft + "px"
+            else
+              L.DomUtil.addClass icon, "leaflet-edit-marker-selected"
 
-                # Offset as the border will make the icon move.
-                iconMarginTop = parseInt(icon.style.marginTop, 10) - 4
-                iconMarginLeft = parseInt(icon.style.marginLeft, 10) - 4
-                icon.style.marginTop = iconMarginTop + "px"
-                icon.style.marginLeft = iconMarginLeft + "px"
-              icon.style.display = ""
-            return
+              # Offset as the border will make the icon move.
+              iconMarginTop = parseInt(icon.style.marginTop, 10) - 4
+              iconMarginLeft = parseInt(icon.style.marginLeft, 10) - 4
+              icon.style.marginTop = iconMarginTop + "px"
+              icon.style.marginLeft = iconMarginLeft + "px"
+            icon.style.display = ""
           return
         return
+      return
+
+    $rootScope.$watch(
+      -> resource.category
+      updateFeatures
+    )
+
+    $rootScope.$watch(
+      -> resource.activity
+      updateFeatures
     )
 
     resource

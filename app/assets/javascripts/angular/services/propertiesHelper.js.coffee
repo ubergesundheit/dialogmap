@@ -1,9 +1,9 @@
 angular.module('DialogMapApp').service "propertiesHelper", ->
-  @createProperties = (title, type, color) ->
+  @createProperties = (title, type, color, icon) ->
     properties = { "title": title }
     if type == "Point"
       properties["marker-size"] = "medium"
-      properties["marker-symbol"] = "circle-stroked"
+      properties["marker-symbol"] = icon
       properties["marker-color"] = color
     else if type == "Polygon"
       properties["stroke"] = color

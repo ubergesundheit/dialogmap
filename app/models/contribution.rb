@@ -40,7 +40,10 @@ class Contribution < ActiveRecord::Base
 
   hstore_accessor :properties,
     category: :string,
-    category_color: :string
+    category_color: :string,
+    activity: :string,
+    activity_icon: :string,
+    content: :string
 
   def user
     User.find(self.user_id)
