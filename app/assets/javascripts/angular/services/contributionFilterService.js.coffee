@@ -20,7 +20,10 @@ angular.module('DialogMapApp').service "contributionFilterService",[
         if filter_items.contents?
           @_contents =  if angular.isArray(filter_items.contents) then filter_items.contents else [filter_items.contents]
       return
-    applyFilter: (contributions, callback) ->
+    applyFilter: (contributions, includeChildren, callback) ->
+      if !callback?
+        callback = includeChildren
+
       augmented_contributions = contributions
       if @_categories? or @_activities? or @_contents?
         augmented_contributions = []
@@ -36,5 +39,6 @@ angular.module('DialogMapApp').service "contributionFilterService",[
       $rootScope.$broadcast 'map.updateFeatures',
         contributions: augmented_contributions,
         focusFeatures: true
+        includeChildren: (includeChildren if typeof includeChildren is 'boolean')
       return
 ]
