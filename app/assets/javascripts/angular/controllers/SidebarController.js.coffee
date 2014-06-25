@@ -21,7 +21,19 @@ angular.module("DialogMapApp").controller "SidebarController", [
         state.color = stringToColor.hex(state.id) unless state.color?
         "<div class='category-color' style='background-color: #{state.color};'></div>&nbsp;#{state.text}"
       formatActivity: (state) ->
-        state.icon = 'circle-stroked' unless state.icon?
+        if !state.icon?
+          first_char = state.id.charAt(0).toLowerCase()
+          state.icon = switch
+            when first_char is '0' then 'zero'
+            when first_char is '1' then 'one'
+            when first_char is '2' then 'two'
+            when first_char is '3' then 'three'
+            when first_char is '4' then 'four'
+            when first_char is '5' then 'five'
+            when first_char is '6' then 'six'
+            when first_char is '7' then 'seven'
+            when first_char is '9' then 'nine'
+            else first_char
         "<div class=\"maki-icon #{state.icon}\"></div><span class=\"activity-label\">&nbsp;#{state.text}</span>"
       initSelect2: ->
         compileAndInitCategory = (response) ->
