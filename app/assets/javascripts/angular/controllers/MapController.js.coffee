@@ -122,7 +122,7 @@ angular.module("DialogMapApp").controller "MapController", [
                 map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]})
                 return
               return
-            ,0
+            ,500
             ,false
 
         return
