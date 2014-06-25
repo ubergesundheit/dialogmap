@@ -7,7 +7,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
   '$state'
   '$q'
   'propertiesHelper'
-  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q, propertiesHelper) ->
+  'contributionFilterService'
+  (railsResourceFactory, leafletData, $rootScope, contributionTransformer, User, $state, $q, propertiesHelper, contributionFilterService) ->
     resource = railsResourceFactory
       url: "/api/contributions"
       name: 'contribution'
@@ -31,6 +32,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       contribution.promise
 
     resource.parent_contributions = []
+    resource.display_contributions = []
 
     _replaceOrAppendContribution = (contribution) ->
       # update the tree
@@ -67,9 +69,15 @@ angular.module('DialogMapApp').factory 'Contribution', [
 
         ( _replaceOrAppendContribution(c) )for c in resultData
 
+        # apply the filters, prepare the display_contributions
+        contributionFilterService.applyFilter resource.parent_contributions, (contributions) ->
+          resource.display_contributions = contributions
+          return
+
+        # only update the map here if the network call was for the index (not /api/contributions/:id)
         if !result.config.url.match(/\/api\/contributions\/\d+/) or !resource.currentContribution?
           $rootScope.$broadcast 'map.updateFeatures',
-            contributions: resource.parent_contributions,
+            contributions: resource.display_contributions,
             focusFeatures: !(result.config.params? and result.config.params.bbox?)
 
         result

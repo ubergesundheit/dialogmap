@@ -219,3 +219,31 @@ a
     font-size: 150px
     line-height: 130px
     margin-top: 20px
+
+#contribution_filter_container
+  display: block
+  position: absolute
+  top: 10px
+  right: calc(0% + 420px)
+  +border-radius(3px)
+  border: 1px solid rgba(0, 0, 0, 0.4)
+  background-color: white
+  #contribution_filter_button
+    cursor: pointer
+    width: 26px
+    height: 26px
+    line-height: 26px
+    text-align: center
+    border-radius: inherit
+    vertical-align: top
+    +user-select(none)
+  .active_button
+    background-color: #F8F8F8
+  .active_filter
+    padding: 0px 0px 5px 5px
+  #contribution_filter
+    display: inline-block
+  .reset_filter
+    visibility: hidden
+  .filter_section:hover .reset_filter
+    visibility: visible

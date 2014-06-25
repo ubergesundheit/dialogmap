@@ -1,4 +1,4 @@
-.contributions-list{ ng_repeat: "contribution in Contribution.parent_contributions"}
+.contributions-list{ ng_repeat: "contribution in Contribution.display_contributions"}
   .contribution
     .contribution-info
       {{ contribution.user.email }}
