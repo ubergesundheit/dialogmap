@@ -159,9 +159,8 @@ class Contribution < ActiveRecord::Base
       Feature
         .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
                Contribution.unscoped.with_category(self.category).where(deleted: true).select(:id))
-        .update_all([%(properties = properties || hstore(ARRAY['marker-color','marker-symbol'], ARRAY[?,?])),
-          deleted_color,
-          self.activity_icon])
+        .update_all([%(properties = properties || hstore('marker-color', ?)),
+          deleted_color])
       # Update deleted Polygons
       Feature
         .where("contribution_id IN (?) AND defined(properties,'stroke') = 't' AND defined(properties,'fill') = 't'",
@@ -173,8 +172,13 @@ class Contribution < ActiveRecord::Base
       Feature
         .where("contribution_id IN (?) AND defined(properties,'marker-color') = 't'",
                Contribution.unscoped.with_category(self.category).where(deleted: false).select(:id))
-        .update_all([%(properties = properties || hstore(ARRAY['marker-color','marker-symbol'], ARRAY[?,?])),
-          self.category_color,
+        .update_all([%(properties = properties || hstore('marker-color', ?)),
+          self.category_color])
+      # Update the icon of Markers
+      Feature
+        .where("contribution_id IN (?) AND defined(properties,'marker-symbol') = 't'",
+               Contribution.unscoped.with_activity(self.activity).select(:id))
+        .update_all([%(properties = properties || hstore('marker-symbol', ?)),
           self.activity_icon])
       # Update Polygons
       Feature
