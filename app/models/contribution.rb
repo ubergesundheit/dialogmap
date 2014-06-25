@@ -4,7 +4,7 @@ class Contribution < ActiveRecord::Base
   has_many :references
 
   belongs_to :parent, :class_name => "Contribution"
-  has_many :child_contributions, :foreign_key => "parent_id", :class_name => "Contribution"
+  has_many :child_contributions, :foreign_key => "parent_id", :class_name => "Contribution", dependent: :destroy
 
   accepts_nested_attributes_for :features, reject_if: :features_exist
   accepts_nested_attributes_for :references, reject_if: :references_exist
