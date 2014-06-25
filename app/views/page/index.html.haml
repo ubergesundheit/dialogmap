@@ -10,6 +10,7 @@
 
     #sidebar
       #user{ ng_include: "'sidebar_user.html'" }
+      %div{ contribution_filter: true }
       %a.btn.btn--full.btn--green.new-topic-btn{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
       -# %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
       #new-topic-container
