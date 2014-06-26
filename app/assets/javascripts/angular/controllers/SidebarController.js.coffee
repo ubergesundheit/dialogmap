@@ -61,11 +61,11 @@ angular.module("DialogMapApp").controller "SidebarController", [
         compileAndInitContent = (response) ->
           $scope.contentSelectOpts =
             data: response.data || []
-            multiple: false
+            multiple: true
             createSearchChoice: $scope.createContentSearchChoice
             placeholder: 'Inhalt'
-          angular.element('input#content.category_input').attr("ui-select2", "contentSelectOpts")
-          $compile(angular.element('input#content.category_input'))($scope)
+          angular.element('div#content.category_input').attr("ui-select2", "contentSelectOpts")
+          $compile(angular.element('div#content.category_input'))($scope)
           return
         # fetch items from server
         $http.get('/api/contributions/categories').then(compileAndInitCategory, compileAndInitCategory)
@@ -143,7 +143,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
     $scope.$on 'Contribution.reset', ->
       angular.element('input#category.category_input').select2('destroy')
-      angular.element('input#content.category_input').select2('destroy')
+      angular.element('div#content.category_input').select2('destroy')
       angular.element('input#activity.category_input').select2('destroy')
       return
 

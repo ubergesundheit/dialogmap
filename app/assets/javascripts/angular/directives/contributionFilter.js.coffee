@@ -64,7 +64,8 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
           scope.previously_selected_contents = scope.selected_contents
           current_category[value.category.id] = true
           current_activity[value.activity.id] = true
-          current_content[value.content.id] = true
+          for content in value.content
+            current_content[content.id] = true
           scope.isCurrentContribution = true
         else
           current_category = scope.previously_selected_categories

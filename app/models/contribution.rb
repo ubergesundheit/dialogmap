@@ -54,11 +54,9 @@ class Contribution < ActiveRecord::Base
     unscoped
     .select("DISTINCT ON (con) (properties -> 'content') AS con")
     .map{ |c|
-      {
-        id: c.con,
-        text: c.con
-      } unless c.con == nil
-    }.compact
+      c.con.split('||;||')
+      .map{ |cc| { id: cc, text: cc } } unless c.con == nil
+    }.flatten.uniq
   }
 
   hstore_accessor :properties,
@@ -66,7 +64,7 @@ class Contribution < ActiveRecord::Base
     category_color: :string,
     activity: :string,
     activity_icon: :string,
-    content: :string
+    content: :array
 
   def user
     User.find(self.user_id)
@@ -140,7 +138,7 @@ class Contribution < ActiveRecord::Base
       if self.content_changed?
         self.child_contributions
           .update_all([%(properties = properties || hstore('content',?)),
-                       self.content])
+                       self.content.join("||;||")])
       end
       # Update the color of all Contributions with the same category
       Contribution

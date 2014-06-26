@@ -52,7 +52,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
           category_color: contribution.category.color
           activity: contribution.activity.id
           activity_icon: contribution.activity.icon
-          content: contribution.content.id
+          content: (c.id for c in contribution.content)
         }
     @createFancyContributionFromRaw = (contribution) ->
       featureReplacer = (match, offset, string) ->

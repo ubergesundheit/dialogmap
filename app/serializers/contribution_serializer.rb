@@ -18,7 +18,7 @@ class ContributionSerializer < ActiveModel::Serializer
   end
 
   def content
-    { id: object.content, text: object.content }
+    object.content.map{ |c| { id: c, text: c } } unless object.content == nil
   end
 
 end

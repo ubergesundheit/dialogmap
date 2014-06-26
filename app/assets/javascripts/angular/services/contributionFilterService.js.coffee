@@ -32,7 +32,10 @@ angular.module('DialogMapApp').service "contributionFilterService",[
         if @_activities?
           (augmented_contributions.push c if c not in augmented_contributions) for c in contributions when c.activity.id in @_activities
         if @_contents?
-          (augmented_contributions.push c if c not in augmented_contributions) for c in contributions when c.content.id in @_contents
+          for c in contributions
+            contribution_contents = (ct.id for ct in c.content)
+            [@_contents, contribution_contents] = [contribution_contents, @_contents] if @_contents.length > contribution_contents.length
+            (augmented_contributions.push c if c not in augmented_contributions) for content in @_contents when content in contribution_contents
         callback(augmented_contributions)
       else
         callback(augmented_contributions)
