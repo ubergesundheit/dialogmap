@@ -16,6 +16,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
 gem 'font-awesome-rails'
 
+gem 'ngannotate-rails'
 gem 'angularjs-rails'
 gem 'angularjs-rails-resource'
 gem 'angular_rails_csrf'
