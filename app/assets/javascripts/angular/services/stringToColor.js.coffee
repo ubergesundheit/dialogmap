@@ -11,8 +11,8 @@ angular.module('DialogMapApp').service "stringToColor", ->
       hash |= 0 #Convert to 32bit integer
       i++
 
-    hash = Math.abs(hash) % 16777215
+    hash = Math.abs(hash) #% 16777215
 
-    "##{hash.toString(16)}"
+    "##{hash.toString(16).slice(0,6)}"
 
   return
