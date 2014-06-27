@@ -14525,13 +14525,38 @@ var url = require('./url'),
 function icon(fp) {
     fp = fp || {};
 
+    var icon = fp["marker-symbol"];
+    if (icon !== 'undefined') {
+      if (fp["marker-symbol"] === "zero") {
+        icon = "0";
+      } else if (fp["marker-symbol"] === "one") {
+        icon = "1";
+      } else if (fp["marker-symbol"] === "two") {
+        icon = "2";
+      } else if (fp["marker-symbol"] === "three") {
+        icon = "3";
+      } else if (fp["marker-symbol"] === "four") {
+        icon = "4";
+      } else if (fp["marker-symbol"] === "five") {
+        icon = "5";
+      } else if (fp["marker-symbol"] === "six") {
+        icon = "6";
+      } else if (fp["marker-symbol"] === "seven") {
+        icon = "7";
+      } else if (fp["marker-symbol"] === "eight") {
+        icon = "8";
+      } else if (fp["marker-symbol"] === "nine") {
+        icon = "9";
+      }
+    }
+
     var sizes = {
             small: [20, 50],
             medium: [30, 70],
             large: [35, 90]
         },
         size = fp['marker-size'] || 'medium',
-        symbol = (fp['marker-symbol']) ? '-' + fp['marker-symbol'] : '',
+        symbol = (icon) ? '-' + icon : '',
         color = (fp['marker-color'] || '7e7e7e').replace('#', '');
 
     return L.icon({
