@@ -111,12 +111,13 @@ angular.module("DialogMapApp").controller "SidebarController", [
         $rootScope.$broadcast('highlightFeature', { feature_id: feature_id } )
         return
 
-      resetHighlight: (feature_id, $event) ->
-        target = angular.element($event.target)
-        while target.is('span')
-          target = angular.element(target.parent())
-        target.removeClass('highlight')
-        $rootScope.$broadcast('resetHighlight', { feature_id: feature_id })
+      highlightAllRelated: (contribution) ->
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.id } ) for f in contribution.features
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id } ) for f in contribution.references
+        return
+
+      resetHighlight: ->
+        $rootScope.$broadcast 'resetHighlight'
         return
 
     $scope.$on '$stateChangeStart', (event) ->
@@ -125,20 +126,22 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
     $scope.$on '$stateChangeSuccess', (event) ->
       $scope.loading = false
+      $rootScope.$broadcast 'resetHighlight'
       return
 
     $scope.$on '$stateChangeError', (event) ->
       $scope.loading = false
+      $rootScope.$broadcast 'resetHighlight'
       return
 
     $scope.$on 'highlightFeature', (event, data) ->
-      id = data.feature_id
-      angular.element(".contribution-description-tag[feature-tag=#{id}]").addClass('highlight')
+      angular.element(".contribution-description-tag[feature-tag=#{data.feature_id}]").addClass('highlight')
+      angular.element(".contribution[contribution-id=#{data.contribution_id}]").addClass('contribution-hover')
       return
 
     $scope.$on 'resetHighlight', (event, data) ->
-      id = data.feature_id
-      angular.element(".contribution-description-tag[feature-tag=#{id}]").removeClass('highlight')
+      angular.element(".contribution-description-tag").removeClass('highlight')
+      angular.element(".contribution").removeClass('contribution-hover')
       return
 
     $scope.$on 'Contribution.reset', ->
