@@ -63,8 +63,17 @@ a
   background-color: $lighter-grey
   font-size: 12pt
 
-.category_input
+.input_title
+  width: calc(50% - 2px)
   display: block
+
+.category_input
+  display: inline-block
+  width: calc(50% - 2px)
+  margin-bottom: 2px
+
+.content_input
+  width: 100%
 
 .select2-container
   border: solid $darker-grey 1px
@@ -97,6 +106,22 @@ a
 
 .ngdialog.ngdialog-theme-default .ngdialog-content
   font-family: $default-font-family
+
+.select2-container-multi .select2-choices
+  border-width: 0px
+  background-image: none
+  background-color: $lighter-grey
+
+.select2-container-active
+  border: 1px solid $darker-grey
+
+.select2-container-multi.select2-container-active .select2-choices
+  border: 0px solid $darker-grey
+  +box-shadow(none)
+  background-image: none
+
+.select2-drop
+  background-color: $lighter-grey
 
 .loading_container
   margin-top: 200px

@@ -63,7 +63,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
             data: response.data || []
             multiple: true
             createSearchChoice: $scope.createContentSearchChoice
-            placeholder: 'Inhalt'
+            placeholder: 'Inhalte'
           angular.element('div#content.category_input').attr("ui-select2", "contentSelectOpts")
           $compile(angular.element('div#content.category_input'))($scope)
           return
