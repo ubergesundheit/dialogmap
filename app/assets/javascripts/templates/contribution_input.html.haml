@@ -5,6 +5,12 @@
     %input#category.category_input{ type: "hidden", ng_model: "Contribution.category" }
     %input#activity.category_input{ type: "hidden", ng_model: "Contribution.activity" }
     #content.category_input.content_input{ type: "hidden", ng_model: "Contribution.content" }
+    -# #above-description-buttons.contributions-buttons
+    -#   %a#create-marker.button.marker.btn.btn--s.btn--green{ href: "", title: "Draw a marker", ng_click: "clickMarker()" }
+    -#   %a#create-polygon.button.polygon.btn.btn--s.btn--green{ href: "", title: "Draw a polygon", ng_click: "clickPolygon()" }
+    -#   .divider
+    -#   %a#create-feature-reference.button.feature-reference.btn.btn--s.btn--green{ href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference()" }
+    -#   %a#create-url-reference.button.url-reference.btn.btn--s.btn--green{ href: "", title: "Link einfügen", ng_click: "clickUrlReference()" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
     %a.btn.btn--green.btn--m{ :ng_disabled => "contribution_form.$invalid", :ng_click => "Contribution.submit()" } Abschicken
     %a.btn.btn--red.btn--m{ :ng_click => "Contribution.abort()" } Abbrechen

@@ -1,9 +1,26 @@
-angular.module("DialogMapApp").directive 'descriptionArea', [
+angular.module("DialogMapApp")
+# taken from http://www.bennadel.com/blog/2632-creating-asynchronous-alerts-prompts-and-confirms-in-angularjs.htm
+.factory "prompt", ['$window', '$q', ($window, $q) ->
+  # Define promise-based prompt() method.
+  prompt = (message, defaultValue) ->
+    defer = $q.defer()
+
+    # The native prompt will return null or a string.
+    response = $window.prompt(message, defaultValue)
+    if response is null
+      defer.reject()
+    else
+      defer.resolve response
+    defer.promise
+  prompt
+]
+.directive 'descriptionArea', [
   'Contribution'
   'leafletData'
   'descriptionTagHelper'
   '$compile'
-  (Contribution, leafletData, descriptionTagHelper, $compile) ->
+  'prompt'
+  (Contribution, leafletData, descriptionTagHelper, $compile, prompt) ->
     restrict: 'AE'
     require: 'ngModel'
     transclude: true
@@ -12,14 +29,30 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
     link: (scope, element, attrs, controller) ->
       angular.extend scope,
         clickMarker: (e) ->
-          Contribution.startAddMarker()
-          replaceSelectedText(scope.selection, 'marker', 'feature')
-          disableDescriptionArea()
+          if e is 'bar'
+            prompt('Bitte Titel des neuen Markers angeben', '').then (response) ->
+              element.find('#contribution_description_text').focus()
+              Contribution.startAddMarker()
+              replaceSelectedText(response, 'marker', 'feature')
+              disableDescriptionArea()
+              return
+          else
+            Contribution.startAddMarker()
+            replaceSelectedText(scope.selection, 'marker', 'feature')
+            disableDescriptionArea()
           return
         clickPolygon: (e) ->
-          replaceSelectedText(scope.selection, 'polygon', 'feature')
-          Contribution.startAddPolygon()
-          disableDescriptionArea()
+          if e is 'bar'
+            prompt('Bitte Titel des neuen Polygons angeben', '').then (response) ->
+              element.find('#contribution_description_text').focus()
+              Contribution.startAddPolygon()
+              replaceSelectedText(response, 'polygon', 'feature')
+              disableDescriptionArea()
+              return
+          else
+            replaceSelectedText(scope.selection, 'polygon', 'feature')
+            Contribution.startAddPolygon()
+            disableDescriptionArea()
           return
         clickDelete: (e) ->
           id = e.target.getAttribute('type_id')
@@ -33,15 +66,31 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
           element.find("[type_id=\"#{id}\"][type=#{type}]").remove()
           enableDescriptionArea()
           return
-        clickFeatureReference: ->
-          Contribution.startAddFeatureReference()
-          replaceSelectedText(scope.selection, 'reference', 'feature_reference')
-          disableDescriptionArea()
+        clickFeatureReference: (e) ->
+          if e is 'bar'
+            prompt('Bitte Titel der neuen Vernküpfung angeben', '').then (response) ->
+              element.find('#contribution_description_text').focus()
+              Contribution.startAddFeatureReference()
+              replaceSelectedText(response, 'reference', 'feature_reference')
+              disableDescriptionArea()
+              return
+          else
+            Contribution.startAddFeatureReference()
+            replaceSelectedText(scope.selection, 'reference', 'feature_reference')
+            disableDescriptionArea()
           return
-        clickUrlReference: ->
-          disableDescriptionArea()
-          replaceSelectedText(scope.selection, 'reference', 'url_reference')
-          showUrlInput(getLastButtonsPos(), 'http://')
+        clickUrlReference: (e) ->
+          if e is 'bar'
+            prompt('Bitte Titel des Links angeben', '').then (response) ->
+              element.find('#contribution_description_text').focus()
+              replaceSelectedText(response, 'reference', 'url_reference')
+              disableDescriptionArea()
+              showUrlInput(getLastButtonsPos(), 'http://')
+              return
+          else
+            disableDescriptionArea()
+            replaceSelectedText(scope.selection, 'reference', 'url_reference')
+            showUrlInput(getLastButtonsPos(), 'http://')
           return
         clickExistingUrlReference: (e) ->
           scope.internal.clickedUrlReference = angular.element(e.target).parent().attr('type_id')
@@ -260,15 +309,15 @@ angular.module("DialogMapApp").directive 'descriptionArea', [
         return
 
       showButtons = (x,y) ->
-        element.find(".contributions-buttons").show().css("left", x).css("top", y)
+        element.find("#floating-buttons").show().css("left", x).css("top", y)
         return
 
       hideButtons = ->
-        elem = element.find(".contributions-buttons").hide()
+        elem = element.find("#floating-buttons").hide()
         return
 
       getLastButtonsPos = ->
-        elem = element.find(".contributions-buttons").hide()
+        elem = element.find("#floating-buttons").hide()
         [elem.css('left'), elem.css('top')]
 
       showUrlInput = (x,y,text) ->

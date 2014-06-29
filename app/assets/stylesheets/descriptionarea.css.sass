@@ -6,6 +6,24 @@
   @include single-box-shadow
   display: none
 
+#above-description-buttons
+  display: block
+  position: relative
+  +box-shadow(none)
+  margin-bottom: 2px
+  padding: 2px
+  background-color: $sidebar-background
+  .button
+    margin-bottom: 0px
+  .marker
+    background-position: -123px -3px
+  .polygon
+    background-position: -32px -3px
+  .feature-reference
+    background-position: -269px -3px
+  .url-reference
+    background-position: -303px -3px
+
 .contributions-buttons
   display: none
   position: absolute
