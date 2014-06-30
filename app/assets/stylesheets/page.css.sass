@@ -175,6 +175,7 @@ a
       font-size: 14px
       +stroke(1px, rgba( $darker-grey, 0.2 ))
   .contribution-info
+    display: inline-block
     font-size: 13px
     color: lighten($darker-grey,15)
   .info-below
@@ -182,6 +183,10 @@ a
     text-align: right
   .contribution-description
     line-height: 24px
+  .description-box
+    padding: 10px
+    margin: 10px 20px
+    border: 1px solid darken($sidebar-background, 10)
   .contribution-links
     float: right
   .children-contributions
@@ -191,7 +196,15 @@ a
     .contribution
       border-bottom: 0px solid lighten($darker-grey,15)
       &:hover
-        background-color: darken($sidebar-background,1)
+        background-color: $sidebar-background
+  .description-expand-button
+    color: $darker-grey
+    float: right
+    width: 26px
+    height: 26px
+    line-height: 26px
+    text-align: center
+    margin-right: 4px
 
 .category-color
   display: inline-block
