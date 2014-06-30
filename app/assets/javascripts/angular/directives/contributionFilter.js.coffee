@@ -13,17 +13,19 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.previously_selected_categories = {}
       $scope.previously_selected_activities = {}
       $scope.previously_selected_contents = {}
-      $http.get('/api/contributions/categories').then (response) ->
-        $scope.categories = response.data
+      $scope.fetchFilterItems = ->
+        $http.get('/api/contributions/filter_items').then (response) ->
+          $scope.categories = response.data.categories
+          $scope.activities = response.data.activities
+          $scope.contents = response.data.contents
+          return
         return
-      $http.get('/api/contributions/activities').then (response) ->
-        $scope.activities = response.data
-        return
-      $http.get('/api/contributions/contents').then (response) ->
-        $scope.contents = response.data
-        return
+      # $scope.fetchFilterItems()
       return
     link: (scope, element, attr, controller) ->
+
+      scope.$on '$stateChangeSuccess', scope.fetchFilterItems
+      scope.$on 'Contribution.submitted', scope.fetchFilterItems
 
       setAndApplyFilter = (value, oldvalue, scope) ->
         categories = (k for k,v of scope.selected_categories when v == true)

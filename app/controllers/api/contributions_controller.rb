@@ -77,6 +77,10 @@ class Api::ContributionsController < Api::BaseController
     render json: Contribution.activities
   end
 
+  def filter_items
+    render json: {categories: Contribution.categories, contents: Contribution.contents, activities: Contribution.activities}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution

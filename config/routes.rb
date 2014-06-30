@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, path: "api/users", defaults: { format: :json }
 
   namespace :api, defaults: { format: :json } do
+    get 'contributions/filter_items', to: 'contributions#filter_items'
     get 'contributions/categories', to: 'contributions#categories'
     get 'contributions/activities', to: 'contributions#activities'
     get 'contributions/contents', to: 'contributions#contents'
