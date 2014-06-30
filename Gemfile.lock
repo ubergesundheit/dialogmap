@@ -297,6 +297,8 @@ GEM
     rails-assets-moment (2.6.0)
     rails-assets-ngDialog (0.1.7)
       rails-assets-angular (~> 1)
+    rails-assets-ngQuickDate (1.3.0)
+      rails-assets-angular (~> 1.2.0)
     rails-assets-select2 (3.5.0)
       rails-assets-jquery (>= 1.7.1)
     rails-i18n (4.0.2)
@@ -432,6 +434,7 @@ DEPENDENCIES
   rails-assets-angular-ui-router
   rails-assets-angular-ui-select2
   rails-assets-ngDialog
+  rails-assets-ngQuickDate
   rails-i18n
   rgeo
   rgeo-geojson

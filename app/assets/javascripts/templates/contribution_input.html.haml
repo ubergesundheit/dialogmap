@@ -11,6 +11,7 @@
     -#   .divider
     -#   %a#create-feature-reference.button.feature-reference.btn.btn--s.btn--green{ href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference()" }
     -#   %a#create-url-reference.button.url-reference.btn.btn--s.btn--green{ href: "", title: "Link einfügen", ng_click: "clickUrlReference()" }
+    <quick-datepicker ng-model='myDate'></quick-datepicker>
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
     %a.btn.btn--green.btn--m{ :ng_disabled => "contribution_form.$invalid", :ng_click => "Contribution.submit()" } Abschicken
     %a.btn.btn--red.btn--m{ :ng_click => "Contribution.abort()" } Abbrechen

@@ -9,6 +9,7 @@ angular.module "DialogMapApp", [
   "ui.keypress"
   "angularMoment"
   "ui.select2"
+  "ngQuickDate"
 ]
 .config [
   "$stateProvider"
