@@ -25,6 +25,7 @@
 //= require moment/lang/de
 //= require angular-moment
 //= require angular-ui-select2
+//= require ngQuickDate
 //= require mapbox
 //= require angular-leaflet-directive
 //= require L.activearea.js

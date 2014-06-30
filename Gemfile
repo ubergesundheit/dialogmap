@@ -26,6 +26,7 @@ gem 'rails-assets-ngDialog'
 gem 'rails-assets-angular-ui-router'
 gem 'rails-assets-angular-moment'
 gem 'rails-assets-angular-ui-select2'
+gem 'rails-assets-ngQuickDate'
 
 gem 'color'
 

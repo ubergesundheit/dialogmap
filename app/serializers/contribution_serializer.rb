@@ -1,7 +1,7 @@
 class ContributionSerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :parent_id, :created_at,
     :updated_at, :references, :deleted, :delete_reason, :category, :activity,
-    :content
+    :content, :start_date, :end_date
     has_many :features, :child_contributions
     has_one :user
 
