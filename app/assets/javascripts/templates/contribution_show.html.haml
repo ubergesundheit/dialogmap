@@ -8,9 +8,10 @@
   .contribution-category-container{ title: '{{Contribution.currentContribution.category.id }} | {{Contribution.currentContribution.activity.id }}' }
     .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}" }
     %span.category-title{ ng_style: "{'color': Contribution.currentContribution.category.color}" } {{Contribution.currentContribution.category.id }}
+    |
     .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
     {{ Contribution.currentContribution.activity.id }}
-    %br
+    |
     %span{ ng_repeat: "c in Contribution.currentContribution.content" }
       {{ c.id }}{{ !$last == true ? ', ' : ''}}
   %h3 {{ Contribution.currentContribution.title }}

@@ -12,7 +12,7 @@
       |
       .maki-icon{ class: "{{contribution.activity.icon}}" }
       {{ contribution.activity.id }}
-      %br
+      |
       %span{ ng_repeat: "c in contribution.content" }
         {{ c.id }}{{ !$last == true ? ', ' : ''}}
     %h3 {{ contribution.title }}
