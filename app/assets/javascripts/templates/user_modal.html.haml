@@ -2,7 +2,7 @@
   = image_tag("loading.gif", class: "loading")
 %div{ ng_hide: "authenticated || loading" }
   %h3 {{ !showLoginTab ? "Einloggen" : "Registrieren" }}
-  %a{ ng_click: "showLoginTab=!showLoginTab; flash = undefined", href:"#" } oder {{ showLoginTab ? "einloggen" : "registrieren" }}?
+  %a{ ng_click: "showLoginTab=!showLoginTab; flash = undefined", href:"" } oder {{ showLoginTab ? "einloggen" : "registrieren" }}?
   #flash{ ng_show: "flash" } {{ flash }}
   %form{ id: "register_form", name: "register_form", novalidate: true, ng_show: "showLoginTab" }
     .field_label_container
