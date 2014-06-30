@@ -14,7 +14,21 @@ angular.module "DialogMapApp", [
 .config [
   "$stateProvider"
   "$urlRouterProvider"
-  ($stateProvider, $urlRouterProvider) ->
+  "ngQuickDateDefaultsProvider"
+  ($stateProvider, $urlRouterProvider, ngQuickDateDefaultsProvider) ->
+    ngQuickDateDefaultsProvider.set
+      placeholder: "Datum/Uhrzeit"
+      dateFormat: "dd.MM.yyyy"
+      timeFormat: "hh:mm"
+      defaultTime: "12:00"
+      closeButtonHtml: "<i class='fa fa-times'></i>"
+      buttonIconHtml: "<i class='fa fa-calendar'></i>"
+      nextLinkHtml: "<i class='fa fa-chevron-right'></i>"
+      prevLinkHtml: "<i class='fa fa-chevron-left'></i>"
+      parseDateFunction: (str) ->
+        moment(str).isValid()
+
+
     $urlRouterProvider.otherwise("/")
     $stateProvider
       .state 'contributions',

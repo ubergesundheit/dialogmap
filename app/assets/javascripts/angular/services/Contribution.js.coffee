@@ -190,6 +190,10 @@ angular.module('DialogMapApp').factory 'Contribution', [
         @_currentDrawHandler.disable()
         @_currentDrawHandler = undefined
       return
+    resource.resetDates = ->
+      @startDate = undefined
+      @endDate = undefined
+      return
     resource.abort = ->
       @reset()
       @composing = false
@@ -208,6 +212,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @category = ""
       @activity = ""
       @content = []
+      @resetDates()
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()
         map.drawControl.options.edit.featureGroup.clearLayers()
