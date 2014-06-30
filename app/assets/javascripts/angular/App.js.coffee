@@ -25,9 +25,6 @@ angular.module "DialogMapApp", [
       buttonIconHtml: "<i class='fa fa-calendar'></i>"
       nextLinkHtml: "<i class='fa fa-chevron-right'></i>"
       prevLinkHtml: "<i class='fa fa-chevron-left'></i>"
-      parseDateFunction: (str) ->
-        moment(str).isValid()
-
 
     $urlRouterProvider.otherwise("/")
     $stateProvider

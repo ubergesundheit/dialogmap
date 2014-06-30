@@ -100,6 +100,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
 
     # Methods for creating a Contribution
     resource.composing =  false
+    resource.editing = false
+    resource.isAnswer = false
     resource.addingFeatureReference = false
     resource.references = []
     resource.features = {}
@@ -112,6 +114,8 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.setContributionForEdit = (id) ->
       resource.getContribution(id).then (contrib) ->
         angular.extend resource, contrib
+        resource.threadStartEditing = true unless contrib.parentId?
+        resource.editing = true
         return
       return
 
@@ -127,6 +131,9 @@ angular.module('DialogMapApp').factory 'Contribution', [
           return
       @composing = true
       return
+    resource.startAnswer = (parent_id) ->
+      @start(parent_id)
+      @isAnswer = true
     resource.addFeature = (feature) ->
       @features[feature] = {}
       leafletData.getMap('map_main').then (map) ->
@@ -212,6 +219,9 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @category = ""
       @activity = ""
       @content = []
+      @isAnswer = false
+      @threadStartEditing = undefined
+      @editing = false
       @resetDates()
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()

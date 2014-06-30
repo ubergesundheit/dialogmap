@@ -111,6 +111,8 @@ class Api::ContributionsController < Api::BaseController
         :category_color,
         :activity,
         :activity_icon,
+        :start_date,
+        :end_date,
         content: [],
         features_attributes: [
           {
