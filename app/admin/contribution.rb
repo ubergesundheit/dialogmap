@@ -11,6 +11,8 @@ ActiveAdmin.register Contribution do
     column :updated_at
     column :deleted
     column :delete_reason
+    column :start_date
+    column :end_date
     column :category do |color|
       raw("<span class=\"status_tag\" style=\"color: black;border:1px solid black;background:#{color.category_color};\">#{color.category}</span>")
     end
@@ -26,6 +28,8 @@ ActiveAdmin.register Contribution do
       f.input :description
       f.input :deleted
       f.input :delete_reason
+      f.input :start_date
+      f.input :end_date
       f.input :category, input_html: { disabled: true }
       f.input :category_color, input_html: { type: 'color' }
       f.input :activity, input_html: { disabled: true }
