@@ -21,3 +21,10 @@
   %div{ ng_repeat: "content in contents"}
     %input{ type: 'checkbox', ng_model: 'selected_contents[content.id]', ng_disabled: "isCurrentContribution" }
       {{ content.id }}
+.filter_section
+  %h4
+    Zeitlich begrenzt
+    %a.reset_filter{ href: "", ng_hide: "isCurrentContribution", ng_click: "selected_time = {}" } Filter zurücksetzen
+  %div
+    %input{ type: "checkbox", ng_model: 'selected_time["only_limited"]', ng_disabled: "isCurrentContribution"}
+      begrenzt

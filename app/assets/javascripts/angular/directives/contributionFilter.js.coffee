@@ -10,9 +10,11 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.selected_categories = {}
       $scope.selected_activities = {}
       $scope.selected_contents = {}
+      $scope.selected_time = {}
       $scope.previously_selected_categories = {}
       $scope.previously_selected_activities = {}
       $scope.previously_selected_contents = {}
+      $scope.previously_selected_time = {}
       $http.get('/api/contributions/categories').then (response) ->
         $scope.categories = response.data
         return
@@ -29,11 +31,13 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         categories = (k for k,v of scope.selected_categories when v == true)
         activities = (k for k,v of scope.selected_activities when v == true)
         contents = (k for k,v of scope.selected_contents when v == true)
-        if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0
+        time = scope.selected_time.only_limited
+        if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 or time isnt false
           contributionFilterService.setFilter({
             categories: categories
             activities: activities
             contents: contents
+            time: time
           })
         else
           contributionFilterService.resetFilter()
@@ -50,6 +54,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       scope.$watchCollection 'selected_categories', setAndApplyFilter
       scope.$watchCollection 'selected_activities', setAndApplyFilter
       scope.$watchCollection 'selected_contents', setAndApplyFilter
+      scope.$watchCollection 'selected_time', setAndApplyFilter
 
       scope.$watch 'Contribution.currentContribution', (value, oldvalue, scope) ->
         contributionFilterService.resetFilter()
