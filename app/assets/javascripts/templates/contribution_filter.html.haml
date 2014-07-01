@@ -24,7 +24,7 @@
 .filter_section
   %h4
     Zeitlich begrenzt
-    %a.reset_filter{ href: "", ng_hide: "isCurrentContribution", ng_click: "selected_time = {}" } Filter zurücksetzen
+    %a.reset_filter{ href: "", ng_hide: "isCurrentContribution", ng_click: "selected_time = false" } Filter zurücksetzen
   %div
-    %input{ type: "checkbox", ng_model: 'selected_time["only_limited"]', ng_disabled: "isCurrentContribution"}
+    %input{ type: "checkbox", ng_model: 'selected_time', ng_disabled: "isCurrentContribution"}
       begrenzt

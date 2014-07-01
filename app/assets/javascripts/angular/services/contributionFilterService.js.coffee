@@ -5,7 +5,7 @@ angular.module('DialogMapApp').service "contributionFilterService",[
       @_categories = undefined
       @_activities = undefined
       @_contents = undefined
-      @_time = undefined
+      @_time = false
 
       return
     # filter_items is an object with the keys
@@ -28,7 +28,7 @@ angular.module('DialogMapApp').service "contributionFilterService",[
         callback = includeChildren
 
       augmented_contributions = contributions
-      if @_categories? or @_activities? or @_contents?
+      if @_categories? or @_activities? or @_contents? or @_time is true
         augmented_contributions = []
         if @_categories?
           augmented_contributions.push c for c in contributions when c.category.id in @_categories
@@ -39,7 +39,7 @@ angular.module('DialogMapApp').service "contributionFilterService",[
             contribution_contents = (ct.id for ct in c.content)
             [@_contents, contribution_contents] = [contribution_contents, @_contents] if @_contents.length > contribution_contents.length
             (augmented_contributions.push c if c not in augmented_contributions) for content in @_contents when content in contribution_contents
-        if @_time?
+        if @_time is true
           (augmented_contributions.push c if c not in augmented_contributions) for c in contributions when c.startDate? and c.endDate?
         callback(augmented_contributions)
       else

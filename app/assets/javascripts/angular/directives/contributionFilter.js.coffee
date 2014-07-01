@@ -10,11 +10,11 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.selected_categories = {}
       $scope.selected_activities = {}
       $scope.selected_contents = {}
-      $scope.selected_time = {}
+      $scope.selected_time = false
       $scope.previously_selected_categories = {}
       $scope.previously_selected_activities = {}
       $scope.previously_selected_contents = {}
-      $scope.previously_selected_time = {}
+      $scope.previously_selected_time = false
       $scope.fetchFilterItems = ->
         $http.get('/api/contributions/filter_items').then (response) ->
           $scope.categories = response.data.categories
@@ -33,14 +33,18 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         categories = (k for k,v of scope.selected_categories when v == true)
         activities = (k for k,v of scope.selected_activities when v == true)
         contents = (k for k,v of scope.selected_contents when v == true)
-        time = scope.selected_time.only_limited
-        if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 or time isnt false
-          contributionFilterService.setFilter({
+        time = scope.selected_time
+        if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 #or time isnt false
+          contributionFilterService.setFilter
+            categories: categories
+            activities: activities
+            contents: contents
+        else if time is true
+          contributionFilterService.setFilter
             categories: categories
             activities: activities
             contents: contents
             time: time
-          })
         else
           contributionFilterService.resetFilter()
 
@@ -65,23 +69,28 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         current_category = {}
         current_activity = {}
         current_content = {}
+        current_time = {}
         if value? # there is a currentContribution
           scope.previously_selected_categories = scope.selected_categories
           scope.previously_selected_activities = scope.selected_activities
           scope.previously_selected_contents = scope.selected_contents
+          scope.previously_selected_time = scope.selected_time
           current_category[value.category.id] = true
           current_activity[value.activity.id] = true
           for content in value.content
             current_content[content.id] = true
+          current_time = (value.startDate? and value.endDate?)
           scope.isCurrentContribution = true
         else
           current_category = scope.previously_selected_categories
           current_activity = scope.previously_selected_activities
           current_content = scope.previously_selected_contents
+          current_time = scope.previously_selected_time
 
         scope.selected_categories = current_category
         scope.selected_activities = current_activity
         scope.selected_contents = current_content
+        scope.selected_time = current_time
         return
 
       return
