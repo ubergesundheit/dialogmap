@@ -14,7 +14,14 @@
     |
     %span{ ng_repeat: "c in Contribution.currentContribution.content" }
       {{ c.id }}{{ !$last == true ? ', ' : ''}}
-  %h3 {{ Contribution.currentContribution.title }}
+    %span{ ng_show: "Contribution.currentContribution.startDate && Contribution.currentContribution.endDate" }
+      |
+      %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
+        Beginn
+        {{Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}
+        Ende
+        {{Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}
+  %h2 {{ Contribution.currentContribution.title }}
   .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
   .contribution-links{ ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }

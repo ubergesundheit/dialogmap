@@ -15,6 +15,13 @@
       |
       %span{ ng_repeat: "c in contribution.content" }
         {{ c.id }}{{ !$last == true ? ', ' : ''}}
+      %span{ ng_show: "contribution.startDate && contribution.endDate" }
+        |
+        %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
+          Beginn
+          %span{ :"am-time-ago" => "contribution.startDate"}
+          Ende
+          %span{ :"am-time-ago" => "contribution.endDate"}
     %h3 {{ contribution.title }}
     .contribution-description.description-box{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
