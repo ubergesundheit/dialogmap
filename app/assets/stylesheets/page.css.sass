@@ -35,9 +35,16 @@ h3
   right: 0
   +border-radius(15px)
   +single-box-shadow($darker-grey, 2px, 2px)
+  #user, #help
+    font-size: 13px
   #user
     float: right
-    font-size: 13px
+  #help
+    float: left
+  .sidebar-top
+    padding-bottom: 2px
+    height: 17px
+    clear: both
 
 input, button
   margin-bottom: 2px
@@ -54,6 +61,7 @@ a
 
 .new-topic-btn
   clear: both
+  margin-top: 4px
 
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
@@ -164,10 +172,8 @@ a
 
 #contributions-scroller
   overflow-y: auto
-  height: 92%
-  float: right
+  height: calc(98% - 70px)
   width: 100%
-  margin-top: 5px
 .contribution-list
   // height: 95%
   float: right
