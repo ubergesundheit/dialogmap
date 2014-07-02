@@ -95,7 +95,7 @@ angular.module("DialogMapApp")
         clickExistingUrlReference: (e) ->
           scope.internal.clickedUrlReference = angular.element(e.target).parent().attr('type_id')
           disableDescriptionArea()
-          showUrlInput(getClickPositionWithOffset(e), decodeURIComponent(scope.internal.clickedUrlReference))
+          showUrlInput(getSelectionCoords(), decodeURIComponent(scope.internal.clickedUrlReference))
           return
         urlOnKeyEnterCallback: ($event) ->
           leaveUrlInputMode()
@@ -350,20 +350,57 @@ angular.module("DialogMapApp")
         enableDescriptionArea()
         return
 
-      getClickPositionWithOffset = (e) ->
-        parentOffset = angular.element('#sidebar').offset()
-        relX = e.pageX - parentOffset.left
-        relY = e.pageY - parentOffset.top
+      getSelectionCoords = ->
+        sel = document.selection
+        x = 0
+        y = 0
+        if sel
+          unless sel.type is "Control"
+            range = sel.createRange()
+            range.collapse true
+            x = range.boundingLeft
+            y = range.boundingTop
+        else if window.getSelection
+          sel = window.getSelection()
+          if sel.rangeCount
+            range = sel.getRangeAt(0).cloneRange()
+            if range.getClientRects
+              range.collapse true
+              rect = range.getClientRects()[0]
+              x = rect.left
+              y = rect.top
+
+            # Fall back to inserting a temporary element
+            if x is 0 and y is 0
+              span = document.createElement("span")
+              if span.getClientRects
+                span.appendChild document.createTextNode("​") # Zero-width space character
+                range.insertNode span
+                rect = span.getClientRects()[0]
+                x = rect.left
+                y = rect.top
+                spanParent = span.parentNode
+                spanParent.removeChild span
+
+                # Glue any broken text nodes back together
+                spanParent.normalize()
+        parent = angular.element('#sidebar')
+        parentOffset = parent.offset()
         lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
-        [relX, relY + lineHeight / 2]
+        elemX = x - parentOffset.left
+        buttonsWidth = angular.element('#floating-buttons').width()
+        if elemX + buttonsWidth > parent.width()
+          elemX = parent.width() - buttonsWidth
+        elemY = y - parentOffset.top + lineHeight
+        [elemX, elemY]
 
       element.find('#contribution_description_text').on 'mouseup', (e) ->
         if element.find(".url-input").is(":visible") # url input is visible..
           # user has clicked somewhere else.. leave url input mode
           leaveUrlInputMode()
         scope.selection = getSelection()
-        if scope.selection != ""
-          clickPos = getClickPositionWithOffset(e)
+        if scope.selection.trim() != ""
+          clickPos = getSelectionCoords()
           showButtons(clickPos[0], clickPos[1])
         else
           hideButtons()
