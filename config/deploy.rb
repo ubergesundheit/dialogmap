@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'dialog_map'
-set :repo_url, 'git@github.com:ubergesundheit/masterthesis.git'
+set :repo_url, 'git@github.com:ubergesundheit/dialogmap.git'
 
 set :branch, 'master'
 
