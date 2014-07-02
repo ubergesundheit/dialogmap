@@ -9,7 +9,7 @@ class Contribution < ActiveRecord::Base
   accepts_nested_attributes_for :features, reject_if: :features_exist
   accepts_nested_attributes_for :references, reject_if: :references_exist
 
-  validates_presence_of :description, :user_id
+  validates_presence_of :description, :user_id, :category, :activity, :content
 
   before_save :lighten_features_colors, if: :about_to_be_deleted?
 

@@ -17,5 +17,10 @@
         Ende:
         %quick-datepicker{ ng_model: "Contribution.endDate" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
+    .errors{ ng_show: "Contribution.errors" }
+      %i.fa.fa-exclamation-triangle
+        Bitte die Felder
+        %span{ ng_repeat: "error in Contribution.errors" } {{error}}{{ $last === false ? ',&nbsp;' : '' }}
+        ausfüllen
     %a.btn.btn--green.btn--m{ :ng_disabled => "contribution_form.$invalid", :ng_click => "Contribution.submit()" } Abschicken
     %a.btn.btn--red.btn--m{ :ng_click => "Contribution.abort()" } Abbrechen

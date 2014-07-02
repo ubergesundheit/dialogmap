@@ -223,6 +223,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @threadStartEditing = undefined
       @editing = false
       @resetDates()
+      @errors = undefined
       leafletData.getMap('map_main').then (map) ->
         map.drawControl.disableEditing()
         map.drawControl.options.edit.featureGroup.clearLayers()
@@ -232,24 +233,25 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.submit = ->
       if User.isAuthenticated()
         $rootScope.$broadcast('Contribution.submit_start')
-        # this is a defered because the method internally uses the map which
-        # is fetched by a deferred
-        contributionTransformer.createContributionForSubmit(@).then (contribution) ->
-          if resource.id?
-            # update
-            contribution.id = resource.id
-            contribution.parent_id = resource.parentId
-            new resource(contribution).update().then (data) ->
-              $rootScope.$broadcast('Contribution.submitted', data)
+        if contributionTransformer.validateContribution(@)
+          # this is a defered because the method internally uses the map which
+          # is fetched by a deferred
+          contributionTransformer.createContributionForSubmit(@).then (contribution) ->
+            if resource.id?
+              # update
+              contribution.id = resource.id
+              contribution.parent_id = resource.parentId
+              new resource(contribution).update().then (data) ->
+                $rootScope.$broadcast('Contribution.submitted', data)
+                return
+              resource.abort()
               return
-            resource.abort()
-            return
-          else
-            resource.abort()
-            new resource(contribution).create().then (data) ->
-              $rootScope.$broadcast('Contribution.submitted', data)
+            else
+              resource.abort()
+              new resource(contribution).create().then (data) ->
+                $rootScope.$broadcast('Contribution.submitted', data)
+                return
               return
-            return
       else
         User._unauthorized()
       return

@@ -2,7 +2,37 @@ angular.module('DialogMapApp').service "contributionTransformer", [
   "leafletData"
   "propertiesHelper"
   "descriptionTagHelper"
-  (leafletData, propertiesHelper, descriptionTagHelper) ->
+  "$rootScope"
+  (leafletData, propertiesHelper, descriptionTagHelper, $rootScope) ->
+    @validateContribution = (contribution) ->
+      # attributes to validate
+      # title
+      # description
+      # category
+      # activity
+      # content
+      errors = []
+
+      # if the contribution is an answer, title is not needed
+      # isAnswer is true, so we can set the validation to it
+      if contribution.isAnswer is true
+        title_valid = contribution.isAnswer
+      else
+        title_valid = (contribution.title? and contribution.title.trim() isnt '')
+      description_valid = (contribution.description? and contribution.description.trim() isnt '')
+      category_valid = (contribution.category? and contribution.category.id? and contribution.category.id.trim() isnt '')
+      activity_valid = (contribution.activity? and contribution.activity.id? and contribution.activity.id.trim() isnt '')
+      content_valid = (contribution.content? and contribution.content.length isnt 0)
+
+      errors.push 'Titel' unless title_valid
+      errors.push 'Beschreibung' unless description_valid
+      errors.push 'Kategorie' unless category_valid
+      errors.push 'Aktivität' unless activity_valid
+      errors.push 'Inhalte' unless content_valid
+      contribution.errors = errors unless errors.length is 0
+
+      title_valid and description_valid and category_valid and activity_valid and content_valid
+
     @createContributionForSubmit = (contribution) ->
       leafletData.getMap('map_main').then (map) ->
         features_attributes = []
