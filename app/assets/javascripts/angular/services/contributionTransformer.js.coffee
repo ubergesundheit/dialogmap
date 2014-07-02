@@ -16,7 +16,7 @@ angular.module('DialogMapApp').service "contributionTransformer", [
       # if the contribution is an answer, title is not needed
       # isAnswer is true, so we can set the validation to it
       if contribution.isAnswer is true
-        title_valid = contribution.isAnswer
+        title_valid = true
       else
         title_valid = (contribution.title? and contribution.title.trim() isnt '')
       description_valid = (contribution.description? and contribution.description.trim() isnt '')

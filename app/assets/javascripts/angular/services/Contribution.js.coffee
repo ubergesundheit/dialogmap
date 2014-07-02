@@ -115,6 +115,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       resource.getContribution(id).then (contrib) ->
         angular.extend resource, contrib
         resource.threadStartEditing = true unless contrib.parentId?
+        resource.isAnswer = true if contrib.parentId?
         resource.editing = true
         return
       return
