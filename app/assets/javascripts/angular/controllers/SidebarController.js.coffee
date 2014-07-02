@@ -12,9 +12,9 @@ angular.module("DialogMapApp").controller "SidebarController", [
       Contribution: Contribution
       User: User
       createCategorySearchChoice: (term) ->
-        {id: term, text: "Neue Kategorie: #{term}"}
+        {id: term, text: "Neuer Akteur: #{term}"}
       createActivitySearchChoice: (term) ->
-        {id: term, text: "Neue Aktivität: #{term}"}
+        {id: term, text: "Neue Funktion: #{term}"}
       createContentSearchChoice: (term) ->
         {id: term, text: "Neuer Inhalt: #{term}"}
       formatCategory: (state) ->
@@ -36,6 +36,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
             else first_char
         "<div class=\"maki-icon #{state.icon}\"></div><span class=\"activity-label\">&nbsp;#{state.text}</span>"
       initSelect2: ->
+        compileAndInitCategoryActivityContent = (response) ->
+          compileAndInitCategory({data: response.data.categories})
+          compileAndInitActivity({data: response.data.activities})
+          compileAndInitContent({data: response.data.contents})
         compileAndInitCategory = (response) ->
           $scope.categorySelectOpts =
             data: response.data || []
@@ -43,7 +47,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
             createSearchChoice: $scope.createCategorySearchChoice
             formatResult: $scope.formatCategory
             formatSelection: $scope.formatCategory
-            placeholder: 'Kategorie'
+            placeholder: 'Akteur'
           angular.element('input#category.category_input').attr("ui-select2", "categorySelectOpts")
           $compile(angular.element('input#category.category_input'))($scope)
           return
@@ -54,7 +58,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
             createSearchChoice: $scope.createActivitySearchChoice
             formatResult: $scope.formatActivity
             formatSelection: $scope.formatActivity
-            placeholder: 'Aktivität'
+            placeholder: 'Funktion'
           angular.element('input#activity.category_input').attr("ui-select2", "activitySelectOpts")
           $compile(angular.element('input#activity.category_input'))($scope)
           return
@@ -68,9 +72,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
           $compile(angular.element('div#content.category_input'))($scope)
           return
         # fetch items from server
-        $http.get('/api/contributions/categories').then(compileAndInitCategory, compileAndInitCategory)
-        $http.get('/api/contributions/activities').then(compileAndInitActivity, compileAndInitActivity)
-        $http.get('/api/contributions/contents').then(compileAndInitContent, compileAndInitContent)
+        # $http.get('/api/contributions/categories').then(compileAndInitCategory, compileAndInitCategory)
+        # $http.get('/api/contributions/activities').then(compileAndInitActivity, compileAndInitActivity)
+        # $http.get('/api/contributions/contents').then(compileAndInitContent, compileAndInitContent)
+        $http.get('/api/contributions/filter_items').then(compileAndInitCategoryActivityContent, compileAndInitCategoryActivityContent)
         return
       startNewTopic: ->
         angular.element('.composing_container').remove()
