@@ -1,6 +1,6 @@
 .filter_section
   %h4
-    Kategorien
+    Akteure
     %a.reset_filter{ href: "", ng_hide: "isCurrentContribution", ng_click: "selected_categories = {}" } Filter zurücksetzen
   %div{ ng_repeat: "category in categories"}
     %input{ type: 'checkbox', ng_model: 'selected_categories[category.id]', ng_disabled: "isCurrentContribution" }
@@ -8,7 +8,7 @@
       {{ category.id }}
 .filter_section
   %h4
-    Aktivitäten
+    Funktionen
     %a.reset_filter{ href: "", ng_hide: "isCurrentContribution", ng_click: "selected_activities = {}" } Filter zurücksetzen
   %div{ ng_repeat: "activity in activities"}
     %input{ type: 'checkbox', ng_model: 'selected_activities[activity.id]', ng_disabled: "isCurrentContribution" }
