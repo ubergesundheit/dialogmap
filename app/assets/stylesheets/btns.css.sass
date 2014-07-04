@@ -214,13 +214,12 @@
 
 /* GREEN */
 
-.btn--green
-  background-color: $sidebar-background
-
-.btn--green:hover
+.btn--sidebar
   background-color: lighten($sidebar-background,10)
-  border-color: $darker-grey
-  color: $darker-grey
+  &:hover
+    background-color: darken($sidebar-background,10)
+    border-color: $darker-grey
+    color: $darker-grey
 
 
 .btn--red
@@ -229,6 +228,13 @@
   color: #444
   &:hover
     background-color: lighten(#e74c3c,10)
+    border-color: $darker-grey
+    color: $darker-grey
+
+.btn--green
+  background-color: $green
+  &:hover
+    background-color: lighten($green,10)
     border-color: $darker-grey
     color: $darker-grey
 

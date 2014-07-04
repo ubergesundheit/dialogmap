@@ -18,7 +18,7 @@
           %a{ ng_dialog: "help_modal.html", ng_dialog_class: "ngdialog-theme-default help-modal", ng_dialog_close_previous: true }
             Hilfe
         #user{ ng_include: "'sidebar_user.html'" }
-      %a.btn.btn--full.btn--green.new-topic-btn{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
+      %a.btn.btn--full.btn--sidebar.new-topic-btn{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
       -# %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
       #new-topic-container
       #contributions-scroller
