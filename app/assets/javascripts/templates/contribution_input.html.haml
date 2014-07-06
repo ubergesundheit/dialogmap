@@ -24,5 +24,3 @@
         %span{ ng_repeat: "error in Contribution.errors" } {{error}}{{ $last === false ? ',&nbsp;' : '' }}
         ausfüllen
     %i.fa.fa-check.pointer.submit-button{ ng_click: "Contribution.submit()" } Abschicken
-    -# %a.btn.btn--green.btn--m{ :ng_disabled => "contribution_form.$invalid", :ng_click => "Contribution.submit()" } Abschicken
-    -# %a.btn.btn--red.btn--m{ :ng_click => "Contribution.abort()" } Abbrechen

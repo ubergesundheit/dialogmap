@@ -60,6 +60,8 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
           Contribution.display_contributions = filtered_contributions
           return
 
+        angular.element('#contributions-scroller').scrollTop(0)
+
         Contribution.filterCount = {
           categories: categories.length
           activities: activities.length
@@ -107,5 +109,10 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         scope.selected_time = current_time
         return
 
+      scope.$watch 'filterVisible', (value) ->
+        filterElem = angular.element('#filter')
+        top = parseInt(filterElem.css('height')) + filterElem.position().top
+        angular.element('#contributions-scroller').css('height', "calc(100% - #{top+4}px)")
+        return
       return
 ]

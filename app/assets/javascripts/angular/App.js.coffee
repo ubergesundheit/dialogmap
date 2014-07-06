@@ -1,4 +1,11 @@
 L.Icon.Default.imagePath = 'assets'
+L.Map = L.Map.extend
+  openPopup: (popup) ->
+    @_popup = popup
+    @addLayer(popup).fire "popupopen",
+      popup: @_popup
+
+
 angular.module "DialogMapApp", [
   "leaflet-directive"
   "rails"

@@ -22,12 +22,14 @@ angular.module("DialogMapApp").controller "MapController", [
         leafletData.getMap('map_main').then (map) ->
           # called by the mouseout of the geojson..
           if evt? and evt.type? and evt.type is 'mouseout'
+            map.closePopup()
             map.geojson_layer.resetStyle(evt.target)
             $scope.highlightsLayer.clearLayers()
             $rootScope.$broadcast 'resetHighlight'
           else
             map.geojson_layer.eachLayer (f) ->
               map.geojson_layer.resetStyle f
+              f.closePopup()
             $scope.highlightsLayer.clearLayers()
           return
         return
@@ -42,7 +44,7 @@ angular.module("DialogMapApp").controller "MapController", [
             # find the layer to highlight..
             (highlightFeature = f; break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
 
-          if  highlightFeature instanceof L.Polygon
+          if highlightFeature instanceof L.Polygon
             highlightFeature.setStyle
               weight: 6
               color: 'orange'
@@ -50,6 +52,7 @@ angular.module("DialogMapApp").controller "MapController", [
           else # the feature is a Marker..
             highlightCircle = L.circleMarker(highlightFeature.getLatLng(), { radius: 20, className: 'highlight' })
             $scope.highlightsLayer.addLayer(highlightCircle)
+          highlightFeature.openPopup()
           return
         return
 

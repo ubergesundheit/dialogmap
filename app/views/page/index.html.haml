@@ -24,5 +24,7 @@
       .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
         %h3 Beiträge filtern
         %div{ contribution_filter: true }
-      %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions", ng_hide: "Contribution.composing && $state.is('contributions')" }
+      %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions",
+        ng_hide: "Contribution.composing && $state.is('contributions')",
+        ng_class: "{'scroller-tall': $state.is('contribution')}" }
         .view{ ui_view: true }

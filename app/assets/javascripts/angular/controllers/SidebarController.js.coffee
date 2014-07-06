@@ -119,8 +119,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
         return
 
       highlightAllRelated: (contribution) ->
-        $rootScope.$broadcast('highlightFeature', { feature_id: f.id, contribution_id: contribution.id } ) for f in contribution.features
-        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id, contribution_id: contribution.id } ) for f in contribution.references
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.id, contribution_id: contribution.id, dontScroll: true } ) for f in contribution.features
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id, contribution_id: contribution.id, dontScroll: true } ) for f in contribution.references
         return
 
       resetHighlight: ->
@@ -143,7 +143,11 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
     $scope.$on 'highlightFeature', (event, data) ->
       angular.element(".contribution-description-tag[feature-tag=#{data.feature_id}]").addClass('highlight')
-      angular.element(".contribution[contribution-id=#{data.contribution_id}]").addClass('contribution-hover')
+      contribution = angular.element(".contribution[contribution-id=#{data.contribution_id}]")
+      contribution.addClass('contribution-hover')
+      if !data.dontScroll
+        angular.element('#contributions-scroller').scrollTop(contribution.position().top)
+
       return
 
     $scope.$on 'resetHighlight', (event, data) ->
