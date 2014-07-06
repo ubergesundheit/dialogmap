@@ -4,30 +4,34 @@
     ng_mouseleave: "resetHighlight()",
     :"contribution-id" => "{{contribution.id}}",
     ng_style: "{'background-color': lightenColor(contribution.category.color)}"}
-    %h3.contribution-title {{ contribution.title }}
-    .contribution-info
-      {{ contribution.user.email }}
-      schrieb
-      {{ contribution.createdAt | amCalendar}}
+    %h3.contribution-title{ ng_class: "{'expanded-title': contribution.showDescription}"} {{ contribution.title }}
     %a
       %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
-    .contribution-category-container{ title: '{{contribution.category.id }} | {{contribution.activity.id }}' }
-      .category-color{ ng_style: "{'background-color': contribution.category.color}" }
-      %span.category-title{ ng_style: "{'color': complementColor(contribution.category.color)}" } {{contribution.category.id }}
-      |
-      .maki-icon{ class: "{{contribution.activity.icon}}" }
-      {{ contribution.activity.id }}
-      |
-      %span{ ng_repeat: "c in contribution.content" }
-        {{ c.id }}{{ !$last == true ? ', ' : ''}}
-      %span{ ng_show: "contribution.startDate && contribution.endDate" }
-        |
-        %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
-          Beginn
-          %span{ :"am-time-ago" => "contribution.startDate"}
-          Ende
-          %span{ :"am-time-ago" => "contribution.endDate"}
     .contribution-description.description-box{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
+    .contribution-info
+      von
+      {{ contribution.user.email }}
+      am
+      {{ contribution.createdAt | amCalendar}}
+    .contribution-category-container
+      .category-columns
+        %div.category-column
+          %span{ title: "Akteur: {{contribution.category.id}}" }
+            %span.category-title Akteur:
+            .category-color{ ng_style: "{'background-color': contribution.category.color}"}
+            %span.category-value {{contribution.category.id }}
+          %br
+          %span{ title: "Aktivität: {{contribution.activity.id}}"}
+            %span.category-title Aktivität:
+            .maki-icon{ class: "{{contribution.activity.icon}}" }
+            %span.category-value {{ contribution.activity.id }}
+        %div.category-column
+          %span.category-title.content-title Inhalte:
+          %span{ ng_repeat: "c in contribution.content" }
+            %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
+      .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
+        %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
+          Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
       Antworten
       %span{ ng_show: "contribution.childContributions.length > 0" } anzeigen ({{contribution.childContributions.length}})

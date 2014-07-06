@@ -24,10 +24,5 @@
       .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
         %h3 Beiträge filtern
         %div{ contribution_filter: true }
-        -# %a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
-        -#   {{ filterVisible === true ? 'weniger' : (Contribution.filterCount.all !== 0 ? '('+Contribution.filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
-        -# {{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge angezeigt
-        -# %input{ type:"text", placeholder: "Suchbegriff", ng_model: "query" }
-        -# #contribution-filter{ ng_show: "filterVisible", contribution_filter: true }
       %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions", ng_hide: "Contribution.composing && $state.is('contributions')" }
         .view{ ui_view: true }

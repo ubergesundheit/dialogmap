@@ -17,6 +17,9 @@
 .select2-drop-active
   border-color: $light-grey
 
+.select2-container .select2-choice
+  +text-shadow(unset)
+
 .select2-container .select2-choice abbr
   background: asset-url("select2.png") right top no-repeat
 
@@ -43,7 +46,7 @@
   outline: none
 
 .select2-container-multi.select2-container-active .select2-choices
-  border: 1px solid $light-grey
+  border-width: 0px
   +box-shadow(none)
   background-image: none
 
@@ -54,4 +57,5 @@
   background-color: $lighter-grey
 
 .select2-container-multi .select2-choices .select2-search-field input
+  padding: 4px
   font-family: $default-font-family

@@ -54,9 +54,10 @@ input[type=text]
 
 a
   cursor: pointer
-  color: #3498db
+  color: rgb(52, 72, 219) //#3498db
   text-decoration: none
   +user-select(none)
+  +text-shadow(rgba(128,128,128, 0.2) 0px 1px 1px)
 
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
@@ -137,6 +138,12 @@ a
   white-space: nowrap
   overflow: hidden
   padding: 5px 0px
+  margin-bottom: -5px
+
+.expanded-title
+  text-overflow: initial
+  white-space: normal
+  overflow: unset
 
 .contribution
   cursor: pointer
@@ -148,12 +155,23 @@ a
   background-color: $lighter-grey
   text-align: left
   .contribution-category-container
+    font-size: 14px
+    .category-column
+      width: 49%
+      vertical-align: top
+      display: inline-block
     .category-title
-      text-transform: uppercase
-      font-size: 14px
-      +stroke(1px, rgba( $darker-grey, 0.2 ))
+      color: lighten($darker-grey,15)
+      font-variant: small-caps
+      width: 70px
+      text-align: right
+      display: inline-block
+    .content-title
+      width: unset
+    .time-limit
+      text-align: center
+      margin: 4px 0px
   .contribution-info
-    display: inline-block
     font-size: 13px
     color: lighten($darker-grey,15)
   .info-below
@@ -162,9 +180,9 @@ a
   .contribution-description
     line-height: 24px
   .description-box
-    padding: 10px
-    margin: 10px 20px
-    border: 1px solid darken($sidebar-background, 10)
+    padding: 4px
+    margin: 4px 0px
+    +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.08))
   .contribution-links
     display: block
     text-align: right
@@ -184,6 +202,9 @@ a
     line-height: 26px
     text-align: center
     margin-right: 4px
+    margin-top: -26px
+  .category-value
+    font-style: italic
 
 #new-topic-initiator, #filter
   cursor: default
@@ -196,6 +217,7 @@ a
   width: 10px
   height: 10px
   border: 1px solid rgba( $darker-grey, 0.2 )
+  margin: 0px 4px
   +border-radius(5px)
 
 .activity-label
@@ -257,10 +279,27 @@ a
 .filter-checkboxes
   +column-count(2)
 
-
 .help-modal
   .ngdialog-content
     width: 50% !important
   p
     font-size: 14px
     line-height: 16px
+
+.contribution-form
+  .submit-button
+    display: block
+    text-align: right
+    margin-top: 8px
+    margin-right: 4px
+    +transition(color .4s)
+    &:hover
+      color: $green
+      +transition(color .3s)
+.abort-submission-button
+  float: right
+  margin-top: -26px
+  +transition(color .4s)
+  &:hover
+    color: $red
+    +transition(color .3s)
