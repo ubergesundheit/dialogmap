@@ -1,5 +1,5 @@
-.activearea
-%div{ ng_controller: "MainController"}
+-# .activearea
+#main_ctrl{ ng_controller: "MainController"}
   #map{ ng_controller: "MapController" }
     %leaflet{ id: "map_main", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
   #ui_container{ ng_controller: "SidebarController" }
@@ -7,20 +7,27 @@
       = fa_icon "arrow-circle-o-left", class: "backbutton_icon"
       %span.backtext zurück
     = fa_icon "info", id: 'app_info_button', ng_dialog: "app_info_modal.html", ng_dialog_class: "ngdialog-theme-default", ng_dialog_close_previous: true
-    #contribution_filter_container{ ng_show: "!loading" }
-      #contribution_filter{ contribution_filter: true, ng_show: "showFilter", ng_class: "{'active_filter': showFilter}"  }
-      = fa_icon "filter", id: "contribution_filter_button", ng_click: "showFilter = !showFilter", ng_class: "{'active_button': showFilter}"
 
     #sidebar
+      = image_tag("loading.gif", class: "loading", ng_show: "loading")
       .sidebar-top
         #help
           = fa_icon "question"
           %a{ ng_dialog: "help_modal.html", ng_dialog_class: "ngdialog-theme-default help-modal", ng_dialog_close_previous: true }
             Hilfe
         #user{ ng_include: "'sidebar_user.html'" }
-      %a.btn.btn--full.btn--sidebar.new-topic-btn{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
-      -# %button{ ng_click: "startNewTopic()", ng_hide: "Contribution.composing || $state.is('contribution')" } neues Thema
-      #new-topic-container
-      #contributions-scroller
-        = image_tag("loading.gif", class: "loading", ng_show: "loading")
+
+      .contribution#new-topic-initiator{ ng_hide: "$state.is('contribution')" }
+        %h3 neues Thema erstellen
+        %input{ type:"text", placeholder: "Titel", ng_focus: "startNewTopic()", ng_hide: "Contribution.composing" }
+        #new-topic-container
+      .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
+        %h3 Beiträge filtern
+        %div{ contribution_filter: true }
+        -# %a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
+        -#   {{ filterVisible === true ? 'weniger' : (Contribution.filterCount.all !== 0 ? '('+Contribution.filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
+        -# {{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge angezeigt
+        -# %input{ type:"text", placeholder: "Suchbegriff", ng_model: "query" }
+        -# #contribution-filter{ ng_show: "filterVisible", contribution_filter: true }
+      %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions", ng_hide: "Contribution.composing && $state.is('contributions')" }
         .view{ ui_view: true }

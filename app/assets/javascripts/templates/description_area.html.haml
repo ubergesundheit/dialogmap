@@ -5,6 +5,7 @@
   %a#create-feature-reference.button.feature-reference.btn.btn--s.btn--sidebar{ href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference('bar')" }
   %a#create-url-reference.button.url-reference.btn.btn--s.btn--sidebar{ href: "", title: "Link einfügen", ng_click: "clickUrlReference('bar')" }
 %div{ id: "contribution_description_text", contenteditable: "true", :"strip-br" => "true", class: "contribution_descriptioninput", ng_model: "internal.description" }
+  %span#placeholder Beschreibung
 #floating-buttons.contributions-buttons
   %a{ id: "create-marker", class: "button marker", href: "", title: "Punkt markieren", ng_click: "clickMarker()" }
   %a{ id: "create-polygon", class: "button polygon", href: "", title: "Fläche markieren", ng_click: "clickPolygon()" }

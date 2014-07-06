@@ -34,6 +34,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         activities = (k for k,v of scope.selected_activities when v == true)
         contents = (k for k,v of scope.selected_contents when v == true)
         time = scope.selected_time
+        query = if scope.filterQuery? then scope.filterQuery.trim() else undefined
         if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 #or time isnt false
           contributionFilterService.setFilter
             categories: categories
@@ -45,6 +46,9 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
             activities: activities
             contents: contents
             time: time
+        else if query? and query isnt ''
+          contributionFilterService.setFilter
+            query: query
         else
           contributionFilterService.resetFilter()
 
@@ -55,12 +59,22 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         contributionFilterService.applyFilter contributionsToFilter, scope.isCurrentContribution, (filtered_contributions) ->
           Contribution.display_contributions = filtered_contributions
           return
+
+        Contribution.filterCount = {
+          categories: categories.length
+          activities: activities.length
+          contents: contents.length
+          time: (if time is true then 1 else 0)
+          query: (if query? and query isnt '' then 1 else 0)
+          all: (categories.length + activities.length + contents.length + (if time is true then 1 else 0) + (if query? and query isnt '' then 1 else 0))
+        }
         return
 
       scope.$watchCollection 'selected_categories', setAndApplyFilter
       scope.$watchCollection 'selected_activities', setAndApplyFilter
       scope.$watchCollection 'selected_contents', setAndApplyFilter
       scope.$watchCollection 'selected_time', setAndApplyFilter
+      scope.$watch 'filterQuery', setAndApplyFilter
 
       scope.$watch 'Contribution.currentContribution', (value, oldvalue, scope) ->
         contributionFilterService.resetFilter()

@@ -12,7 +12,7 @@ angular.module("DialogMapApp").controller "MapController", [
         top: "0"
         bottom: "0"
         left: "0"
-        width: "75%"
+        width: "calc(100% - 450px)"
       return
     angular.extend $scope,
       Contribution: Contribution

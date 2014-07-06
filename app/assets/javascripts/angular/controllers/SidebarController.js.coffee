@@ -6,8 +6,10 @@ angular.module("DialogMapApp").controller "SidebarController", [
   "$state"
   "$rootScope"
   "$http"
-  "stringToColor"
-  ($scope, Contribution, User, $compile, $state, $rootScope, $http, stringToColor) ->
+  "colorService"
+  "$timeout"
+  ($scope, Contribution, User, $compile, $state, $rootScope, $http, colorService, $timeout) ->
+    angular.extend $scope, colorService
     angular.extend $scope,
       Contribution: Contribution
       User: User
@@ -18,7 +20,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
       createContentSearchChoice: (term) ->
         {id: term, text: "Neuer Inhalt: #{term}"}
       formatCategory: (state) ->
-        state.color = stringToColor.hex(state.id) unless state.color?
+        state.color = $scope.stringToHexColor(state.id) unless state.color?
         "<div class='category-color' style='background-color: #{state.color};'></div>&nbsp;#{state.text}"
       formatActivity: (state) ->
         if !state.icon?
@@ -72,9 +74,6 @@ angular.module("DialogMapApp").controller "SidebarController", [
           $compile(angular.element('div#content.category_input'))($scope)
           return
         # fetch items from server
-        # $http.get('/api/contributions/categories').then(compileAndInitCategory, compileAndInitCategory)
-        # $http.get('/api/contributions/activities').then(compileAndInitActivity, compileAndInitActivity)
-        # $http.get('/api/contributions/contents').then(compileAndInitContent, compileAndInitContent)
         $http.get('/api/contributions/filter_items').then(compileAndInitCategoryActivityContent, compileAndInitCategoryActivityContent)
         return
       startNewTopic: ->
@@ -84,6 +83,9 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
         $scope.initSelect2()
         Contribution.start()
+        $timeout ->
+          angular.element('input.input_title').focus()
+          return
         return
 
       # id is the parent_id
@@ -117,8 +119,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
         return
 
       highlightAllRelated: (contribution) ->
-        $rootScope.$broadcast('highlightFeature', { feature_id: f.id } ) for f in contribution.features
-        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id } ) for f in contribution.references
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.id, contribution_id: contribution.id } ) for f in contribution.features
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id, contribution_id: contribution.id } ) for f in contribution.references
         return
 
       resetHighlight: ->

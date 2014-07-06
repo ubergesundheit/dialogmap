@@ -1,7 +1,5 @@
-body
-  margin: 0
-  padding: 0
-  overflow: none
+html, body
+  height: 100%
   color: $darker-grey
   font-family: $default-font-family
 
@@ -16,25 +14,23 @@ h2
 h3
   font-size: 15pt
 
-#map_main
+#main_ctrl, #ui_container
+  height: 100%
+
+#map_main, #map
   position: absolute
   top: 0
   bottom: 0
   width: 100%
 
 #sidebar
-  overflow-y: hidden
-  position: absolute
-  margin: 10px
-  padding: 10px
-  // width: 25%
-  width: 400px
+  position: relative
+  padding: 10px 0px 10px 10px
+  width: $sidebar-width
+  top: 0px
+  left: calc(100% - #{$sidebar-width})
+  height: 100%
   background-color: $sidebar-background
-  top: 0
-  bottom: 0
-  right: 0
-  +border-radius(15px)
-  +single-box-shadow($darker-grey, 2px, 2px)
   #user, #help
     font-size: 13px
   #user
@@ -46,39 +42,42 @@ h3
     height: 17px
     clear: both
 
-input, button
+input
   margin-bottom: 2px
   margin-top: 2px
   margin-left: 0px
   margin-right: 0px
-  border: solid $darker-grey 1px
+  border: solid $light-grey 1px
   padding: 4px
+input[type=text]
+  width: 100%
 
 a
   cursor: pointer
-  color: blue
-  text-decoration: underline
-
-.new-topic-btn
-  clear: both
-  margin-top: 4px
+  color: #3498db
+  text-decoration: none
+  +user-select(none)
 
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
   color: $darker-grey
   font-family: $default-font-family
-  border: solid $darker-grey 1px
+  border: 1px solid $light-grey
   background-color: $lighter-grey
   font-size: 12pt
+  &:focus
+    outline: none
 
 .input_title
-  width: calc(50% - 2px)
   display: block
 
 .category_input
   display: inline-block
   width: calc(50% - 2px)
   margin-bottom: 2px
+
+.activity_input
+  width: calc(50% - 1px)
 
 .content_input
   width: 100%
@@ -102,58 +101,6 @@ a
   margin-top: 4px
   color: firebrick
 
-.select2-container
-  border: solid $darker-grey 1px
-  .select2-choice
-    border-radius: 0px
-    border: 0px
-    background-color: $lighter-grey
-    background-image: none
-    padding-left: 4px
-.select2-arrow
-  background: none !important
-  border-radius: 0px !important
-.select2-drop-active
-  border-color: $darker-grey
-
-.select2-container .select2-choice abbr
-  background: asset-url("select2.png") right top no-repeat
-
-.select2-container .select2-choice .select2-arrow b
-  background: asset-url("select2.png") no-repeat 0 1px
-
-.select2-search input
-  background: asset-url("select2.png") no-repeat 100% -22px
-  font-family: $default-font-family
-
-.select2-search-choice-close
-  background: asset-url("select2.png") right top no-repeat
-
-.select2-more-results.select2-active
-  background: #f4f4f4 asset-url("select2-spinner.gif") no-repeat 100%
-
-.ngdialog.ngdialog-theme-default .ngdialog-content
-  font-family: $default-font-family
-
-.select2-container-multi .select2-choices
-  border-width: 0px
-  background-image: none
-  background-color: $lighter-grey
-
-.select2-container-active
-  border: 1px solid $darker-grey
-
-.select2-container-multi.select2-container-active .select2-choices
-  border: 0px solid $darker-grey
-  +box-shadow(none)
-  background-image: none
-
-.select2-drop
-  background-color: $lighter-grey
-
-.select2-container-multi .select2-choices .select2-search-field input
-  font-family: $default-font-family
-
 .loading_container
   margin-top: 200px
   margin-bottom: 200px
@@ -171,29 +118,35 @@ a
   +single-box-shadow(rgba(40, 40, 40, 0.1), 0px, 0px, 2px, 2px)
 
 #contributions-scroller
-  overflow-y: auto
-  height: calc(98% - 70px)
+  overflow: hidden
+  position: relative
+  height: calc(100% - 70px)
   width: 100%
 .contribution-list
-  // height: 95%
-  float: right
   margin-top: 5px
   width: 100%
   &:hover
     background-color: $sidebar-background
 
 .contribution-hover
-  background-color: lighten($sidebar-background,5)
+  background-color: lighten($sidebar-background,5) !important
+
+.contribution-title
+  text-overflow: ellipsis
+  width: 95%
+  white-space: nowrap
+  overflow: hidden
+  padding: 5px 0px
 
 .contribution
-  border-bottom: 1px solid lighten($darker-grey,15)
-  padding-top: 0.5em
-  padding-bottom: 0.5em
-  float: left
-  clear: both
-  width: 100%
-  &:hover
-    background-color: lighten($sidebar-background,5)
+  cursor: pointer
+  padding: 10px
+  margin-top: 5px
+  margin-bottom: 10px
+  width: calc(100% - 16px)
+  +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.08))
+  background-color: $lighter-grey
+  text-align: left
   .contribution-category-container
     .category-title
       text-transform: uppercase
@@ -213,7 +166,8 @@ a
     margin: 10px 20px
     border: 1px solid darken($sidebar-background, 10)
   .contribution-links
-    float: right
+    display: block
+    text-align: right
   .children-contributions
     // width: 98%
     padding-left: 5px
@@ -230,6 +184,12 @@ a
     line-height: 26px
     text-align: center
     margin-right: 4px
+
+#new-topic-initiator, #filter
+  cursor: default
+
+#more-filter-options
+  float: right
 
 .category-color
   display: inline-block
@@ -268,63 +228,35 @@ a
   .contribution-description-tag
     +opacity(0.5)
 
-
 #map_backbutton
   display: block
   position: absolute
   bottom: 10px
-  right: calc(0% + 420px)
+  right: calc(0% + #{$sidebar-width} + 20px)
   width: 130px
   height: 170px
   text-align: center
   cursor: pointer
-  color: darken($sidebar-background, 10)
+  color: darken($green, 10)
   &:hover
-    text-shadow: 0px 0px 3px $sidebar-background
+    text-shadow: 0px 0px 3px $green
   .backtext
     font-size: 20px
     display: block
-    color: darken($sidebar-background, 20)
+    color: darken($green, 20)
   .backbutton_icon
     font-size: 150px
     line-height: 130px
     margin-top: 20px
 
-#contribution_filter_container
-  display: block
-  position: absolute
-  top: 10px
-  right: calc(0% + 420px)
-  +border-radius(3px)
-  border: 1px solid rgba(0, 0, 0, 0.4)
-  background-color: white
-  #contribution_filter_button
-    cursor: pointer
-    width: 26px
-    height: 26px
-    line-height: 26px
-    text-align: center
-    border-radius: inherit
-    vertical-align: top
-    +user-select(none)
-  .active_button
-    background-color: #F8F8F8
-  .active_filter
-    padding: 0px 0px 5px 5px
-  #contribution_filter
-    display: inline-block
-  .reset_filter
-    visibility: hidden
-  .filter_section:hover .reset_filter
-    visibility: visible
+.reset_filter
+  visibility: hidden
+.filter_section:hover .reset_filter
+  visibility: visible
 
-.app-info
-  font-size: 14px
-  a
-    color: #3498db
-    text-decoration: none
-  .with-heart
-    font-size: 12px
+.filter-checkboxes
+  +column-count(2)
+
 
 .help-modal
   .ngdialog-content

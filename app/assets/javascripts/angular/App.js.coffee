@@ -10,6 +10,7 @@ angular.module "DialogMapApp", [
   "angularMoment"
   "ui.select2"
   "ngQuickDate"
+  "perfect_scrollbar"
 ]
 .config [
   "$stateProvider"

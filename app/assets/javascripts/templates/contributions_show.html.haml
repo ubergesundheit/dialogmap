@@ -1,14 +1,19 @@
-.contributions-list{ ng_repeat: "contribution in Contribution.display_contributions"}
-  .contribution{ ng_mouseover: "highlightAllRelated(contribution)", ng_mouseleave: "resetHighlight()", :"contribution-id" => "{{contribution.id}}"}
+%div{ ng_repeat: "contribution in Contribution.display_contributions"}
+  .contribution{ ng_click: "contribution.showDescription = !contribution.showDescription",
+    ng_mouseover: "highlightAllRelated(contribution)",
+    ng_mouseleave: "resetHighlight()",
+    :"contribution-id" => "{{contribution.id}}",
+    ng_style: "{'background-color': lightenColor(contribution.category.color)}"}
+    %h3.contribution-title {{ contribution.title }}
     .contribution-info
       {{ contribution.user.email }}
       schrieb
       {{ contribution.createdAt | amCalendar}}
     %a
-      %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_click: "contribution.showDescription = !contribution.showDescription", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
+      %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
     .contribution-category-container{ title: '{{contribution.category.id }} | {{contribution.activity.id }}' }
       .category-color{ ng_style: "{'background-color': contribution.category.color}" }
-      %span.category-title{ ng_style: "{'color': contribution.category.color}" } {{contribution.category.id }}
+      %span.category-title{ ng_style: "{'color': complementColor(contribution.category.color)}" } {{contribution.category.id }}
       |
       .maki-icon{ class: "{{contribution.activity.icon}}" }
       {{ contribution.activity.id }}
@@ -22,7 +27,6 @@
           %span{ :"am-time-ago" => "contribution.startDate"}
           Ende
           %span{ :"am-time-ago" => "contribution.endDate"}
-    %h3 {{ contribution.title }}
     .contribution-description.description-box{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
       Antworten

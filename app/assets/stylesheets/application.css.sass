@@ -1,15 +1,27 @@
+@import compass/reset
+@import compass
+
+*,
+*:before,
+*:after
+  +box-sizing(border-box)
+
 @import base
 
+//library styles
+@import font-awesome
+@import btns
 @import select2
 @import ngDialog
 @import ngQuickDate
-//@import ng-contenteditable
-//@import ng-tags-input
 @import mapbox
 @import leaflet.draw
+@import perfect-scrollbar
+
+//own styles
+@import vendor-overwrites
 @import page
 @import descriptionarea
-//@import highlighter
 @import user
 @import app-info
 @import maki

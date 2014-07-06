@@ -1,0 +1,57 @@
+.ngdialog.ngdialog-theme-default .ngdialog-content
+  font-family: $default-font-family
+
+
+.select2-container
+  border: 1px solid $light-grey
+  .select2-choice
+    border-radius: 0px
+    border: 0px
+    background-color: $lighter-grey
+    background-image: none
+    padding-left: 4px
+.select2-arrow
+  background: none !important
+  border-radius: 0px !important
+  border: 0px !important
+.select2-drop-active
+  border-color: $light-grey
+
+.select2-container .select2-choice abbr
+  background: asset-url("select2.png") right top no-repeat
+
+.select2-container .select2-choice .select2-arrow b
+  background: asset-url("select2.png") no-repeat 0 1px
+
+.select2-search input
+  background: asset-url("select2.png") no-repeat 100% -22px
+  font-family: $default-font-family
+
+.select2-search-choice-close
+  background: asset-url("select2.png") right top no-repeat
+
+.select2-more-results.select2-active
+  background: #f4f4f4 asset-url("select2-spinner.gif") no-repeat 100%
+
+.select2-container-multi .select2-choices
+  border-width: 0px
+  background-image: none
+  background-color: $lighter-grey
+
+.select2-container-active
+  border: 1px solid $light-grey
+  outline: none
+
+.select2-container-multi.select2-container-active .select2-choices
+  border: 1px solid $light-grey
+  +box-shadow(none)
+  background-image: none
+
+.select2-container-active .select2-choice, .select2-container-active .select2-choices
+  +box-shadow(none)
+
+.select2-drop
+  background-color: $lighter-grey
+
+.select2-container-multi .select2-choices .select2-search-field input
+  font-family: $default-font-family
