@@ -13,6 +13,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
+      scroller: angular.element('#contributions-scroller')
       createCategorySearchChoice: (term) ->
         {id: term, text: "Neuer Akteur: #{term}"}
       createActivitySearchChoice: (term) ->
@@ -90,24 +91,33 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
       # id is the parent_id
       startAnswer: (id) ->
+        $scope.currentlyEditing = 'new'
         angular.element('.composing_container').remove()
 
         inputAreaHtml = $compile("<div class=\"composing_container\" ng-include=\"'contribution_input.html'\"></div>")($scope)
         angular.element(".contribution_input_replace[data-id=#{id}]").append inputAreaHtml
         Contribution.startAnswer(id)
+        $timeout ->
+          $scope.scroller.scrollTop(9999)
+          return
         return
 
       startContributionEdit: (id) ->
+        $scope.currentlyEditing = id
         Contribution.setContributionForEdit(id)
 
         angular.element('.composing_container').remove()
         inputAreaHtml = $compile("<div class=\"composing_container\" contribution_input=\"contribution\"></div>")($scope)
-        angular.element(".contribution_input_replace[data-id=#{id}][type=edit]").append inputAreaHtml
+        appendElement = angular.element(".contribution_input_replace[data-id=#{id}][type=edit]")
+        appendElement.append inputAreaHtml
         # only initialize the category selector if the contribution is a parent
         Contribution.getContribution(id).then (c) ->
           $scope.initSelect2() if !c.parentId?
           return
         Contribution.start(id)
+        $timeout ->
+          $scope.scroller.scrollTop(appendElement.position().top)
+          return
         return
 
       highlightRelated: (feature_id, $event) ->
@@ -127,26 +137,12 @@ angular.module("DialogMapApp").controller "SidebarController", [
         $rootScope.$broadcast 'resetHighlight'
         return
 
-    $scope.$on '$stateChangeStart', (event) ->
-      $scope.loading = true
-      return
-
-    $scope.$on '$stateChangeSuccess', (event) ->
-      $scope.loading = false
-      $rootScope.$broadcast 'resetHighlight'
-      return
-
-    $scope.$on '$stateChangeError', (event) ->
-      $scope.loading = false
-      $rootScope.$broadcast 'resetHighlight'
-      return
-
     $scope.$on 'highlightFeature', (event, data) ->
       angular.element(".contribution-description-tag[feature-tag=#{data.feature_id}]").addClass('highlight')
       contribution = angular.element(".contribution[contribution-id=#{data.contribution_id}]")
       contribution.addClass('contribution-hover')
-      if !data.dontScroll
-        angular.element('#contributions-scroller').scrollTop(contribution.position().top)
+      if !data.dontScroll and !contribution?
+        $scope.scroller.scrollTop(contribution.position().top)
 
       return
 
@@ -155,10 +151,11 @@ angular.module("DialogMapApp").controller "SidebarController", [
       angular.element(".contribution").removeClass('contribution-hover')
       return
 
-    $scope.$on 'Contribution.reset', ->
+    $scope.$on 'Contribution.abort', ->
       angular.element('input#category.category_input').select2('destroy')
       angular.element('div#content.category_input').select2('destroy')
       angular.element('input#activity.category_input').select2('destroy')
+      $scope.currentlyEditing = undefined
       return
 
     return

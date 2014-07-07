@@ -203,6 +203,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
       @endDate = undefined
       return
     resource.abort = ->
+      $rootScope.$broadcast('Contribution.abort')
       @reset()
       @composing = false
       @addingFeatureReference = false

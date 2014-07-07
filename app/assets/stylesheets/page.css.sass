@@ -9,7 +9,7 @@ h1, h2, h3, h4
 
 h2
   font-size: 27px
-  margin: 0px 0px 10px 5px
+  margin-bottom: 4px
 
 h3
   font-size: 15pt
@@ -128,17 +128,12 @@ a
 .scroller-tall
   height: calc(100% - 15px) !important
 
-.contribution-list
-  margin-top: 5px
-  width: 100%
-  &:hover
-    background-color: $sidebar-background
-
 .contribution-hover
-  background-color: lighten($sidebar-background,5) !important
+  background-color: $lighter-grey !important
   padding: 9px !important
-  border: 1px solid rgba(0,0,0,0.1)
+  border: 1px solid rgba(0,0,0,0.2)
   +box-shadow(0px 4px 1px rgba(0, 0, 0, 0.2) !important)
+  +transition(box-shadow .4s, border .4s, background-color .4s)
 
 .contribution-title
   text-overflow: ellipsis
@@ -153,6 +148,10 @@ a
   white-space: normal
   overflow: auto
 
+.contribution_input_replace
+  background-color: $light-grey
+  padding: 17px 10px 10px
+
 .contribution
   cursor: pointer
   padding: 10px
@@ -160,6 +159,7 @@ a
   margin-bottom: 10px
   width: calc(100% - 16px)
   +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.1))
+  +transition(box-shadow .4s, background-color .4s)
   background-color: $lighter-grey
   text-align: left
   .contribution-category-container
@@ -185,23 +185,55 @@ a
   .info-below
     width: 100%
     text-align: right
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+    padding: 5px 0px
   .contribution-description
     line-height: 24px
-  .description-box
     padding: 4px
     margin: 4px 0px
-    +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.08))
+    +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.2))
   .contribution-links
     display: block
     text-align: right
+  .edit-link, .delete-edit-links
+    float: right
+    color: $middle-grey
+  .delete-edit-links
+    opacity: 0
+    visibility: hidden
+    +transition(visibility .4s, opacity .4s)
+  .edit-link
+    opacity: 1
+    visibility: visible
+  .delete-edit-icon
+    font-size: 14px
+    &:hover
+      color: $darker-grey
+  .reply-arrow
+    font-size: 14px
   .children-contributions
-    // width: 98%
     padding-left: 5px
-    border-left: 2px solid lighten($darker-grey,15)
     .contribution
-      border-bottom: 0px solid lighten($darker-grey,15)
-      &:hover
-        background-color: $sidebar-background
+      +box-shadow(initial)
+      padding: 2px 10px
+      width: 100%
+      &:before
+        font-family: FontAwesome
+        font-weight: normal
+        font-style: normal
+        display: inline-block
+        text-decoration: inherit
+        content: ""
+        left: 11px
+        position: absolute
+        color: rgba(0, 0, 0, 0.3)
+        font-size: 14px
+      &:hover .delete-edit-links
+        visibility: visible
+        opacity: 1
+        +transition(visibility .4s, opacity .4s)
   .description-expand-button
     color: $darker-grey
     float: right
@@ -214,8 +246,10 @@ a
   .category-value
     font-style: italic
 
-#new-topic-initiator, #filter
+#new-topic-initiator, #filter, .cursor-default
   cursor: default
+
+#new-topic-initiator, #filter
   width: calc(100% - 8px)
 
 #more-filter-options
@@ -233,57 +267,68 @@ a
   vertical-align: top
 
 .delete
-  background-color: rgb(222, 177, 144)
   text-align: center
+  // border: 1px solid $light-grey
+  +box-shadow(0px 2px 1px rgba(0,0,0,0.1))
   a
-    width: 50px
+    width: 57px
     display: inline-block
-  &:hover
-    background-color: rgb(222, 177, 144) !important
+  &:before
+    content: "" !important
 
 .highlight
-  border: 2px solid orange !important
+  border: 2px solid $feature-highlight-color !important
   margin-left: 1px !important
   margin-right: 1px !important
   padding-left: 4px !important
   padding-right: 4px !important
   stroke-width: 6px
-  stroke: orange
+  stroke: $feature-highlight-color
   stroke-opacity: 1
   fill: rgba(0,0,0,0)
 
 .deleted
   color: dimgrey !important
+  &:before
+    content: "\f05e" !important
   .contribution-description, .tag-title
     text-decoration: line-through
   .contribution-description-tag
     +opacity(0.5)
 
-#map_backbutton
+#back_flag
   display: block
   position: absolute
-  bottom: 10px
-  right: calc(0% + #{$sidebar-width} + 20px)
-  width: 130px
-  height: 170px
-  text-align: center
-  cursor: pointer
-  color: darken($green, 10)
+  right: calc(0% + #{$sidebar-width})
+  width: 40px
+  height: 50px
+  text-align: left
+  background-color: $sidebar-background
+  border-radius: 25px 0px 0px 25px
+  background-image: linear-gradient(to right, darken($sidebar-background, 10), $sidebar-background)
+  +transition(width .4s)
+  white-space: nowrap
+  top: 32px
+  .icon
+    font-size: 50px
+    margin-left: 12px
+  span.text
+    vertical-align: middle
+    position: relative
+    bottom: 12px
+    padding-left: 7px
   &:hover
-    text-shadow: 0px 0px 3px $green
-  .backtext
-    font-size: 20px
-    display: block
-    color: darken($green, 20)
-  .backbutton_icon
-    font-size: 150px
-    line-height: 130px
-    margin-top: 20px
+    width: 90px
+    +transition(width .4s)
 
 .reset_filter
   visibility: hidden
+  opacity: 0
+  +transition(visibility .4s, opacity .4s)
 .filter_section:hover .reset_filter
   visibility: visible
+  opacity: 1
+  +transition(visibility .4s, opacity .4s)
 
 .filter-checkboxes
   +column-count(2)

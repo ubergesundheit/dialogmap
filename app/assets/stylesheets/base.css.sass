@@ -1,6 +1,7 @@
 $darker-grey: #303030
 $light-grey: #DEDEDE
-$lighter-grey: #FAFAFA
+$lighter-grey: #FDFDFD //#FAFAFA
+$middle-grey: #9E9E9E
 $default-font-family: 'lato', sans-serif
 
 $sidebar-background: #e8e8e8
@@ -8,6 +9,7 @@ $sidebar-background: #e8e8e8
 $green: #2ecc71
 $red: #e74c3c
 
+$feature-highlight-color: orange
 
 $tag-border-color: #505050
 $feature-tag-color: rgba(81, 191, 65, 1) // #87D37C
@@ -34,24 +36,3 @@ $sidebar-width: 450px
   font-style: italic
   font-weight: 400
   src: local('Lato Italic'), local('Lato-Italic'), url(//themes.googleusercontent.com/static/fonts/lato/v7/oUan5VrEkpzIazlUe5ieaA.woff) format('woff')
-
-
-@mixin stroke($width, $color)
-  $width: $width + 0
-  $shadow: 0 0 0 transparent
-  $i: 0
-  $w: 1
-
-  @while ($i < $width)
-    $i: $i + 1
-    $j: 0
-    $w: $w + 2
-
-    @for $r from 1 through $w
-      @for $c from 1 through $w
-        $x: $c - ceil($w / 2)
-        $y: $r - ceil($w / 2)
-
-        $shadow: #{$shadow}, #{$x}px #{$y}px 0 $color
-
-  text-shadow: $shadow

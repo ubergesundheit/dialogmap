@@ -16,12 +16,15 @@ angular.module('DialogMapApp').service "colorService", ->
     "##{hash.toString(16).slice(0,6)}"
 
   @lightenColor = (input) ->
-    Spectra(input).desaturate(10).lighten(35).rgbaString()
+    if input?
+      Spectra(input).desaturate(10).lighten(35).rgbaString()
 
   @highlightColor = (input) ->
-    Spectra(input).lighten(30).rgbaString()
+    if input?
+      Spectra(input).lighten(30).rgbaString()
 
   @complementColor = (input) ->
-    Spectra(input).complement().rgbaString()
+    if input?
+      Spectra(input).complement().rgbaString()
 
   return

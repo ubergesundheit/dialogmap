@@ -123,7 +123,7 @@ angular.module("DialogMapApp").controller "MapController", [
             $timeout ->
               leafletData.getMap('map_main').then (map) ->
                 bounds = L.geoJson($scope.geojson.data).getBounds()
-                map.fitBounds(bounds, { maxZoom: 17, padding: [50,50]}) if Object.keys(bounds).length isnt 0
+                map.fitBounds(bounds, { maxZoom: 17, padding: [55,55]}) if Object.keys(bounds).length isnt 0
                 return
               return
             ,500

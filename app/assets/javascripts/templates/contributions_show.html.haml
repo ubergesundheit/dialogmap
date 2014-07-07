@@ -5,9 +5,7 @@
     :"contribution-id" => "{{contribution.id}}",
     ng_style: "{'background-color': lightenColor(contribution.category.color)}"}
     %h3.contribution-title{ ng_class: "{'expanded-title': contribution.showDescription}"} {{ contribution.title }}
-    %a
-      %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
-    .contribution-description.description-box{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
+    %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
     .contribution-info
       von
       {{ contribution.user.email }}
@@ -31,7 +29,9 @@
             %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
       .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
         %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
-          Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
+        Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
+    .contribution-description{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
     %a.contribution-links{ :"ui-sref" => "contribution({ id: contribution.id })" }
+      %i.fa.fa-angle-double-right.reply-arrow
       Antworten
       %span{ ng_show: "contribution.childContributions.length > 0" } anzeigen ({{contribution.childContributions.length}})

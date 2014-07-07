@@ -48,6 +48,7 @@ angular.module "DialogMapApp", [
               Contribution.abort()
               Contribution.currentContribution = undefined
               Contribution.getContribution()
+              $rootScope.$broadcast 'resetHighlight'
               return
             ]
 
@@ -58,8 +59,10 @@ angular.module "DialogMapApp", [
           a: [
             "Contribution"
             "$stateParams"
-            (Contribution, $stateParams) ->
+            "$rootScope"
+            (Contribution, $stateParams, $rootScope) ->
               Contribution.fetchAndSetCurrentContribution($stateParams.id)
+              $rootScope.$broadcast 'resetHighlight'
               return
             ]
 ] #<leaflet center='muenster' controls='controls' event-broadcast='events' geojson='geojson' id='map_main' tiles='tiles'></leaflet>

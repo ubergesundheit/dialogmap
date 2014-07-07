@@ -1,64 +1,70 @@
-.contribution{ ng_show: "Contribution.currentContribution" }
-  %a.contribution-links{ ui_sref: "contributions" }
-    zurück
-  .contribution-info
-    {{ Contribution.currentContribution.user.email }}
-    schrieb
-    {{ Contribution.currentContribution.createdAt | amCalendar}}
-  .contribution-category-container{ title: '{{Contribution.currentContribution.category.id }} | {{Contribution.currentContribution.activity.id }}' }
-    .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}" }
-    %span.category-title{ ng_style: "{'color': Contribution.currentContribution.category.color}" } {{Contribution.currentContribution.category.id }}
-    |
-    .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
-    {{ Contribution.currentContribution.activity.id }}
-    |
-    %span{ ng_repeat: "c in Contribution.currentContribution.content" }
-      {{ c.id }}{{ !$last == true ? ', ' : ''}}
-    %span{ ng_show: "Contribution.currentContribution.startDate && Contribution.currentContribution.endDate" }
-      |
-      %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
-        Beginn
-        {{Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}
-        Ende
-        {{Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}
+.contribution.cursor-default{ ng_show: "Contribution.currentContribution", ng_style: "{'border-top': '10px solid '+ lightenColor(Contribution.currentContribution.category.color)}" }
+  -# %a.contribution-links{ ui_sref: "contributions" }
+  -#   zurück
+
   %h2 {{ Contribution.currentContribution.title }}
-  .contribution-description{ contribution_description: "Contribution.currentContribution.description" }
-  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit" }
-  .contribution-links{ ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
-    %a{ ng_click: "startContributionEdit(Contribution.currentContribution.id)"} Beitrag bearbeiten
-  .children-contributions.contribution-list{ ng_repeat: "contribution in Contribution.currentContribution.childContributions", ng_show: "Contribution.currentContribution.childContributions" }
-    .contribution{ ng_hide: "contribution.deleting", ng_class: "{deleted: contribution.deleted}" }
+  .contribution-info
+    von
+    {{ Contribution.currentContribution.user.email }}
+    am
+    {{ Contribution.currentContribution.createdAt | amCalendar}}
+  .contribution-category-container
+    .category-columns
+      %div.category-column
+        %span{ title: "Akteur: {{Contribution.currentContribution.category.id}}" }
+          %span.category-title Akteur:
+          .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}"}
+          %span.category-value {{Contribution.currentContribution.category.id }}
+        %br
+        %span{ title: "Aktivität: {{Contribution.currentContribution.activity.id}}"}
+          %span.category-title Aktivität:
+          .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
+          %span.category-value {{ Contribution.currentContribution.activity.id }}
+      %div.category-column
+        %span.category-title.content-title Inhalte:
+        %span{ ng_repeat: "c in Contribution.currentContribution.content" }
+          %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
+    .time-limit{ ng_show: "Contribution.currentContribution.startDate && Contribution.currentContribution.endDate" }
+      %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
+      Beginn <span am-time-ago="Contribution.currentContribution.startDate"></span>, Ende <span am-time-ago="Contribution.currentContribution.endDate"></span>
+  .edit-link{ ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
+    %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(Contribution.currentContribution.id)", title: "Beitrag bearbeiten" }
+  .contribution-description{ contribution_description: "Contribution.currentContribution.description", ng_hide: "currentlyEditing === Contribution.currentContribution.id" }
+  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit", ng_show: "currentlyEditing === Contribution.currentContribution.id" }
+    %h4 Thema bearbeiten
+  .children-contributions{ ng_repeat: "contribution in Contribution.currentContribution.childContributions", ng_show: "Contribution.currentContribution.childContributions" }
+    .contribution.cursor-default{ ng_hide: "contribution.deleting", ng_class: "{deleted: contribution.deleted}" }
+      .delete-edit-links{ ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
+        %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(contribution.id)", title: "Beitrag bearbeiten" }
+        %i.fa.fa-trash-o.pointer.delete-edit-icon{ ng_click: "contribution.deleting = true", title: "Beitrag löschen" }
       .contribution-info
         {{ contribution.user.email }}
         schrieb
         {{ contribution.createdAt | amCalendar }}
-      .contribution-description{ contribution_description: "contribution.description" }
-      .contribution-info.info-below{ ng_show: "contribution.createdAt !== contribution.updatedAt || contribution.deleted" }
-        {{ contribution.updatedAt | amCalendar }} {{ contribution.deleted ? 'gelöscht' : 'bearbeitet' }}
+      .contribution-description{ contribution_description: "contribution.description", ng_hide: "currentlyEditing === contribution.id" }
+      .contribution-info.info-below{ title: "{{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}"}
+        {{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}
         %span{ ng_show: "contribution.deleteReason" }
-          %br
           Grund: {{ contribution.deleteReason }}
-      .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit" }
-      .contribution-links{ ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
-        %a{ ng_click: "startContributionEdit(contribution.id)"} Beitrag bearbeiten
-        &#448;
-        %a{ ng_click: "contribution.deleting = true" } Beitrag löschen
+      .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit", ng_show: "currentlyEditing === contribution.id" }
+        %h4 Beitrag bearbeiten
     .contribution.delete{ ng_show: "contribution.deleting" }
       %h3 Beitrag wirklich löschen?
       %br
-      %input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 50 Zeichen)", maxlength: "50" }
+      %input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 30 Zeichen)", maxlength: "30" }
       %br
       %br
       %a.btn.btn--s.btn--green{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja
       %a.btn.btn--s.btn--red{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined" } Nein
   %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
     Noch keine Antworten &hellip;
-  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}" }
+  .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", ng_show: "currentlyEditing === 'new'" }
+    %h4 Antwort verfassen
   .contribution-links{ ng_hide: "Contribution.composing" }
-    %a{ ng_hide: "Contribution.composing", ng_click: "startAnswer(Contribution.currentContribution.id)" } Antwort verfassen
-    &#448;
-    %a{ ui_sref: "contributions" } zurück
-.contribution{ ng_hide: "loading || Contribution.currentContribution" }
+    %a{ ng_hide: "Contribution.composing", ng_click: "startAnswer(Contribution.currentContribution.id)" }
+      %i.fa.fa-angle-double-right.reply-arrow
+      Antwort verfassen
+.contribution{ ng_show: "!Contribution.currentContribution" }
   Dieser Beitrag wurde nicht gefunden :(
   %a.contribution-links{ ui_sref: "contributions" }
     zurück
