@@ -1,0 +1,9 @@
+DEVISE_SECRET_KEY=swaghettiYolonaise
+SECRET_KEY_BASE=swaghettiYolonaise
+DIALOG_MAP_DATABASE_PASSWORD=swaghettiYolonaise
+OAUTH_FACEBOOK_KEY=swaghettiYolonaise
+OAUTH_FACEBOOK_SECRET=swaghettiYolonaise
+OAUTH_TWITTER_KEY=swaghettiYolonaise
+OAUTH_TWITTER_SECRET=swaghettiYolonaise
+OAUTH_GOOGLE_KEY=swaghettiYolonaise
+OAUTH_GOOGLE_SECRET=swaghettiYolonaise

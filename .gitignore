@@ -17,3 +17,6 @@
 # Ignore chef stuff
 infrastructure/cookbooks/
 infrastructure/nodes/localhost.json
+
+# Ignore .rbenv-vars containing oauth secrets.. n' stuff
+.rbenv-vars
