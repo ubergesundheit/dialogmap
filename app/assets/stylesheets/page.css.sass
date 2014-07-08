@@ -300,16 +300,17 @@ a
   display: block
   position: absolute
   right: calc(0% + #{$sidebar-width})
-  width: 40px
+  width: 90px
   height: 50px
   text-align: left
   background-color: $sidebar-background
   border-radius: 25px 0px 0px 25px
-  background-image: linear-gradient(to right, darken($sidebar-background, 10), $sidebar-background)
-  +transition(width .4s, margin-right .2s)
+  background-image: linear-gradient(to right, darken($sidebar-background, 10), $sidebar-background 40%)
+  +transition(margin-right .4s)
   white-space: nowrap
   top: 32px
   +user-select(none)
+  margin-right: -50px
   .icon
     font-size: 50px
     margin-left: 12px
@@ -319,13 +320,13 @@ a
     bottom: 12px
     padding-left: 7px
   &:hover
-    width: 90px
-    +transition(width .4s)
+    // width: 90px
+    margin-right: 0px
+    +transition(margin-right .4s)
 
 .hidden_back_flag
-  margin-right: -40px
-  width: 40px !important
-  +transition(width .4s, margin-right .2s)
+  margin-right: -90px !important
+  +transition(margin-right .4s)
 
 .reset_filter
   visibility: hidden
