@@ -13,7 +13,6 @@ angular.module("DialogMapApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
-      scroller: angular.element('#contributions-scroller')
       createCategorySearchChoice: (term) ->
         {id: term, text: "Neuer Akteur: #{term}"}
       createActivitySearchChoice: (term) ->
@@ -98,7 +97,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
         angular.element(".contribution_input_replace[data-id=#{id}]").append inputAreaHtml
         Contribution.startAnswer(id)
         $timeout ->
-          $scope.scroller.scrollTop(9999)
+          angular.element('#contributions-scroller').scrollTop(9999)
           return
         return
 
@@ -116,7 +115,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
           return
         Contribution.start(id)
         $timeout ->
-          $scope.scroller.scrollTop(appendElement.position().top)
+          angular.element('#contributions-scroller').scrollTop(appendElement.position().top)
           return
         return
 
@@ -141,8 +140,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
       angular.element(".contribution-description-tag[feature-tag=#{data.feature_id}]").addClass('highlight')
       contribution = angular.element(".contribution[contribution-id=#{data.contribution_id}]")
       contribution.addClass('contribution-hover')
-      if !data.dontScroll and !contribution?
-        $scope.scroller.scrollTop(contribution.position().top)
+      if !data.dontScroll and contribution? and contribution.position? and contribution.position()?
+        angular.element('#contributions-scroller').scrollTop(contribution.position().top)
 
       return
 

@@ -306,9 +306,10 @@ a
   background-color: $sidebar-background
   border-radius: 25px 0px 0px 25px
   background-image: linear-gradient(to right, darken($sidebar-background, 10), $sidebar-background)
-  +transition(width .4s)
+  +transition(width .4s, margin-right .2s)
   white-space: nowrap
   top: 32px
+  +user-select(none)
   .icon
     font-size: 50px
     margin-left: 12px
@@ -320,6 +321,11 @@ a
   &:hover
     width: 90px
     +transition(width .4s)
+
+.hidden_back_flag
+  margin-right: -40px
+  width: 40px !important
+  +transition(width .4s, margin-right .2s)
 
 .reset_filter
   visibility: hidden

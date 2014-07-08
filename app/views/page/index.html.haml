@@ -4,7 +4,7 @@
     %leaflet{ id: "map_main", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
   #ui_container{ ng_controller: "SidebarController" }
 
-    #back_flag.pointer{ title: "zurück", ng_show: "$state.is('contribution') && !loading", ui_sref: "contributions" }
+    #back_flag.pointer{ title: "zurück", ng_class: "{hidden_back_flag: $state.is('contributions') || loading === false}", ui_sref: "contributions" }
       = fa_icon "angle-left", class: "icon"
       %span.text zurück
     = fa_icon "info", id: 'app_info_button', ng_dialog: "app_info_modal.html", ng_dialog_class: "ngdialog-theme-default", ng_dialog_close_previous: true
