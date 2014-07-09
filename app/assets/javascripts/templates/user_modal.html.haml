@@ -46,6 +46,11 @@
     %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
 
   %form{ id: "login_form", name: "login_form", novalidate: true, ng_hide: "showLoginTab" }
+    .social-buttons-container.center
+      %i.fa.fa-login-fcbk.social-login-button{ ng_click: "initSocialLogin('facebook')" } Facebook
+      %i.fa.fa-login-twtr.social-login-button{ ng_click: "initSocialLogin('twitter')" } Twitter
+      %i.fa.fa-login-ggl.social-login-button{ ng_click: "initSocialLogin('google_oauth2')" } Google
+    .center oder traditionell:
     .field_label_container
       .field_label E-Mail
     %input.username{ name: "email", ng_model: "loginCredentials.email" }
