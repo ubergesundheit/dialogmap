@@ -48,10 +48,10 @@
       %a.btn.btn--s.btn--red.user-button{ ng_click: "closeThisDialog()" } Abbrechen
 
   %form{ id: "login_form", name: "login_form", novalidate: true, ng_hide: "showLoginTab" }
-    .center
-      %i.fa.fa-login-fcbk.pointer{ ng_click: "initSocialLogin('facebook')" } Facebook
-      %i.fa.fa-login-twtr.pointer{ ng_click: "initSocialLogin('twitter')" } Twitter
-      %i.fa.fa-login-ggl.pointer{ ng_click: "initSocialLogin('google_oauth2')" } Google
+    .social-buttons-container.center
+      %i.fa.fa-login-fcbk.social-login-button{ ng_click: "initSocialLogin('facebook')" } Facebook
+      %i.fa.fa-login-twtr.social-login-button{ ng_click: "initSocialLogin('twitter')" } Twitter
+      %i.fa.fa-login-ggl.social-login-button{ ng_click: "initSocialLogin('google_oauth2')" } Google
     .center oder traditionell:
     .field_label_container
       .field_label E-Mail
