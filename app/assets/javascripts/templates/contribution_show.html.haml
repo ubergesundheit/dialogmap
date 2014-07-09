@@ -1,7 +1,4 @@
 .contribution.cursor-default{ ng_show: "Contribution.currentContribution", ng_style: "{'border-top': '10px solid '+ lightenColor(Contribution.currentContribution.category.color)}" }
-  -# %a.contribution-links{ ui_sref: "contributions" }
-  -#   zurück
-
   %h2 {{ Contribution.currentContribution.title }}
   .contribution-info
     von
@@ -49,13 +46,12 @@
       .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit", ng_show: "currentlyEditing === contribution.id" }
         %h4 Beitrag bearbeiten
     .contribution.delete{ ng_show: "contribution.deleting" }
-      %h3 Beitrag wirklich löschen?
-      %br
-      %input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 30 Zeichen)", maxlength: "30" }
-      %br
-      %br
-      %a.btn.btn--s.btn--green{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja
-      %a.btn.btn--s.btn--red{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined" } Nein
+      %h3
+        %i.fa.fa-exclamation-triangle
+        Beitrag wirklich löschen?
+      %i.fa.fa-times.pointer.abort-submission-button{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined", title: "Abbrechen"  }
+      %input.delete-reason-input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 30 Zeichen)", maxlength: "30" }
+      %i.fa.fa-check.submit-button.pointer{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja, Beitrag löschen!
   %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
     Noch keine Antworten &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", ng_show: "currentlyEditing === 'new'" }

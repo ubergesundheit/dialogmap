@@ -267,14 +267,16 @@ a
   vertical-align: top
 
 .delete
+  cursor: default
   text-align: center
-  // border: 1px solid $light-grey
-  +box-shadow(0px 2px 1px rgba(0,0,0,0.1))
   a
     width: 57px
     display: inline-block
   &:before
     content: "" !important
+  input
+    display: block
+    margin: 25px auto
 
 .highlight
   border: 2px solid $feature-highlight-color !important
