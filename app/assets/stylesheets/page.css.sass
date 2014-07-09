@@ -347,16 +347,19 @@ a
     font-size: 14px
     line-height: 16px
 
+.submit-button
+  display: block
+  text-align: right
+  +transition(color .4s)
+  &:hover
+    color: $green
+    +transition(color .3s)
+
 .contribution-form
   .submit-button
-    display: block
-    text-align: right
     margin-top: 8px
     margin-right: 4px
-    +transition(color .4s)
-    &:hover
-      color: $green
-      +transition(color .3s)
+
 .abort-submission-button
   float: right
   margin-top: -26px

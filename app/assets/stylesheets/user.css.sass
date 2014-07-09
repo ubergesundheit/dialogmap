@@ -1,4 +1,4 @@
-#login_form, #register_form
+#login_form, #register_form, #modal_user
   width: 70%
   margin: auto
   input
@@ -27,11 +27,15 @@
     font-size: 11px
     font-style: italic
 
-  .button_container
-    text-align: center
+  .user-email
+    font-style: italic
+    margin: 10px 0px
 
-  .user-button
-    padding: 0.5em 9px
+  .logout-link
+    &:hover
+      color: firebrick
+    &:before
+      margin: 0px 4px
 
 #flash
   border: 1px dashed firebrick

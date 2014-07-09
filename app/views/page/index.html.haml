@@ -13,10 +13,13 @@
       = image_tag("loading.gif", class: "loading", loading: true)
       .sidebar-top
         #help
-          = fa_icon "question"
           %a{ ng_dialog: "help_modal.html", ng_dialog_class: "ngdialog-theme-default help-modal", ng_dialog_close_previous: true }
+            %i.fa.fa-question
             Hilfe
-        #user{ ng_include: "'sidebar_user.html'" }
+        #user
+          %a{ href: "", ng_click: "User.showUserModal()" }
+            %i.fa.fa-user
+            {{ User.user.email || "Einloggen/Registrieren" }}
 
       .contribution#new-topic-initiator{ ng_hide: "$state.is('contribution')" }
         %h3 neues Thema erstellen

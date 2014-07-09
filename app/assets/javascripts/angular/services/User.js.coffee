@@ -92,7 +92,7 @@ angular.module('DialogMapApp')
         ngDialog.open
           template: 'user_modal.html'
           scope: scope
-          showClose: false
+          # showClose: false
       return
 
     _user.logout = ->
