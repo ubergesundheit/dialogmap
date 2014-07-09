@@ -6,6 +6,11 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   config.secret_key = ENV["DEVISE_SECRET_KEY"]
 
+
+  config.omniauth :facebook, ENV["OAUTH_FACEBOOK_KEY"], ENV["OAUTH_FACEBOOK_SECRET"]
+  config.omniauth :twitter, ENV["OAUTH_TWITTER_KEY"], ENV["OAUTH_TWITTER_SECRET"]
+  config.omniauth :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET'], scope: 'email'
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
