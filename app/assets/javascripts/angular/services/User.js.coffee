@@ -22,7 +22,8 @@ angular.module('DialogMapApp')
   'Auth'
   'ngDialog'
   '$rootScope'
-  (Auth, ngDialog, $rootScope) ->
+  '$timeout'
+  (Auth, ngDialog, $rootScope, $timeout) ->
     _user = {}
 
     _user.isAuthenticated = Auth.isAuthenticated
@@ -85,6 +86,23 @@ angular.module('DialogMapApp')
           _user.user = undefined
           scope.authenticated = _user.isAuthenticated()
           return
+      initSocialLogin: (provider) ->
+        dualScreenLeft = (if window.screenLeft isnt `undefined` then window.screenLeft else screen.left)
+        dualScreenTop = (if window.screenTop isnt `undefined` then window.screenTop else screen.top)
+        width = (if window.innerWidth then window.innerWidth else (if document.documentElement.clientWidth then document.documentElement.clientWidth else screen.width))
+        height = (if window.innerHeight then window.innerHeight else (if document.documentElement.clientHeight then document.documentElement.clientHeight else screen.height))
+        left = ((width / 2) - (1000 / 2)) + dualScreenLeft
+        top = ((height / 2) - (650 / 2)) + dualScreenTop
+        socialLoginWindow = window.open(window.location.origin+"/api/users/auth/#{provider}", "socialLoginWindow", "width=1000,height=650,top=#{top},left=#{left},status=yes,scrollbars=yes,resizable=yes")
+        socialLoginWindow.focus()
+        # check if the window has been closed and then try to login..
+        (checkLoginWindowClosed = ->
+          if socialLoginWindow.closed is true
+            Auth.currentUser().then handleUser
+          else
+            $timeout(checkLoginWindowClosed,500)
+          return)()
+        return
 
     # show the User Modal (Login/Register/User signout)
     _user.showUserModal = ->
