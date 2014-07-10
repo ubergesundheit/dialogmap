@@ -17,7 +17,7 @@ class Contribution < ActiveRecord::Base
 
   after_save :update_category_activity_content
 
-  default_scope { order('created_at ASC') }
+  default_scope { includes(:child_contributions).includes(:features).includes(:references).order('created_at ASC') }
 
   scope :within, -> (bbox_string) {
     where(id: Feature.within(bbox_string).map { |f| f.contribution_id })
