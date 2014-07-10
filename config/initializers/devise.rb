@@ -9,7 +9,7 @@ Devise.setup do |config|
 
   config.omniauth :facebook, ENV["OAUTH_FACEBOOK_KEY"], ENV["OAUTH_FACEBOOK_SECRET"]
   config.omniauth :twitter, ENV["OAUTH_TWITTER_KEY"], ENV["OAUTH_TWITTER_SECRET"]
-  config.omniauth :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET'], scope: 'email'
+  config.omniauth :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET'], { scope: 'openid email' }
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,

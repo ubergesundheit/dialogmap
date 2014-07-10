@@ -27,7 +27,11 @@ class User < ActiveRecord::Base
       # Get the existing user by email if the provider gives us a verified email.
       # If no verified email was provided we assign a temporary email and ask the
       # user to verify it on the next step via UsersController.finish_signup
-      email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
+      if auth.provider != 'google_oauth2'
+        email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
+      else
+        email_is_verified = auth.extra.raw_info.email_verified == "true"
+      end
       email = auth.info.email if email_is_verified
       user = User.where(:email => email).first if email
 
