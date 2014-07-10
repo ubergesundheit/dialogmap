@@ -12,6 +12,8 @@ class UsersController < ApplicationController
       end
     elsif request.get? && current_user.email.match(User::TEMP_EMAIL_REGEX).nil?
       redirect_to '/finish_signin.html'
+    else
+      render :layout => 'application_without_angular'
     end
   end
 

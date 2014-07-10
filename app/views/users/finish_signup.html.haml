@@ -1,0 +1,17 @@
+#add-email
+  %h2 Eine Sache noch..
+  = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form'}) do |f|
+    - if @show_errors && current_user.errors.any?
+      #error_explanation
+        Fehler:
+        - current_user.errors.full_messages.each do |msg|
+          = msg
+    %p.help-block Leider wird bei der Authentifizierung mit Twitter keine E-Mail Adresse mitgeschickt. Bitte vervollständige sie an dieser Stelle, damit andere Benutzer dich eindeutig identifizieren können.
+    = current_user.name
+    #form-group
+      = f.label :email
+      #controls
+        = f.text_field :email, :autofocus => true, :value => '', class: 'form-control', placeholder: 'adresse@provider.de'
+        %p.no-spam Es wird kein Spam versendet!
+    #actions
+      = f.submit 'Speichern und Fortfahren'

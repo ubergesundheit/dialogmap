@@ -1,51 +1,55 @@
 .loading_container{ ng_show: "loading" }
   = image_tag("loading.gif", class: "loading")
 %div{ ng_hide: "authenticated || loading" }
-  %h3 {{ !showLoginTab ? "Einloggen" : "Registrieren" }}
-  %a{ ng_click: "showLoginTab=!showLoginTab; flash = undefined", href:"" } oder {{ showLoginTab ? "einloggen" : "registrieren" }}?
-  #flash{ ng_show: "flash" } {{ flash }}
-  %form{ id: "register_form", name: "register_form", novalidate: true, ng_show: "showLoginTab" }
-    .field_label_container
-      .field_label E-Mail
-    %input#email.username{ name: "email",
-            ng_class: "{error: register_form.email.$dirty && register_form.email.$invalid}",
-            ng_model: "registerCredentials.email",
-            type: "email",
-            required: true }
-    .field_error_container
-      .field_error{ ng_show: "register_form.email.$dirty && register_form.email.$invalid || errors.email" }
-        %span{ ng_show: "errors.email", ng_repeat: "error in errors.email"} {{ error }}
-        %span{ ng_show: "register_form.email.$error.email" } muss eine E-Mail Adresse sein
-    .field_label_container
-      .field_label Passwort
-    %input#password.password{ name: "password",
-            ng_class: "{error: register_form.password.$dirty && register_form.password.$invalid}",
-            ng_model: "registerCredentials.password",
-            type: "password",
-            title: "muss mindestens 6 Zeichen enthalten",
-            required: true,
-            ng_minlength: 6 }
-    .field_error_container
-      .field_error{ ng_show: "register_form.password.$dirty && register_form.password.$invalid || errors.password" }
-        %span{ ng_show: "errors.password", ng_repeat: "error in errors.password"} {{ error }}
-        %span{ ng_show: "register_form.password.$error.minlength" } muss mindestens 6 Zeichen enthalten
-    .field_label_container
-      .field_label Passwortwiederholung
-    %input#password_confirmation.password{ name: "password_confirmation",
-            ng_class: "{error: register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid}",
-            ng_model: "registerCredentials.password_confirmation",
-            type: "password",
-            required: true,
-            password_match: "password",
-            ng_minlength: 6,
-            ui_keypress: "{13:'performRegister()'}" }
-    .field_error_container
-      .field_error{ ng_show: "register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid || register_form.password_confirmation.$error.pwmatch || errors.password_confirmation" }
-        %span{ ng_show: "register_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
-        %span{ ng_show: "errors.password_confirmation", ng_repeat: "error in errors.password_confirmation"} {{ error }}
-    %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
+  %div{ ng_hide: "needConfirmation" }
+    %h3 {{ !showLoginTab ? "Einloggen" : "Registrieren" }}
+    %a{ ng_click: "showLoginTab=!showLoginTab; flash = undefined", href:"" } oder {{ showLoginTab ? "einloggen" : "registrieren" }}?
+    #flash{ ng_show: "flash" } {{ flash }}
+    %form{ id: "register_form", name: "register_form", novalidate: true, ng_show: "showLoginTab" }
+      .field_label_container
+        .field_label E-Mail
+      %input#email.username{ name: "email",
+              ng_class: "{error: register_form.email.$dirty && register_form.email.$invalid}",
+              ng_model: "registerCredentials.email",
+              type: "email",
+              required: true }
+      .field_error_container
+        .field_error{ ng_show: "register_form.email.$dirty && register_form.email.$invalid || errors.email" }
+          %span{ ng_show: "errors.email", ng_repeat: "error in errors.email"} {{ error }}
+          %span{ ng_show: "register_form.email.$error.email" } muss eine E-Mail Adresse sein
+      .field_label_container
+        .field_label Passwort
+      %input#password.password{ name: "password",
+              ng_class: "{error: register_form.password.$dirty && register_form.password.$invalid}",
+              ng_model: "registerCredentials.password",
+              type: "password",
+              title: "muss mindestens 6 Zeichen enthalten",
+              required: true,
+              ng_minlength: 6 }
+      .field_error_container
+        .field_error{ ng_show: "register_form.password.$dirty && register_form.password.$invalid || errors.password" }
+          %span{ ng_show: "errors.password", ng_repeat: "error in errors.password"} {{ error }}
+          %span{ ng_show: "register_form.password.$error.minlength" } muss mindestens 6 Zeichen enthalten
+      .field_label_container
+        .field_label Passwortwiederholung
+      %input#password_confirmation.password{ name: "password_confirmation",
+              ng_class: "{error: register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid}",
+              ng_model: "registerCredentials.password_confirmation",
+              type: "password",
+              required: true,
+              password_match: "password",
+              ng_minlength: 6,
+              ui_keypress: "{13:'performRegister()'}" }
+      .field_error_container
+        .field_error{ ng_show: "register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid || register_form.password_confirmation.$error.pwmatch || errors.password_confirmation" }
+          %span{ ng_show: "register_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
+          %span{ ng_show: "errors.password_confirmation", ng_repeat: "error in errors.password_confirmation"} {{ error }}
+      %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
+  %div{ ng_show: "needConfirmation" }
+    Danke für deine Registrierung. Bitte schau in dein Postfach für die Adresse {{user.email}} und folge den Anweisungen, um deinen Account freizuschalten.
+    %i.fa.fa-check.pointer.submit-button{ ng_click: "needConfirmation = false; showLoginTab = false" } zurück zum Login
 
-  .social-buttons-container.center
+  .social-buttons-container.center{ ng_hide: "showLoginTab" }
     %i.fa.fa-login-fcbk.social-login-button{ ng_click: "initSocialLogin('facebook')" } Facebook
     %i.fa.fa-login-twtr.social-login-button{ ng_click: "initSocialLogin('twitter')" } Twitter
     %i.fa.fa-login-ggl.social-login-button{ ng_click: "initSocialLogin('google_oauth2')" } Google

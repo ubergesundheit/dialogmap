@@ -45,11 +45,14 @@ angular.module('DialogMapApp')
       scope.loginCredentials = {}
       scope.registerCredentials = {}
       scope.loading = false
-      scope.user =
-        email: user.email
-        id: user.id
-      _user.user = scope.user
-      scope.authenticated = _user.isAuthenticated()
+      if user.confirmed is true
+        scope.user =
+          email: user.email
+          id: user.id
+        _user.user = scope.user
+      else
+        scope.needConfirmation = true
+      scope.authenticated = user.confirmed and _user.isAuthenticated()
       # _user._off = $rootScope.$on 'devise:unauthorized', _user._unauthorized
       return
 
@@ -124,6 +127,7 @@ angular.module('DialogMapApp')
       scope.flash = undefined
       scope.loginCredentials = {}
       scope.registerCredentials = {}
+      scope.needConfirmation = false
       return
 
     scope.$on 'ngDialog.opened', (e, $dialog) ->

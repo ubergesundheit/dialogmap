@@ -2,7 +2,13 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   root 'page#index'
-  devise_for :users, path: "api/users", defaults: { format: :json }, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }
+  devise_for :users, path: "api/users", defaults: { format: :json }, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }, skip: [:confirmations]
+
+  as :user do
+    get   '/users/confirm', to: 'confirmations#show',   as: 'user_confirmation'
+    post  '/users/confirm', to: 'confirmations#create'
+    get   '/users/confirm/resend', to: 'confirmations#new',    as: 'new_user_confirmation'
+  end
 
   namespace :api, defaults: { format: :json } do
     get 'contributions/filter_items', to: 'contributions#filter_items'
@@ -12,7 +18,7 @@ Rails.application.routes.draw do
     resources :contributions
   end
 
-  match '/finish_signup/:id' => 'users#finish_signup', via: [:get, :patch], :as => :finish_signup
+  match '/finish_signup/:id' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

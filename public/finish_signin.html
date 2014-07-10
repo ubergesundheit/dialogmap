@@ -5,10 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Login Redirect</title>
     <script>
-      setTimeout('window.close();', 1200);
+      setTimeout('window.close();', 1000);
     </script>
+    <style>
+    p {
+      display: block;
+      text-align: center;
+    }
+    .ellipsis i {
+      opacity: 0;
+      -webkit-animation: dot 1.3s infinite;
+      -webkit-animation-delay: 0.0s;
+      -moz-animation: dot 1.3s infinite;
+      -moz-animation-delay: 0.0s;
+      animation: dot 1.3s infinite;
+      animation-delay: 0.0s;
+    }
+
+    .ellipsis i+i {
+        opacity: 0;
+        -webkit-animation: dot 1.3s infinite;
+        -webkit-animation-delay: 0.2s;
+        -moz-animation: dot 1.3s infinite;
+        -moz-animation-delay: 0.2s;
+        animation: dot 1.3s infinite;
+        animation-delay: 0.2s;
+    }
+
+    .ellipsis i+i+i {
+        opacity: 0;
+        -webkit-animation: dot 1.3s infinite;
+        -webkit-animation-delay: 0.3s;
+        -moz-animation: dot 1.3s infinite;
+        -moz-animation-delay: 0.3s;
+        animation: dot 1.3s infinite;
+        animation-delay: 0.3s;
+    }
+
+    @-webkit-keyframes dot {
+          0% { opacity: 0; }
+         50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    @-moz-keyframes dot {
+        0% { opacity: 0; }
+       50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes dot {
+        0% { opacity: 0; }
+       50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    </style>
   </head>
   <body>
-    <p>Login erfolgreich. Weiterleitung erfolgt</p>
+    <p>Login erfolgreich.<br />Weiterleitung erfolgt in Kürze<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></p>
   </body>
 </html>
