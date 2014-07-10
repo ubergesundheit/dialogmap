@@ -1,7 +1,30 @@
 {
   "app": {
     "appname": "dialog-map",
-    "hostname": "localhost"
+    "hostname": "localhost",
+    "oauth": {
+      "facebook": {
+        "key": "facebook_key",
+        "secret": "facebook_secret"
+      },
+      "twitter": {
+        "key": "twitter_key",
+        "secret": "twitter_secret"
+      },
+      "google": {
+        "key": "google_key",
+        "secret": "google_secret"
+      }
+    },
+    "email": {
+      "smtp": {
+        "host": "smtp.whatever.com",
+        "port": 25,
+        "user": "someuser",
+        "password": "somepassword"
+      },
+      "email_from": "yourmail@provider.com"
+    }
   },
   "users": {
     "deploy_keys": [
