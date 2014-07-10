@@ -46,9 +46,9 @@
     "version": "2.1.2"
   },
   "nginx": {
-    "version": "1.7.1",
+    "version": "1.7.3",
     "passenger": {
-      "version": "4.0.44"
+      "version": "4.0.45"
     }
   },
   "run_list": [
