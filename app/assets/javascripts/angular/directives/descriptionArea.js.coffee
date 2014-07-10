@@ -102,7 +102,6 @@ angular.module("DialogMapApp")
           $event.preventDefault()
           return
 
-      scope.placeholderReplaced = false
       # this should only happening if a contribution is edited..
       if scope.ngModel.description != ""
         featureReplacer = (match, offset, string) ->
@@ -213,31 +212,6 @@ angular.module("DialogMapApp")
 
       else # not editing
         scope.internal = {}
-        element.find('.contribution_descriptioninput').on "activate", ->
-          if scope.placeholderReplaced is false
-            angular.element(@).empty()
-            range = undefined
-            sel = undefined
-            if (sel = document.selection) and document.body.createTextRange
-              range = document.body.createTextRange()
-              range.moveToElementText @
-              range.select()
-            scope.placeholderReplaced = true
-          return
-
-        element.find('.contribution_descriptioninput').focus ->
-          if scope.placeholderReplaced is false
-            if @hasChildNodes() and document.createRange and window.getSelection
-              angular.element(@).empty()
-              range = undefined
-              sel = undefined
-              range = document.createRange()
-              range.selectNodeContents @
-              sel = window.getSelection()
-              sel.removeAllRanges()
-              sel.addRange range
-              scope.placeholderReplaced = true
-          return
 
 
       # Events for Feature creation
