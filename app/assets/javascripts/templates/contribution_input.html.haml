@@ -22,4 +22,5 @@
         Bitte die Felder
         %span{ ng_repeat: "error in Contribution.errors" } {{error}}{{ $last === false ? ',&nbsp;' : '' }}
         ausfüllen
-    %i.fa.fa-check.pointer.submit-button{ ng_click: "Contribution.submit()" } Abschicken
+    %i.fa.fa-check.submit-button
+      %span.pointer{ ng_click: "Contribution.submit()" } Abschicken
