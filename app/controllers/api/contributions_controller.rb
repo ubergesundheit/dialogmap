@@ -1,6 +1,6 @@
 class Api::ContributionsController < Api::BaseController
-  before_action :set_contribution, only: [:show, :update, :destroy]
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :set_contribution, only: [:show, :update, :destroy, :toggle_favorite]
+  before_action :authenticate_user!, only: [:create, :update, :destroy, :toggle_favorite]
 
   # GET /contributions
   # GET /contributions.json
@@ -81,6 +81,15 @@ class Api::ContributionsController < Api::BaseController
     render json: {categories: Contribution.categories, contents: Contribution.contents, activities: Contribution.activities}
   end
 
+  def toggle_favorite
+    if current_user.id == contribution_params[:toggle_favorite_user_id]
+      @contribution.update(contribution_params)
+      render json: @contribution
+    else
+      permission_denied
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_contribution
@@ -117,6 +126,7 @@ class Api::ContributionsController < Api::BaseController
         :activity_icon,
         :start_date,
         :end_date,
+        :toggle_favorite_user_id,
         content: [],
         features_attributes: [
           {

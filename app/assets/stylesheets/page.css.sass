@@ -55,10 +55,13 @@ input[type=text]
 
 a
   cursor: pointer
-  color: rgb(52, 72, 219) //#3498db
+  color: $blue
   text-decoration: none
   +user-select(none)
   +text-shadow(rgba(128,128,128, 0.2) 0px 1px 1px)
+  +transition(color .4s)
+  &:hover
+    color: #3498db
 
 .input_title, .highlighter, textarea.txt, textarea.popup_txt, input,
 .contribution_descriptioninput
@@ -133,7 +136,6 @@ a
   padding: 9px !important
   border: 1px solid rgba(0,0,0,0.2)
   +box-shadow(0px 4px 1px rgba(0, 0, 0, 0.2) !important)
-  +transition(box-shadow .4s, border .4s, background-color .4s)
 
 .contribution-title
   text-overflow: ellipsis
@@ -181,14 +183,7 @@ a
       margin: 4px 0px
   .contribution-info
     font-size: 13px
-    color: lighten($darker-grey,15)
-  .info-below
-    width: 100%
-    text-align: right
-    text-overflow: ellipsis
-    white-space: nowrap
-    overflow: hidden
-    padding: 5px 0px
+    color: lighten($darker-grey,20)
   .contribution-description
     line-height: 24px
     padding: 4px
@@ -196,23 +191,31 @@ a
     +box-shadow(0px 2px 1px rgba(0, 0, 0, 0.2))
   .contribution-links
     display: block
-    text-align: right
-  .edit-link, .delete-edit-links
+    .inline-block
+      display: inline-block
+  .delete-edit-links
     float: right
     color: $middle-grey
-  .delete-edit-links
     opacity: 0
     visibility: hidden
     +transition(visibility .4s, opacity .4s)
-  .edit-link
-    opacity: 1
-    visibility: visible
+    .fa-stack
+      font-size: 12px
+    .ban-stack-adjust
+      color: fade-out(mix(lighten($middle-grey, 10), firebrick, 50), 0.4)
   .delete-edit-icon
     font-size: 14px
+    +transition(color .4s)
     &:hover
       color: $darker-grey
+  .floated-right
+    float: right
   .reply-arrow
-    font-size: 14px
+    &:before
+      font-size: 14px
+  .favorites-container
+    display: inline
+    color: lighten($darker-grey,20)
   .children-contributions
     padding-left: 5px
     .contribution
@@ -233,7 +236,6 @@ a
       &:hover .delete-edit-links
         visibility: visible
         opacity: 1
-        +transition(visibility .4s, opacity .4s)
   .description-expand-button
     color: $darker-grey
     float: right
@@ -245,6 +247,10 @@ a
     margin-top: -26px
   .category-value
     font-style: italic
+
+#parent-contribution:hover .delete-edit-links
+  visibility: visible
+  opacity: 1
 
 #new-topic-initiator, #filter, .cursor-default
   cursor: default
@@ -324,10 +330,8 @@ a
 
 .visible_back_flag
   margin-right: -50px !important
-  +transition(margin-right .4s)
   &:hover
     margin-right: 0px !important
-    +transition(margin-right .4s)
 
 .reset_filter
   visibility: hidden
@@ -336,7 +340,6 @@ a
 .filter_section:hover .reset_filter
   visibility: visible
   opacity: 1
-  +transition(visibility .4s, opacity .4s)
 
 .filter-checkboxes
   +column-count(2)
@@ -354,7 +357,6 @@ a
   +transition(color .4s)
   &:hover
     color: $green
-    +transition(color .3s)
 
 .contribution-form
   .submit-button
@@ -367,4 +369,3 @@ a
   +transition(color .4s)
   &:hover
     color: $red
-    +transition(color .3s)
