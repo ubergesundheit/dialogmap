@@ -33,6 +33,7 @@ gem 'rails-assets-angular-ui-select2'
 gem 'rails-assets-ngQuickDate'
 gem 'rails-assets-spectrajs'
 gem 'rails-assets-angular-perfect-scrollbar'
+gem 'rails-assets-ng-flow'
 
 gem 'color'
 
