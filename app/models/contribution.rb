@@ -9,9 +9,13 @@ class Contribution < ActiveRecord::Base
   accepts_nested_attributes_for :features, reject_if: :features_exist
   accepts_nested_attributes_for :references, reject_if: :references_exist
 
+  attr_accessor :toggle_favorite_user_id
+
   validates_presence_of :description, :user_id, :category, :activity, :content
 
   before_save :lighten_features_colors, if: :about_to_be_deleted?
+
+  before_save :toggle_favorite, if: :favorite_update?
 
   after_save :transform_description
 
@@ -78,6 +82,20 @@ class Contribution < ActiveRecord::Base
 
     def about_to_be_deleted?
       self.deleted
+    end
+
+    def favorite_update?
+      !self.toggle_favorite_user_id.nil?
+    end
+
+    def toggle_favorite
+      favorites_will_change!
+      user_id = self.toggle_favorite_user_id.to_i
+      if self.favorites.include? user_id
+        self.favorites = self.favorites.reject {|f| f == user_id }
+      else
+        self.favorites.push(user_id)
+      end
     end
 
     def lighten_features_colors

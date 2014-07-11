@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'contributions/activities', to: 'contributions#activities'
     get 'contributions/contents', to: 'contributions#contents'
     resources :contributions
+    post 'contributions/:id/toggle_favorite', to: 'contributions#toggle_favorite', as: 'contribution_toggle_favorite'
   end
 
   match '/finish_signup/:id' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup

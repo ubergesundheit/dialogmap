@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708185128) do
+ActiveRecord::Schema.define(version: 20140710192317) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,7 +63,10 @@ ActiveRecord::Schema.define(version: 20140708185128) do
     t.hstore   "properties"
     t.datetime "start_date"
     t.datetime "end_date"
+    t.integer  "favorites",     default: [],                 array: true
   end
+
+  add_index "contributions", ["favorites"], :name => "index_contributions_on_favorites"
 
   create_table "features", force: true do |t|
     t.integer  "contribution_id"

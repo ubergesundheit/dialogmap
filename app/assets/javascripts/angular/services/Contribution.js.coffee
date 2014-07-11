@@ -35,6 +35,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.display_contributions = []
 
     _replaceOrAppendContribution = (contribution) ->
+      _modifyLikedByUser(contribution)
       # update the tree
       if !contribution.parentId? # the contribution is a topic/parent
         replaced = false
@@ -60,6 +61,13 @@ angular.module('DialogMapApp').factory 'Contribution', [
       # also update the current Contribution
       if resource.currentContribution?
         resource.setCurrentContribution(resource.currentContribution.id)
+      return
+
+    _modifyLikedByUser = (contribution) ->
+      if User.isAuthenticated()
+        contribution.favoredByCurrentUser = (contribution.favorites.indexOf(User.user.id) > -1)
+        if contribution.childContributions.length > 0
+          (c.favoredByCurrentUser = (c.favorites.indexOf(User.user.id) > -1)) for c in contribution.childContributions
       return
 
     resource.addInterceptor
@@ -263,6 +271,13 @@ angular.module('DialogMapApp').factory 'Contribution', [
       else
         User._unauthorized()
       return
+    resource.toggleFavorite = (id) ->
+      if User.isAuthenticated()
+        resource.$post("/api/contributions/#{id}/toggle_favorite", {toggle_favorite_user_id: User.user.id})
+      else
+        User._unauthorized()
+      return
+
 
     updateFeatures = (value) ->
       leafletData.getMap('map_main').then (map) ->
