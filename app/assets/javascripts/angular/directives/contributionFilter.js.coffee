@@ -11,10 +11,6 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.selected_activities = {}
       $scope.selected_contents = {}
       $scope.selected_time = false
-      $scope.previously_selected_categories = {}
-      $scope.previously_selected_activities = {}
-      $scope.previously_selected_contents = {}
-      $scope.previously_selected_time = false
       $scope.fetchFilterItems = ->
         $http.get('/api/contributions/filter_items').then (response) ->
           $scope.categories = response.data.categories
@@ -77,37 +73,6 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       scope.$watchCollection 'selected_contents', setAndApplyFilter
       scope.$watchCollection 'selected_time', setAndApplyFilter
       scope.$watch 'filterQuery', setAndApplyFilter
-
-      scope.$watch 'Contribution.currentContribution', (value, oldvalue, scope) ->
-        contributionFilterService.resetFilter()
-        scope.isCurrentContribution = false
-
-        current_category = {}
-        current_activity = {}
-        current_content = {}
-        current_time = {}
-        if value? # there is a currentContribution
-          scope.previously_selected_categories = scope.selected_categories
-          scope.previously_selected_activities = scope.selected_activities
-          scope.previously_selected_contents = scope.selected_contents
-          scope.previously_selected_time = scope.selected_time
-          current_category[value.category.id] = true
-          current_activity[value.activity.id] = true
-          for content in value.content
-            current_content[content.id] = true
-          current_time = (value.startDate? and value.endDate?)
-          scope.isCurrentContribution = true
-        else
-          current_category = scope.previously_selected_categories
-          current_activity = scope.previously_selected_activities
-          current_content = scope.previously_selected_contents
-          current_time = scope.previously_selected_time
-
-        scope.selected_categories = current_category
-        scope.selected_activities = current_activity
-        scope.selected_contents = current_content
-        scope.selected_time = current_time
-        return
 
       scope.$watch 'filterVisible', (value) ->
         filterElem = angular.element('#filter')
