@@ -53,7 +53,6 @@ angular.module('DialogMapApp')
       else
         scope.needConfirmation = true
       scope.authenticated = user.confirmed and _user.isAuthenticated()
-      # _user._off = $rootScope.$on 'devise:unauthorized', _user._unauthorized
       return
 
     handleErrors = (error) ->
@@ -113,7 +112,6 @@ angular.module('DialogMapApp')
         ngDialog.open
           template: 'user_modal.html'
           scope: scope
-          # showClose: false
       return
 
     _user.logout = ->

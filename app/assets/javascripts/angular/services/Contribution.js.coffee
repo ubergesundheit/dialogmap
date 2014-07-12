@@ -35,7 +35,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.display_contributions = []
 
     _replaceOrAppendContribution = (contribution) ->
-      _modifyLikedByUser(contribution)
+      _modifyFavoredByUser(contribution)
       # update the tree
       if !contribution.parentId? # the contribution is a topic/parent
         replaced = false
@@ -63,11 +63,10 @@ angular.module('DialogMapApp').factory 'Contribution', [
         resource.setCurrentContribution(resource.currentContribution.id)
       return
 
-    _modifyLikedByUser = (contribution) ->
-      if User.isAuthenticated()
-        contribution.favoredByCurrentUser = (contribution.favorites.indexOf(User.user.id) > -1)
-        if contribution.childContributions.length > 0
-          (c.favoredByCurrentUser = (c.favorites.indexOf(User.user.id) > -1)) for c in contribution.childContributions
+    _modifyFavoredByUser = (contribution) ->
+      contribution.favoredByCurrentUser = User.isAuthenticated() && (contribution.favorites.indexOf(User.user.id) > -1)
+      if contribution.childContributions.length > 0
+        (c.favoredByCurrentUser = User.isAuthenticated() && (c.favorites.indexOf(User.user.id) > -1)) for c in contribution.childContributions
       return
 
     resource.addInterceptor
@@ -309,6 +308,11 @@ angular.module('DialogMapApp').factory 'Contribution', [
         return
       return
 
+    updateFavoredByCurrentUser = ->
+      if resource.parent_contributions?
+        _modifyFavoredByUser c for c in resource.parent_contributions
+      return
+
     $rootScope.$watch(
       -> resource.category
       updateFeatures
@@ -317,6 +321,11 @@ angular.module('DialogMapApp').factory 'Contribution', [
     $rootScope.$watch(
       -> resource.activity
       updateFeatures
+    )
+
+    $rootScope.$watch(
+      -> User.isAuthenticated()
+      updateFavoredByCurrentUser
     )
 
     resource
