@@ -55,7 +55,7 @@ angular.module('DialogMapApp').service "contributionFilterService",[
         if @_time is true
           (augmented_contributions.push c if c not in augmented_contributions) for c in contributions when c.startDate? and c.endDate?
         if @_query?
-          regex = RegExp(@_query, 'i')
+          regex = RegExp(@_query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
           for c in contributions
             contribution_summary = ''
             traversePathAndAppend = (target, path, key) ->
