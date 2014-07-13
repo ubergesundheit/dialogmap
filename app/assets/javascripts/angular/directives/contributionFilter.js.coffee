@@ -58,7 +58,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
 
         angular.element('#contributions-scroller').scrollTop(0)
 
-        Contribution.filterCount = {
+        scope.filterCount = {
           categories: categories.length
           activities: activities.length
           contents: contents.length
