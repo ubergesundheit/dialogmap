@@ -11,6 +11,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.selected_activities = {}
       $scope.selected_contents = {}
       $scope.selected_time = false
+      $scope.filter_query = ''
       $scope.fetchFilterItems = ->
         $http.get('/api/contributions/filter_items').then (response) ->
           $scope.categories = response.data.categories
@@ -30,7 +31,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         activities = (k for k,v of scope.selected_activities when v == true)
         contents = (k for k,v of scope.selected_contents when v == true)
         time = scope.selected_time
-        query = if scope.filterQuery? then scope.filterQuery.trim() else undefined
+        query = scope.filter_query.trim()
         if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 #or time isnt false
           contributionFilterService.setFilter
             categories: categories
@@ -42,7 +43,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
             activities: activities
             contents: contents
             time: time
-        else if query? and query isnt ''
+        else if query isnt ''
           contributionFilterService.setFilter
             query: query
         else
@@ -63,8 +64,8 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
           activities: activities.length
           contents: contents.length
           time: (if time is true then 1 else 0)
-          query: (if query? and query isnt '' then 1 else 0)
-          all: (categories.length + activities.length + contents.length + (if time is true then 1 else 0) + (if query? and query isnt '' then 1 else 0))
+          query: (if query isnt '' then 1 else 0)
+          all: (categories.length + activities.length + contents.length + (if time is true then 1 else 0) + (if query isnt '' then 1 else 0))
         }
         return
 
@@ -72,12 +73,21 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       scope.$watchCollection 'selected_activities', setAndApplyFilter
       scope.$watchCollection 'selected_contents', setAndApplyFilter
       scope.$watchCollection 'selected_time', setAndApplyFilter
-      scope.$watch 'filterQuery', setAndApplyFilter
+      scope.$watch 'filter_query', setAndApplyFilter
 
       scope.$watch 'filterVisible', (value) ->
         filterElem = angular.element('#filter')
         top = parseInt(filterElem.css('height')) + filterElem.position().top
         angular.element('#contributions-scroller').css('height', "calc(100% - #{top+4}px)")
         return
+
+      scope.resetAllFilters = ->
+        scope.selected_categories = {}
+        scope.selected_activities = {}
+        scope.selected_contents = {}
+        scope.selected_time = false
+        scope.filter_query = ''
+        return
+
       return
 ]

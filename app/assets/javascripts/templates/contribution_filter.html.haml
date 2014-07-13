@@ -1,9 +1,9 @@
 %a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
-  {{ filterVisible === true ? 'weniger' : (filterCount.all !== 0 ? '('+filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
-{{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge angezeigt
+  {{ filterVisible === true ? 'weniger' : (filterCount.all > 0 ? '('+filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
+{{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge{{ filterCount.all > 0 && Contribution.parent_contributions.length > 1 ? 'n' : '' }} angezeigt
 .filter-query-container
-  %input{ type:"text", placeholder: "Suchbegriff", ng_model: "filterQuery" }
-  %i.fa.fa-times.pointer.reset-filter-query{ ng_hide: "(filterQuery == null) || filterQuery.trim() === ''", ng_click: "filterQuery = ''", title: "Suchbegriff zurücksetzen" }
+  %input{ type:"text", placeholder: "Suchbegriff", ng_model: "filter_query" }
+  %i.fa.fa-times.pointer.reset-filter-query{ ng_hide: "filter_query.trim() === ''", ng_click: "filter_query = ''", title: "Suchbegriff zurücksetzen" }
 #contribution-filter{ ng_show: "filterVisible" }
   .filter_section
     %h4
@@ -38,3 +38,5 @@
     %div
       %input{ type: "checkbox", ng_model: 'selected_time' }
         begrenzt
+  #reset-all-filters
+    %a{ ng_click: "resetAllFilters()" } {{ filterCount.all > 0 ? 'Alle Filter zurücksetzen' : '&nbsp;' }}
