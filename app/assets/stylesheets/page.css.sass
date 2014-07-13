@@ -50,6 +50,8 @@ input
   margin-right: 0px
   border: solid $light-grey 1px
   padding: 4px
+  &::-ms-clear
+    display: none
 input[type=text]
   width: 100%
 
@@ -343,6 +345,18 @@ a
 
 .filter-checkboxes
   +column-count(2)
+
+.filter-query-container
+  position: relative
+
+.reset-filter-query
+  color: $middle-grey
+  +transition(color .4s)
+  position: absolute
+  right: 8px
+  top: 8px
+  &:hover
+    color: $darker-grey
 
 .help-modal
   .ngdialog-content

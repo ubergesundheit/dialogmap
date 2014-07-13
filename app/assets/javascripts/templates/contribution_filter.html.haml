@@ -1,7 +1,9 @@
 %a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
   {{ filterVisible === true ? 'weniger' : (Contribution.filterCount.all !== 0 ? '('+Contribution.filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
 {{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge angezeigt
-%input{ type:"text", placeholder: "Suchbegriff", ng_model: "filterQuery" }
+.filter-query-container
+  %input{ type:"text", placeholder: "Suchbegriff", ng_model: "filterQuery" }
+  %i.fa.fa-times.pointer.reset-filter-query{ ng_hide: "(filterQuery == null) || filterQuery.trim() === ''", ng_click: "filterQuery = ''" }
 #contribution-filter{ ng_show: "filterVisible" }
   .filter_section
     %h4
