@@ -71,6 +71,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
 
     resource.addInterceptor
       response: (result, resourceConstructor, context) ->
+        resource.transferInProgress = false
         # make sure the resultData is always an array
         if angular.isArray(result.data) then resultData = result.data else resultData = [result.data]
 
@@ -117,6 +118,7 @@ angular.module('DialogMapApp').factory 'Contribution', [
     resource.category = ""
     resource.activity = ""
     resource.content = []
+    resource.transferInProgress = false
 
     resource.setContributionForEdit = (id) ->
       resource.getContribution(id).then (contrib) ->
@@ -243,24 +245,28 @@ angular.module('DialogMapApp').factory 'Contribution', [
       if User.isAuthenticated()
         $rootScope.$broadcast('Contribution.submit_start')
         if contributionTransformer.validateContribution(@)
-          # this is a defered because the method internally uses the map which
-          # is fetched by a deferred
-          contributionTransformer.createContributionForSubmit(@).then (contribution) ->
-            if resource.id?
-              # update
-              contribution.id = resource.id
-              contribution.parent_id = resource.parentId
-              new resource(contribution).update().then (data) ->
-                $rootScope.$broadcast('Contribution.submitted', data)
+          _convertFlowToBase64 (b64) ->
+            resource.image = b64
+            # this is a defered because the method internally uses the map which
+            # is fetched by a deferred
+            contributionTransformer.createContributionForSubmit(resource).then (contribution) ->
+              if resource.id?
+                # update
+                contribution.id = resource.id
+                contribution.parent_id = resource.parentId
+                new resource(contribution).update().then (data) ->
+                  $rootScope.$broadcast('Contribution.submitted', data)
+                  resource.abort()
+                  return
                 return
-              resource.abort()
-              return
-            else
-              resource.abort()
-              new resource(contribution).create().then (data) ->
-                $rootScope.$broadcast('Contribution.submitted', data)
+              else
+                resource.transferInProgress = true
+                new resource(contribution).create().then (data) ->
+                  $rootScope.$broadcast('Contribution.submitted', data)
+                  resource.abort()
+                  return
                 return
-              return
+            return
       else
         User._unauthorized()
       return
@@ -277,6 +283,19 @@ angular.module('DialogMapApp').factory 'Contribution', [
         User._unauthorized()
       return
 
+    _convertFlowToBase64 = (callback) ->
+      if typeof window.FileReader isnt "function"
+        write "The file API isn't supported on this browser yet."
+        return
+      if resource.flow? and resource.flow.files? and resource.flow.files[0]?
+        fr = new FileReader()
+        fr.onload = ->
+          callback(fr.result)
+          return
+        fr.readAsDataURL resource.flow.files[0].file
+      else
+        callback("")
+      return
 
     updateFeatures = (value) ->
       leafletData.getMap('map_main').then (map) ->

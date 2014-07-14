@@ -18,6 +18,7 @@ angular.module "DialogMapApp", [
   "ui.select2"
   "ngQuickDate"
   "perfect_scrollbar"
+  "flow"
 ]
 .config [
   "$stateProvider"

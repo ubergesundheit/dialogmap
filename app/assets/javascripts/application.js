@@ -16,6 +16,7 @@
 //= require select2
 //= require spectrajs
 //= require perfect-scrollbar
+//= require flow
 //= require angular
 //= require angular-sanitize
 //= require angularjs/rails/resource
@@ -29,6 +30,7 @@
 //= require angular-ui-select2
 //= require ngQuickDate
 //= require angular-perfect-scrollbar
+//= require ng-flow
 //= require mapbox
 //= require angular-leaflet-directive
 //= require L.activearea.js

@@ -127,6 +127,7 @@ class Api::ContributionsController < Api::BaseController
         :start_date,
         :end_date,
         :toggle_favorite_user_id,
+        :image,
         content: [],
         features_attributes: [
           {

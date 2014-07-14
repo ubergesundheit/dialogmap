@@ -17,10 +17,23 @@
         Ende:
         %quick-datepicker{ ng_model: "Contribution.endDate" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
+    %div{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow" }
+      .thumbnail{ ng_show: "$flow.files.length" }
+        %img{"flow-img" => "$flow.files[0]"}
+      %div
+        %i.fa.fa-file-image-o.pointer{"flow-btn" => "", "ng-show" => "!$flow.files.length"}
+          Bild anhängen
+          %input{ style: "visibility: hidden; position: absolute;", type: "file" }
+        %span.btn.btn-info{"flow-btn" => "", "ng-show" => "$flow.files.length"}
+          Bild ändern
+          %input{ style: "visibility: hidden; position: absolute;", type: "file" }
+        %span.btn.btn-danger.ng-hide{ ng_click: "$flow.cancel()", ng_show: "$flow.files.length" }
+          Bild entfernen
+      {{ img.error | json }}
     .errors{ ng_show: "Contribution.errors" }
       %i.fa.fa-exclamation-triangle
         Bitte die Felder
         %span{ ng_repeat: "error in Contribution.errors" } {{error}}{{ $last === false ? ',&nbsp;' : '' }}
         ausfüllen
-    %i.fa.fa-check.submit-button
-      %span.pointer{ ng_click: "Contribution.submit()" } Abschicken
+    .submit-button-container
+      %i.fa.fa-check.pointer.submit-button{ ng_click: "Contribution.submit()", ng_class: "{'spinner': Contribution.transferInProgress}" } {{ Contribution.transferInProgress === true ? 'Bitte warten' : 'Abschicken' }}

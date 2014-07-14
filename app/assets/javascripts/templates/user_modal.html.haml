@@ -44,10 +44,12 @@
         .field_error{ ng_show: "register_form.password_confirmation.$dirty && register_form.password_confirmation.$invalid || register_form.password_confirmation.$error.pwmatch || errors.password_confirmation" }
           %span{ ng_show: "register_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
           %span{ ng_show: "errors.password_confirmation", ng_repeat: "error in errors.password_confirmation"} {{ error }}
-      %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
+      .submit-button-container
+        %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
   %div{ ng_show: "needConfirmation" }
-    Danke für deine Registrierung. Bitte schau in dein Postfach für die Adresse {{user.email}} und folge den Anweisungen, um deinen Account freizuschalten.
-    %i.fa.fa-check.pointer.submit-button{ ng_click: "needConfirmation = false; showLoginTab = false" } zurück zum Login
+    Danke für deine Registrierung.<br />Bitte schau in dein Postfach für die Adresse {{user.email}} und folge den Anweisungen, um deinen Account freizuschalten.
+    .submit-button-container
+      %i.fa.fa-check.pointer.submit-button{ ng_click: "needConfirmation = false; showLoginTab = false" } zurück zum Login
 
   .social-buttons-container.center{ ng_hide: "showLoginTab" }
     %i.fa.fa-login-fcbk.social-login-button{ ng_click: "initSocialLogin('facebook')" } Facebook
@@ -63,9 +65,10 @@
       .field_label Passwort
     %input.password{ name: "password", ng_model: "loginCredentials.password", type: "password", ui_keypress: "{13:'performLogin()'}" }
     .field_error_container
-    %i.fa.fa-check.pointer.submit-button{ ng_click: "performLogin()" } Anmelden
+    .submit-button-container
+      %i.fa.fa-check.pointer.submit-button{ ng_click: "performLogin()" } Anmelden
 
 #modal_user{ ng_show: "authenticated" }
   %h3 Eingeloggt als
-  %p.center.user-email {{ user.email }}
-  %i.fa.fa-power-off.submit-button.pointer.logout-link.center{ ng_click: "performLogout()" } Ausloggen
+  %p.user-email {{ user.email }}
+  %i.fa.fa-power-off.submit-button.pointer.logout-link{ ng_click: "performLogout()" } Ausloggen
