@@ -37,6 +37,8 @@ gem 'rails-assets-ng-flow'
 
 gem 'color'
 
+gem 'carrierwave'
+
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 
