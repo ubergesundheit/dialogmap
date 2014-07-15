@@ -17,13 +17,12 @@
         Ende:
         %quick-datepicker{ ng_model: "Contribution.endDate" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
-    %div{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]&&{true:true, false:false}[$file.size < 1048576]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow"}
+    .image-upload-container{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]&&{true:true, false:false}[$file.size < 1048576]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow"}
       .thumbnail{ ng_show: "$flow.files.length" }
         .image-actions
           %span.fa-stack.pointer{"flow-btn" => "", "ng-show" => "$flow.files.length", "flow-attrs" => "{accept:'image/*'}", title: "Bild austauschen"}
             %i.fa.fa-square.fa-stack-2x
             %i.fa.fa-pencil.fa-stack-1x.fa-inverse
-            %input{ style: "visibility: hidden; position: absolute;", type: "file" }
           %span.fa-stack.pointer{ ng_click: "$flow.cancel()", ng_show: "$flow.files.length", title: "Bild entfernen" }
             %i.fa.fa-square.fa-stack-2x
             %i.fa.fa-times.fa-stack-1x.fa-inverse
@@ -31,7 +30,6 @@
       %div
         %i.fa.fa-file-image-o.pointer{"flow-btn" => "", "ng-show" => "!$flow.files.length", "flow-attrs" => "{accept:'image/*'}"}
           Bild anhängen (jpg,gif,png, maximal 1 MB)
-          %input{ style: "visibility: hidden; position: absolute;", type: "file" }
     .errors{ ng_show: "Contribution.errors" }
       %i.fa.fa-exclamation-triangle
         Bitte die Felder
