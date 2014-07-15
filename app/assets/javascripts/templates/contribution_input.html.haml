@@ -17,14 +17,15 @@
         Ende:
         %quick-datepicker{ ng_model: "Contribution.endDate" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
-    %div{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow" }
+    %div{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]&&{true:true, false:false}[$file.size < 1048576]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow"}
+      {{ $file.size}}
       .thumbnail{ ng_show: "$flow.files.length" }
         %img{"flow-img" => "$flow.files[0]"}
       %div
-        %i.fa.fa-file-image-o.pointer{"flow-btn" => "", "ng-show" => "!$flow.files.length"}
+        %i.fa.fa-file-image-o.pointer{"flow-btn" => "", "ng-show" => "!$flow.files.length", "flow-attrs" => "{accept:'image/*'}"}
           Bild anhängen
           %input{ style: "visibility: hidden; position: absolute;", type: "file" }
-        %span.btn.btn-info{"flow-btn" => "", "ng-show" => "$flow.files.length"}
+        %span.btn.btn-info{"flow-btn" => "", "ng-show" => "$flow.files.length", "flow-attrs" => "{accept:'image/*'}"}
           Bild ändern
           %input{ style: "visibility: hidden; position: absolute;", type: "file" }
         %span.btn.btn-danger.ng-hide{ ng_click: "$flow.cancel()", ng_show: "$flow.files.length" }
