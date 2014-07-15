@@ -30,7 +30,9 @@
       .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
         %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
         Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
-    .contribution-description{ contribution_description: "contribution.description", ng_show: "contribution.showDescription" }
+    .thumbnail{ ng_show: "contribution.imageUrl && contribution.showDescription" }
+      %img{ ng_src: "{{contribution.imageUrl}}" }
+    .contribution-description{ contribution_description: "contribution.description", ng_show: "contribution.showDescription", ng_class: "{'with-image': contribution.imageUrl}" }
     .contribution-links
       .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
         {{contribution.favorites.length}}&times;

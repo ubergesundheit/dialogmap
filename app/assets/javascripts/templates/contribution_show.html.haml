@@ -26,12 +26,14 @@
         %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
         Beginn <span am-time-ago="Contribution.currentContribution.startDate"></span>, Ende <span am-time-ago="Contribution.currentContribution.endDate"></span>
 
-    .delete-edit-links
+    .delete-edit-links.parent-delete-edit-link
       %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(Contribution.currentContribution.id)", title: "Beitrag bearbeiten", ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
       %span.fa-stack.delete-edit-icon.pointer{ title: "Beitrag {{ Contribution.currentContribution.favoredByCurrentUser === true ? 'nicht mehr' : '' }} favorisieren", ng_click: "Contribution.toggleFavorite(Contribution.currentContribution.id)", ng_hide: "Contribution.currentContribution.user.id === User.user.id || Contribution.composing" }
         %i.fa.fa-heart.fa-stack-1x.heart-stack-adjust
         %i.fa.fa-ban.fa-stack-2x.ban-stack-adjust{ ng_show: "Contribution.currentContribution.favoredByCurrentUser" }
-    .contribution-description{ contribution_description: "Contribution.currentContribution.description", ng_hide: "currentlyEditing === Contribution.currentContribution.id" }
+    .thumbnail{ ng_show: "Contribution.currentContribution.imageUrl" }
+      %img{ ng_src: "{{Contribution.currentContribution.imageUrl}}" }
+    .contribution-description{ contribution_description: "Contribution.currentContribution.description", ng_hide: "currentlyEditing === Contribution.currentContribution.id", ng_class: "{'with-image': Contribution.currentContribution.imageUrl}" }
 
     .contribution-info
       .favorites-container{ title: "{{ (Contribution.currentContribution.favoredByCurrentUser) === true ? 'Von mir und '+(Contribution.currentContribution.favorites.length-1)+' anderen favorisiert.'  : Contribution.currentContribution.favorites.length+' mal favorisiert.' }}"}
@@ -56,8 +58,9 @@
         {{ contribution.user.email }}
         schrieb
         {{ contribution.createdAt | amCalendar }}
-      .contribution-description{ contribution_description: "contribution.description", ng_hide: "currentlyEditing === contribution.id" }
-
+      .thumbnail{ ng_show: "contribution.imageUrl" }
+        %img{ ng_src: "{{contribution.imageUrl}}" }
+      .contribution-description{ contribution_description: "contribution.description", ng_hide: "currentlyEditing === contribution.id", ng_class: "{'with-image': contribution.imageUrl}" }
       .contribution-info
         .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
           {{contribution.favorites.length}}&times;
