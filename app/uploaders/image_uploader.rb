@@ -32,14 +32,17 @@ class ImageUploader < CarrierWave::Uploader::Base
         :extension => $1.split('/')[1] # "png"
       }
       local_file = FilelessIO.new(Base64.decode64(img_data[:data_str]))
-      basename = "#{model.title} #{model.category} #{model.activity}_#{Digest::MD5.hexdigest((Time.now.to_i / Time.now.nsec.to_f).to_s).last(5)}".parameterize
       filename = "#{basename}.#{img_data[:extension]}"
       # this ensures unique filenames
-      filename = "#{basename}.#{img_data[:extension]}" until model.class.unscoped.where(image: filename).count(:image) > 0
+      filename = "#{basename}.#{img_data[:extension]}" while model.class.unscoped.where(image: filename).count(:image) > 0
       local_file.original_filename = filename
       local_file.content_type = img_data[:type]
       super(local_file)
     end
+  end
+
+  def basename
+    "#{model.title} #{model.category} #{model.activity}_#{Digest::MD5.hexdigest((Time.now.to_i / Time.now.nsec.to_f).to_s).last(5)}".parameterize
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
