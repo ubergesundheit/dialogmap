@@ -1,7 +1,7 @@
 class ContributionSerializer < ActiveModel::Serializer
   attributes :id, :title, :description, :parent_id, :created_at,
     :updated_at, :references, :deleted, :delete_reason, :category, :activity,
-    :content, :start_date, :end_date, :favorites
+    :content, :start_date, :end_date, :favorites, :image_url
     has_many :features, :child_contributions
     has_one :user
 
@@ -19,6 +19,10 @@ class ContributionSerializer < ActiveModel::Serializer
 
   def content
     object.content.map{ |c| { id: c, text: c } } unless object.content == nil
+  end
+
+  def image_url
+    object.image.url
   end
 
 end

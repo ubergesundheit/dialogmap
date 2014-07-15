@@ -1,5 +1,7 @@
 require 'color'
 class Contribution < ActiveRecord::Base
+  mount_uploader :image, ImageUploader
+
   has_many :features
   has_many :references
 

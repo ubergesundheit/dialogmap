@@ -13,7 +13,33 @@ class ImageUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    "static_images"
+    #"uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
+
+  # Mimick an UploadedFile.
+  class FilelessIO < StringIO
+    attr_accessor :original_filename
+    attr_accessor :content_type
+  end
+
+  # Param is a string of the format 'data:<CONTENT_TYPE eg image/gif>;base64,BASE64_ENCODED_IMAGE'
+  def cache!(file)
+    if file.match(%r{data:(.*);base64,(.*)})
+      img_data = {
+        :type =>      $1, # "image/png"
+        :data_str =>  $2, # data string
+        :extension => $1.split('/')[1] # "png"
+      }
+      local_file = FilelessIO.new(Base64.decode64(img_data[:data_str]))
+      basename = "#{model.title} #{model.category} #{model.activity}_#{Digest::MD5.hexdigest((Time.now.to_i / Time.now.nsec.to_f).to_s).last(5)}".parameterize
+      filename = "#{basename}.#{img_data[:extension]}"
+      # this ensures unique filenames
+      filename = "#{basename}.#{img_data[:extension]}" until model.class.unscoped.where(image: filename).count(:image) > 0
+      local_file.original_filename = filename
+      local_file.content_type = img_data[:type]
+      super(local_file)
+    end
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
