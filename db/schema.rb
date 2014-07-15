@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710192317) do
+ActiveRecord::Schema.define(version: 20140715133004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20140710192317) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.integer  "favorites",     default: [],                 array: true
+    t.string   "image"
   end
 
   add_index "contributions", ["favorites"], :name => "index_contributions_on_favorites"
