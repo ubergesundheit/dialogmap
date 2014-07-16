@@ -94,7 +94,7 @@ angular.module("DialogMapApp").controller "MapController", [
         pushFeaturesToCollection = (features) ->
           for f in features
             do ->
-              fCollection.features.push f
+              fCollection.features.push f if f.id not in fCollection.features.map (x) -> x.id
               return
         for contribution in contributions
           do ->

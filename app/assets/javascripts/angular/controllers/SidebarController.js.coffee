@@ -129,7 +129,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
 
       highlightAllRelated: (contribution) ->
         $rootScope.$broadcast('highlightFeature', { feature_id: f.id, contribution_id: contribution.id, dontScroll: true } ) for f in contribution.features
-        $rootScope.$broadcast('highlightFeature', { feature_id: f.ref_id, contribution_id: contribution.id, dontScroll: true } ) for f in contribution.references
+        $rootScope.$broadcast('highlightFeature', { feature_id: f.refId, contribution_id: contribution.id, dontScroll: true } ) for f in contribution.references
         return
 
       resetHighlight: ->
