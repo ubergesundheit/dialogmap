@@ -32,7 +32,7 @@
         %i.fa.fa-heart.fa-stack-1x.heart-stack-adjust
         %i.fa.fa-ban.fa-stack-2x.ban-stack-adjust{ ng_show: "Contribution.currentContribution.favoredByCurrentUser" }
     .thumbnail{ ng_show: "Contribution.currentContribution.imageUrl" }
-      %img{ ng_src: "{{Contribution.currentContribution.imageUrl}}" }
+      %img.pointer{ ng_src: "{{Contribution.currentContribution.imageUrl}}", ng_dialog: "image_modal.html", ng_dialog_class: "ngdialog-theme-default image-modal", ng_dialog_close_previous: true, ng_dialog_data: '{{Contribution.currentContribution.imageUrl}}' }
     .contribution-description{ contribution_description: "Contribution.currentContribution.description", ng_hide: "currentlyEditing === Contribution.currentContribution.id", ng_class: "{'with-image': Contribution.currentContribution.imageUrl}" }
 
     .contribution-info
@@ -59,7 +59,7 @@
         schrieb
         {{ contribution.createdAt | amCalendar }}
       .thumbnail{ ng_show: "contribution.imageUrl" }
-        %img{ ng_src: "{{contribution.imageUrl}}" }
+        %img.pointer{ ng_src: "{{contribution.imageUrl}}", ng_dialog: "image_modal.html", ng_dialog_class: "ngdialog-theme-default image-modal", ng_dialog_close_previous: true, ng_dialog_data: '{{contribution.imageUrl}}' }
       .contribution-description{ contribution_description: "contribution.description", ng_hide: "currentlyEditing === contribution.id", ng_class: "{'with-image': contribution.imageUrl}" }
       .contribution-info
         .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}

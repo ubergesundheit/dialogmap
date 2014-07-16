@@ -31,13 +31,13 @@
         %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
         Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
     .thumbnail{ ng_show: "contribution.imageUrl && contribution.showDescription" }
-      %img{ ng_src: "{{contribution.imageUrl}}" }
+      %img{ ng_src: "{{contribution.imageUrl}}", ng_click: "$event.stopPropagation();", ng_dialog: "image_modal.html", ng_dialog_class: "ngdialog-theme-default image-modal", ng_dialog_close_previous: true, ng_dialog_data: '{{contribution.imageUrl}}' }
     .contribution-description{ contribution_description: "contribution.description", ng_show: "contribution.showDescription", ng_class: "{'with-image': contribution.imageUrl}" }
     .contribution-links
       .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
         {{contribution.favorites.length}}&times;
         .i.fa{ ng_class: "{'fa-heart': contribution.favoredByCurrentUser === true, 'fa-heart-o': contribution.favoredByCurrentUser === false}"}
-      %a.floated-right{ :"ui-sref" => "contribution({ id: contribution.id })" }
+      %a.floated-right{ :"ui-sref" => "contribution({ id: contribution.id })", ng_click: "$event.stopPropagation();" }
         %i.fa.fa-angle-double-right.reply-arrow
           Antworten
           %span{ ng_show: "contribution.childContributions.length > 0" } anzeigen ({{contribution.childContributions.length}})
