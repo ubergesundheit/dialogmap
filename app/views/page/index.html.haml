@@ -22,7 +22,7 @@
             {{ User.user.email || "Einloggen/Registrieren" }}
 
       .contribution#new-topic-initiator{ ng_hide: "$state.is('contribution')" }
-        %h3 neues Thema erstellen
+        %h3 Neues Thema erstellen
         %input{ type:"text", placeholder: "Titel", ng_focus: "startNewTopic()", ng_hide: "Contribution.composing" }
         #new-topic-container
       .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
