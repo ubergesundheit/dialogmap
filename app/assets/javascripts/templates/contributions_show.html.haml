@@ -18,15 +18,14 @@
             %span.category-title Akteur:
             .category-color{ ng_style: "{'background-color': contribution.category.color}"}
             %span.category-value {{contribution.category.id }}
-          %br
+        %div.category-column
           %span{ title: "Aktivität: {{contribution.activity.id}}"}
             %span.category-title Aktivität:
             .maki-icon{ class: "{{contribution.activity.icon}}" }
             %span.category-value {{ contribution.activity.id }}
-        %div.category-column
-          %span.category-title.content-title Inhalte:
-          %span{ ng_repeat: "c in contribution.content" }
-            %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
+        %span.category-title.content-title Inhalte:
+        %span{ ng_repeat: "c in contribution.content" }
+          %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
       .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
         %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
         Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>

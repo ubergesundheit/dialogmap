@@ -168,24 +168,33 @@ a
   text-align: left
   .contribution-category-container
     font-size: 14px
+    .category-columns
+      padding-bottom: 2px
     .category-column
       width: 49%
       vertical-align: top
       display: inline-block
+      text-overflow: ellipsis
+      white-space: nowrap
+      overflow: hidden
+      // for firefox
+      padding-bottom: 1px
+      margin-bottom: -1px
     .category-title
       color: lighten($darker-grey,15)
       font-variant: small-caps
       width: 70px
       text-align: right
       display: inline-block
-    .content-title
-      width: auto
+    // .content-title
+    //   width: auto
     .time-limit
       text-align: center
       margin: 4px 0px
   .contribution-info
     font-size: 13px
     color: lighten($darker-grey,20)
+    margin: 2px 0px
   .contribution-description
     line-height: 24px
     padding: 4px
