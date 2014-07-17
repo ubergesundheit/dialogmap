@@ -31,7 +31,7 @@ angular.module("DialogMapApp")
         clickMarker: (e) ->
           if e is 'bar'
             prompt('Bitte Titel des neuen Markers angeben', '').then (response) ->
-              element.find('#contribution_description_text').focus()
+              angular.element('#contribution_description_text').focus()
               Contribution.startAddMarker()
               replaceSelectedText(response, 'marker', 'feature')
               disableDescriptionArea()
@@ -44,7 +44,7 @@ angular.module("DialogMapApp")
         clickPolygon: (e) ->
           if e is 'bar'
             prompt('Bitte Titel des neuen Polygons angeben', '').then (response) ->
-              element.find('#contribution_description_text').focus()
+              angular.element('#contribution_description_text').focus()
               Contribution.startAddPolygon()
               replaceSelectedText(response, 'polygon', 'feature')
               disableDescriptionArea()
@@ -63,13 +63,13 @@ angular.module("DialogMapApp")
           else
             Contribution.removeReference(id)
             Contribution.stopAddFeatureReference()
-          element.find("[type_id=\"#{id}\"][type=#{type}]").remove()
+          angular.element("[type_id=\"#{id}\"][type=#{type}]").remove()
           enableDescriptionArea()
           return
         clickFeatureReference: (e) ->
           if e is 'bar'
             prompt('Bitte Titel der neuen Vernküpfung angeben', '').then (response) ->
-              element.find('#contribution_description_text').focus()
+              angular.element('#contribution_description_text').focus()
               Contribution.startAddFeatureReference()
               replaceSelectedText(response, 'reference', 'feature_reference')
               disableDescriptionArea()
@@ -82,7 +82,7 @@ angular.module("DialogMapApp")
         clickUrlReference: (e) ->
           if e is 'bar'
             prompt('Bitte Titel des Links angeben', '').then (response) ->
-              element.find('#contribution_description_text').focus()
+              angular.element('#contribution_description_text').focus()
               replaceSelectedText(response, 'reference', 'url_reference')
               disableDescriptionArea()
               showUrlInput(getLastButtonsPos(), 'http://')
@@ -99,6 +99,9 @@ angular.module("DialogMapApp")
           return
         urlOnKeyEnterCallback: ($event) ->
           leaveUrlInputMode()
+          $event.preventDefault()
+          return
+        onBackspace: ($event) ->
           $event.preventDefault()
           return
 
@@ -191,13 +194,16 @@ angular.module("DialogMapApp")
 
         scope.internal =
           description: transformedDescription
-        element.find('#contribution_description_text').html(transformedDescription)
+        angular.element('#contribution_description_text').html(transformedDescription)
 
-        element.find('.tag-title').on 'blur keyup change', (e) ->
+        angular.element('.tag-title').on 'blur keyup change', (e) ->
           parent = angular.element(e.target.parentElement)
           tag_type = parent.attr('type')
           id = parseInt(parent.attr('type_id'))
-          text = e.target.childNodes[0].textContent
+          if e.target.childNodes[0]?
+            text = e.target.childNodes[0].textContent
+          else
+            text = ''
           if tag_type is 'feature'
             # find the feature and change the name!
             leafletData.getMap('map_main').then (map) ->
@@ -220,14 +226,14 @@ angular.module("DialogMapApp")
           e.layer.options.properties = {}
           Contribution.addFeature e.layer._leaflet_id
           # update the tag in the description field
-          element.find('[type_id=new][type=feature]').attr('type_id', e.layer._leaflet_id)
+          angular.element('[type_id=new][type=feature]').attr('type_id', e.layer._leaflet_id)
           enableDescriptionArea()
           hideButtons()
           return
         map.on 'draw:aborted', (e) ->
           enableDescriptionArea()
           # reset input to previous state
-          element.find('#contribution_description_text').html(scope.old_contents)
+          angular.element('#contribution_description_text').html(scope.old_contents)
           updateExternalDescription()
           hideButtons()
           return
@@ -236,14 +242,14 @@ angular.module("DialogMapApp")
       #Events for FeatureReferences
       scope.$on 'Contribution.addFeatureReference', (e, data) ->
         enableDescriptionArea()
-        element.find('[type_id=new][type=feature_reference]').attr('type_id', data.ref_id)
-        element.find("[type_id=#{data.ref_id}][type=feature_reference]")
+        angular.element('[type_id=new][type=feature_reference]').attr('type_id', data.ref_id)
+        angular.element("[type_id=#{data.ref_id}][type=feature_reference]")
           .find('.tag-title')
           .append(" #{descriptionTagHelper.featureReferenceTypeIndicatorHtml(data.title, data.feature_type)}")
         return
 
       disableDescriptionArea = ->
-        ((element.find('#contribution_description_text'))
+        ((angular.element('#contribution_description_text'))
           .attr('contenteditable', false)
           .addClass('disabled_contenteditable')
           )
@@ -251,7 +257,7 @@ angular.module("DialogMapApp")
         return
 
       enableDescriptionArea = ->
-        ((element.find('#contribution_description_text'))
+        ((angular.element('#contribution_description_text'))
           .attr('contenteditable', true)
           .removeClass('disabled_contenteditable')
           )
@@ -261,7 +267,7 @@ angular.module("DialogMapApp")
 
       replaceSelectedText = (replacementText, icon_type, box_type) ->
         #store the contents in case the user aborts
-        scope.old_contents = element.find('#contribution_description_text').html()
+        scope.old_contents = angular.element('#contribution_description_text').html()
         if window.getSelection
           sel = window.getSelection()
           if sel.rangeCount
@@ -276,7 +282,7 @@ angular.module("DialogMapApp")
         return
 
       updateExternalDescription = ->
-        Contribution.description = element.find('#contribution_description_text').html()
+        Contribution.description = angular.element('#contribution_description_text').html()
         return
 
       getSelection = ->
@@ -310,35 +316,35 @@ angular.module("DialogMapApp")
         return
 
       showButtons = (x,y) ->
-        element.find("#floating-buttons").show().css("left", x).css("top", y)
+        angular.element("#floating-buttons").show().css("left", x).css("top", y)
         return
 
       hideButtons = ->
-        elem = element.find("#floating-buttons").hide()
+        elem = angular.element("#floating-buttons").hide()
         return
 
       getLastButtonsPos = ->
-        elem = element.find("#floating-buttons").hide()
+        elem = angular.element("#floating-buttons").hide()
         [elem.css('left'), elem.css('top')]
 
       showUrlInput = (x,y,text) ->
         if x instanceof Array and typeof y == 'string' and text == undefined
-          element.find(".url-input").show().css("left", x[0]).css("top", x[1])
+          angular.element(".url-input").show().css("left", x[0]).css("top", x[1])
           scope.internal.clickedUrlReference = y
-          element.find('#url-input-field').val(y)
+          angular.element('#url-input-field').val(y)
           return
-        element.find(".url-input").show().css("left", x).css("top", y)
+        angular.element(".url-input").show().css("left", x).css("top", y)
         scope.internal.clickedUrlReference = text
-        element.find('#url-input-field').val(text)
+        angular.element('#url-input-field').val(text)
         return
 
       hideUrlInput = ->
-        element.find(".url-input").hide()
+        angular.element(".url-input").hide()
         return
 
       popUrlInput = ->
-        val = element.find('#url-input-field').val()
-        element.find('#url-input-field').val('http://')
+        val = angular.element('#url-input-field').val()
+        angular.element('#url-input-field').val('http://')
         val
 
       leaveUrlInputMode = ->
@@ -387,7 +393,7 @@ angular.module("DialogMapApp")
                 spanParent.normalize()
         parent = angular.element('#sidebar')
         parentOffset = parent.offset()
-        lineHeight = parseInt(element.find('#contribution_description_text').css('line-height'))
+        lineHeight = parseInt(angular.element('#contribution_description_text').css('line-height'))
         elemX = x - parentOffset.left
         buttonsWidth = angular.element('#floating-buttons').width()
         if elemX + buttonsWidth > parent.width()
@@ -395,8 +401,8 @@ angular.module("DialogMapApp")
         elemY = y - parentOffset.top + lineHeight
         [elemX, elemY]
 
-      element.find('#contribution_description_text').on 'mouseup', (e) ->
-        if element.find(".url-input").is(":visible") # url input is visible..
+      angular.element('#contribution_description_text').on 'mouseup', (e) ->
+        if angular.element(".url-input").is(":visible") # url input is visible..
           # user has clicked somewhere else.. leave url input mode
           leaveUrlInputMode()
         scope.selection = getSelection()
@@ -408,7 +414,8 @@ angular.module("DialogMapApp")
         return
 
       scope.$watch 'internal.description', (value) ->
-        Contribution.description = element.find('#contribution_description_text').html()
+        console.log value
+        Contribution.description = angular.element('#contribution_description_text').html()
         return
 
       # Reset the area on Contribution reset
@@ -416,12 +423,42 @@ angular.module("DialogMapApp")
         enableDescriptionArea()
         scope.internal.description = ''
         scope.internal.clickedUrlReference = undefined
-        element.find('#contribution_description_text').html('')
+        angular.element('#contribution_description_text').html('')
         return
 
       # finally update the description
       scope.$on 'Contribution.submit_start', (e) ->
         updateExternalDescription()
+        return
+
+      angular.element('#contribution_description_text').keydown (e) ->
+        console.log e
+        node = document.getSelection().anchorNode;
+        if e.keyCode is 8 # Chrome wtf?
+          if node.previousSibling? and node.previousSibling.contentEditable? and node.previousSibling.contentEditable is 'false' #node.previousSibling.className? and node.previousSibling.className.indexOf('contribution-description-tag') is not -1
+            # e.preventDefault()
+            true
+          unless node.parentElement.className.indexOf('tag-title') is -1 # if the cursor is in a tag
+            caretOffset = 0
+            element = node.parentElement
+            doc = element.ownerDocument or element.document
+            win = doc.defaultView or doc.parentWindow
+            sel = undefined
+            unless typeof win.getSelection is "undefined"
+              range = win.getSelection().getRangeAt(0)
+              preCaretRange = range.cloneRange()
+              preCaretRange.selectNodeContents element
+              preCaretRange.setEnd range.endContainer, range.endOffset
+              caretOffset = preCaretRange.toString().length
+            else if (sel = doc.selection) and sel.type isnt "Control"
+              textRange = sel.createRange()
+              preCaretTextRange = doc.body.createTextRange()
+              preCaretTextRange.moveToElementText element
+              preCaretTextRange.setEndPoint "EndToEnd", textRange
+              caretOffset = preCaretTextRange.text.length
+            console.log caretOffset
+            if caretOffset is 0
+              e.preventDefault()
         return
 
       return
