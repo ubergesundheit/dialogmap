@@ -80,6 +80,17 @@ class Contribution < ActiveRecord::Base
   #   self.children_contributions.map { |c| c.merge(c.children_ids) }
   # end
 
+  def toggle_favorite(params)
+    favorites_will_change!
+    user_id = params["toggle_favorite_user_id"]
+    if self.favorites.include? user_id
+      self.favorites = self.favorites.reject {|f| f == user_id }
+    else
+      self.favorites.push(user_id)
+    end
+    self.update_column(:favorites, self.favorites)
+  end
+
   private
 
     def about_to_be_deleted?
@@ -88,16 +99,6 @@ class Contribution < ActiveRecord::Base
 
     def favorite_update?
       !self.toggle_favorite_user_id.nil?
-    end
-
-    def toggle_favorite
-      favorites_will_change!
-      user_id = self.toggle_favorite_user_id.to_i
-      if self.favorites.include? user_id
-        self.favorites = self.favorites.reject {|f| f == user_id }
-      else
-        self.favorites.push(user_id)
-      end
     end
 
     def lighten_features_colors

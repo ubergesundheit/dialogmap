@@ -83,7 +83,7 @@ class Api::ContributionsController < Api::BaseController
 
   def toggle_favorite
     if current_user.id == contribution_params[:toggle_favorite_user_id]
-      @contribution.update(contribution_params)
+      @contribution.toggle_favorite(contribution_params)
       render json: @contribution
     else
       permission_denied
