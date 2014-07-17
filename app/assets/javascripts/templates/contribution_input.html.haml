@@ -17,7 +17,7 @@
         Ende:
         %quick-datepicker{ ng_model: "Contribution.endDate" }
     %div{ description_area: true, ng_model: "Contribution", id: "description_area_parent", required: true }
-    .image-upload-container{ "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]&&{true:true, false:false}[$file.size < 1048576]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow"}
+    .image-upload-container{ ng_if: "!Contribution.editing", "flow-file-added" => "!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]&&{true:true, false:false}[$file.size < 1048576]", "flow-init" => "{singleFile:true}", "flow-name" => "Contribution.flow"}
       .thumbnail{ ng_show: "$flow.files.length" }
         .image-actions
           %span.fa-stack.pointer{"flow-btn" => "", "ng-show" => "$flow.files.length", "flow-attrs" => "{accept:'image/*'}", title: "Bild austauschen"}
@@ -29,7 +29,9 @@
         %img{"flow-img" => "$flow.files[0]"}
       %div
         %i.fa.fa-file-image-o.pointer{"flow-btn" => "", "ng-show" => "!$flow.files.length", "flow-attrs" => "{accept:'image/*'}"}
-          Bild anhängen (jpg,gif,png, maximal 1 MB)
+          Bild anhängen (jpg,gif,png, maximal 1 MB).
+          %br
+          Bild kann nachträglich nicht mehr geändert werden.
     .errors{ ng_show: "Contribution.errors" }
       %i.fa.fa-exclamation-triangle
         Bitte die Felder
