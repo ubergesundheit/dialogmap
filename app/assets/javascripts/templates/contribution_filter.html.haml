@@ -1,5 +1,5 @@
 %a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
-  {{ filterVisible === true ? 'weniger' : (filterCount.all > 0 ? '('+filterCount.all+' Filter aktiv) ': '') + 'mehr' }} Optionen
+  {{ (filterCount.all > 0 ? '('+filterCount.all+')': '')}} Filter {{ filterVisible === true ? 'ausblenden' : 'einblenden' }}
 {{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Beiträge{{ filterCount.all > 0 && Contribution.parent_contributions.length > 1 ? 'n' : '' }} angezeigt
 .filter-query-container
   %input{ type:"text", placeholder: "Suchbegriff", ng_model: "filter_query" }
@@ -10,7 +10,7 @@
       Akteure
       %a.reset_filter{ href: "", ng_hide: "filterCount.categories === 0", ng_click: "selected_categories = {}" } Filter zurücksetzen
     .filter-checkboxes
-      .checkbox{ ng_repeat: "category in categories"}
+      .checkbox{ ng_repeat: "category in categories", title: "{{category.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_categories[category.id]' }
           .category-color{ ng_style: "{'background-color': category.color}"}
           {{ category.id }}
@@ -19,7 +19,7 @@
       Funktionen
       %a.reset_filter{ href: "", ng_hide: "filterCount.activities === 0", ng_click: "selected_activities = {}" } Filter zurücksetzen
     .filter-checkboxes
-      %div{ ng_repeat: "activity in activities"}
+      .checkbox{ ng_repeat: "activity in activities", title: "{{activity.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_activities[activity.id]' }
           .maki-icon{ class: "{{activity.icon}}"}
           {{ activity.id }}
@@ -28,15 +28,16 @@
       Inhalte
       %a.reset_filter{ href: "", ng_hide: "filterCount.contents === 0", ng_click: "selected_contents = {}" } Filter zurücksetzen
     .filter-checkboxes
-      %div{ ng_repeat: "content in contents"}
+      .checkbox{ ng_repeat: "content in contents", title: "{{content.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_contents[content.id]' }
           {{ content.id }}
   .filter_section
     %h4
-      Zeitlich begrenzt
+      Zeitraum
       %a.reset_filter{ href: "", ng_hide: "filterCount.time === 0", ng_click: "selected_time = false" } Filter zurücksetzen
-    %div
-      %input{ type: "checkbox", ng_model: 'selected_time' }
-        begrenzt
+    .filter-checkboxes
+      .checkbox
+        %input{ type: "checkbox", ng_model: 'selected_time' }
+          begrenzt
   #reset-all-filters
     %a{ ng_click: "resetAllFilters()" } {{ filterCount.all > 0 ? 'Alle Filter zurücksetzen' : '&nbsp;' }}
