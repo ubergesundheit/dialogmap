@@ -28,6 +28,14 @@
       .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
         %h3 Beiträge filtern
         %div{ contribution_filter: true }
+      .sorter{ ng_hide: "Contribution.composing || $state.is('contribution')" }
+        Themen sortieren nach:
+        %select{ ng_init: "sortingOrder = 'ctNewer'", ng_model: "sortingOrder" }
+          %option{ value: "ctReplys" } meiste Antworten
+          %option{ value: "ctNewer"} neueste zuerst
+          %option{ value: "ctFav" } meist favorisiert
+          %option{ value: "ctCategory" } Akteur
+          %option{ value: "ctActivity" } Aktivität
       %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions",
         ng_hide: "Contribution.composing && $state.is('contributions')",
         ng_class: "{'scroller-tall': $state.is('contribution')}" }

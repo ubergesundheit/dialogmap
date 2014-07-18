@@ -1,4 +1,4 @@
-%div{ ng_repeat: "contribution in Contribution.display_contributions"}
+%div{ ng_repeat: "contribution in Contribution.display_contributions | orderBy:sort"}
   .contribution{ ng_click: "contribution.showDescription = !contribution.showDescription",
     ng_mouseover: "highlightAllRelated(contribution)",
     ng_mouseleave: "resetHighlight()",

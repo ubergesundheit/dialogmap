@@ -13,6 +13,18 @@ angular.module("DialogMapApp").controller "SidebarController", [
     angular.extend $scope,
       Contribution: Contribution
       User: User
+      sort: (child) ->
+        switch $scope.sortingOrder
+          when 'ctNewer'
+            return -moment(child.createdAt).format('X')
+          when 'ctReplys'
+            return if child.childContributions? then -child.childContributions.length else 0
+          when 'ctFav'
+            return if child.favorites? then -child.favorites.length else 0
+          when 'ctCategory'
+            return child.category.id
+          when 'ctActivity'
+            return child.activity.id
       createCategorySearchChoice: (term) ->
         {id: term, text: "Neuer Akteur: #{term}"}
       createActivitySearchChoice: (term) ->
