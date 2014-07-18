@@ -30,7 +30,7 @@
         %div{ contribution_filter: true }
       .sorter{ ng_hide: "Contribution.composing || $state.is('contribution')" }
         Themen sortieren nach:
-        %select{ ng_init: "sortingOrder = 'ctNewer'", ng_model: "sortingOrder" }
+        %select.sort-select{ "ui-select2" => "{minimumResultsForSearch: -1}", ng_init: "sortingOrder = 'ctNewer'", ng_model: "sortingOrder" }
           %option{ value: "ctReplys" } meiste Antworten
           %option{ value: "ctNewer"} neueste zuerst
           %option{ value: "ctFav" } meist favorisiert

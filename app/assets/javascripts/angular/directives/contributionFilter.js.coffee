@@ -78,7 +78,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       scope.$watch 'filterVisible', (value) ->
         filterElem = angular.element('#filter')
         top = parseInt(filterElem.css('height')) + filterElem.position().top
-        angular.element('#contributions-scroller').css('height', "calc(100% - #{top+4}px)")
+        angular.element('#contributions-scroller').css('height', "calc(100% - #{top+32}px)")
         return
 
       scope.resetAllFilters = ->
