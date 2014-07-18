@@ -36,6 +36,8 @@
           %option{ value: "ctFav" } meist favorisiert
           %option{ value: "ctCategory" } Akteur
           %option{ value: "ctActivity" } Aktivität
+          %option{ value: "ctStarting" } beginnt bald
+          %option{ value: "ctEnding" } endet bald
       %perfect-scrollbar#contributions-scroller{ refresh_on_change: "Contribution.display_contributions",
         ng_hide: "Contribution.composing && $state.is('contributions')",
         ng_class: "{'scroller-tall': $state.is('contribution')}" }

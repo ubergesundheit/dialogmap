@@ -18,13 +18,17 @@ angular.module("DialogMapApp").controller "SidebarController", [
           when 'ctNewer'
             return -moment(child.createdAt).format('X')
           when 'ctReplys'
-            return if child.childContributions? then -child.childContributions.length else 0
+            return if child.childContributions? then -child.childContributions.length else Number.NEGATIVE_INFINITY
           when 'ctFav'
-            return if child.favorites? then -child.favorites.length else 0
+            return if child.favorites? then -child.favorites.length else Number.NEGATIVE_INFINITY
           when 'ctCategory'
             return child.category.id
           when 'ctActivity'
             return child.activity.id
+          when 'ctStarting'
+            return if child.startDate? and moment(child.startDate).isAfter(moment()) then moment(child.startDate).format('X') - moment().format('X') else Number.POSITIVE_INFINITY
+          when 'ctEnding'
+            return if child.endDate? and moment(child.startDate).isAfter(moment()) then moment(child.endDate).format('X') - moment().format('X') else Number.POSITIVE_INFINITY
       createCategorySearchChoice: (term) ->
         {id: term, text: "Neuer Akteur: #{term}"}
       createActivitySearchChoice: (term) ->
