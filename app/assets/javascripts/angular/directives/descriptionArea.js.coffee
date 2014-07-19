@@ -432,7 +432,6 @@ angular.module("DialogMapApp")
         return
 
       angular.element('#contribution_description_text').keydown (e) ->
-        console.log e
         node = document.getSelection().anchorNode;
         if e.keyCode is 8 # Chrome wtf?
           if node.previousSibling? and node.previousSibling.contentEditable? and node.previousSibling.contentEditable is 'false' #node.previousSibling.className? and node.previousSibling.className.indexOf('contribution-description-tag') is not -1
