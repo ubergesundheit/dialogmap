@@ -414,7 +414,6 @@ angular.module("DialogMapApp")
         return
 
       scope.$watch 'internal.description', (value) ->
-        console.log value
         Contribution.description = angular.element('#contribution_description_text').html()
         return
 
