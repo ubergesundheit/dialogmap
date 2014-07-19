@@ -64,9 +64,9 @@ angular.module('DialogMapApp').factory 'Contribution', [
       return
 
     _modifyFavoredByUser = (contribution) ->
-      contribution.favoredByCurrentUser = User.isAuthenticated() && (contribution.favorites.indexOf(User.user.id) > -1)
+      contribution.favoredByCurrentUser = User.isAuthenticated() && User.user? && (contribution.favorites.indexOf(User.user.id) > -1)
       if contribution.childContributions.length > 0
-        (c.favoredByCurrentUser = User.isAuthenticated() && (c.favorites.indexOf(User.user.id) > -1)) for c in contribution.childContributions
+        (c.favoredByCurrentUser = User.isAuthenticated() && User.user? && (c.favorites.indexOf(User.user.id) > -1)) for c in contribution.childContributions
       return
 
     resource.addInterceptor
