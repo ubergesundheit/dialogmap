@@ -57,6 +57,8 @@ angular.module("DialogMapApp").controller "MapController", [
         return
 
       # leaflet-directive stuff
+      defaults:
+        minZoom: 6
       controls:
         draw: true
       events:

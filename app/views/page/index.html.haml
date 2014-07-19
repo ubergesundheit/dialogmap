@@ -1,7 +1,7 @@
 -# .activearea
 #main_ctrl{ ng_controller: "MainController"}
   #map{ ng_controller: "MapController" }
-    %leaflet{ id: "map_main", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles" }
+    %leaflet{ id: "map_main", controls: "controls", geojson: "geojson", :"event-broadcast" => "events", :tiles => "tiles", defaults: "defaults" }
   #ui_container{ ng_controller: "SidebarController" }
 
     #back_flag.pointer{ title: "zurück", ng_class: "{visible_back_flag: $state.is('contribution') || loading === false}", ui_sref: "contributions" }
