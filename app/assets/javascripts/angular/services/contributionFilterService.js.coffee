@@ -40,9 +40,8 @@ angular.module('DialogMapApp').service "contributionFilterService",[
       if !callback?
         callback = includeChildren
 
-      augmented_contributions = contributions
+      augmented_contributions = []
       if @_categories? or @_activities? or @_contents? or @_query? or @_time is true
-        augmented_contributions = []
         if @_categories?
           augmented_contributions.push c for c in contributions when c.category.id in @_categories
         if @_activities?
@@ -53,7 +52,7 @@ angular.module('DialogMapApp').service "contributionFilterService",[
             [@_contents, contribution_contents] = [contribution_contents, @_contents] if @_contents.length > contribution_contents.length
             (augmented_contributions.push c if c not in augmented_contributions) for content in @_contents when content in contribution_contents
         if @_time is true
-          (augmented_contributions.push c if c not in augmented_contributions) for c in contributions when c.startDate? and c.endDate?
+          (augmented_contributions.push c if c not in augmented_contributions) for c in contributions
         if @_query?
           regex = RegExp(@_query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
           for c in contributions
@@ -98,6 +97,8 @@ angular.module('DialogMapApp').service "contributionFilterService",[
 
         callback(augmented_contributions)
       else
+        now = moment()
+        augmented_contributions.push c for c in contributions when !(c.startDate? and c.endDate?) or moment(c.endDate).isAfter(now)
         callback(augmented_contributions)
       $rootScope.$broadcast 'map.updateFeatures',
         contributions: augmented_contributions,
