@@ -31,6 +31,8 @@
 //= require ngQuickDate
 //= require angular-perfect-scrollbar
 //= require ng-flow
+//= require angular-cookies
+//= require angular-simple-slider
 //= require mapbox
 //= require angular-leaflet-directive
 //= require L.activearea.js

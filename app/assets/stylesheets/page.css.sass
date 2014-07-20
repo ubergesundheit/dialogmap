@@ -7,6 +7,10 @@ html, body
 h1, h2, h3, h4
   font-weight: 700
 
+h1
+  font-size: 32px
+  margin-bottom: 2px
+
 h2
   font-size: 27px
   margin-bottom: 4px
@@ -391,9 +395,35 @@ a
 .help-modal
   .ngdialog-content
     width: 50% !important
-  p
-    font-size: 14px
-    line-height: 16px
+  .prev, .next
+    font-size: 25px
+  .next
+    float: right
+  .carousel
+    height: 350px
+    .slide
+      width: 100%
+      .video-container
+        text-align: center
+        a
+          display: block
+          margin-top: -10px
+    a.toggle
+      float: right
+    h1
+      text-align: center
+      margin: 10px 0px
+    .video-link
+      display: block
+      text-align: left
+      padding-left: 10px
+    #support-adress
+      unicode-bidi: bidi-override
+      direction: rtl
+  .footprint
+    font-size: 11px
+    line-height: 12px
+    color: $middle-grey
 
 .submit-button-container
   display: block

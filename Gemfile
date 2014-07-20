@@ -34,6 +34,8 @@ gem 'rails-assets-ngQuickDate'
 gem 'rails-assets-spectrajs'
 gem 'rails-assets-angular-perfect-scrollbar'
 gem 'rails-assets-ng-flow'
+gem 'rails-assets-angular-cookies'
+gem 'rails-assets-angular-simple-slider'
 
 gem 'color'
 

@@ -19,6 +19,8 @@ angular.module "DialogMapApp", [
   "ngQuickDate"
   "perfect_scrollbar"
   "flow"
+  "ngCookies"
+  "angularSimpleSlider"
 ]
 .config [
   "$stateProvider"

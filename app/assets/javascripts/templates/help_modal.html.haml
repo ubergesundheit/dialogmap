@@ -1,6 +1,53 @@
-%h2 Hilfe
-%h4 Was?
-%p
-  Die DialogMap ist eine speziell auf räumliche Dialoge ausgelegte, interaktive Diskussionsplatform. Sie erlaubt es, Objekte mit räumlicher Ausprägung in einer Karte zu verzeichnen, um den Inhalt eines Diskussionsbeitrages eindeutiger zu machen. Antworten können neue Geoobjekte in den Dialog einfließen zu lassen und sich auf andere Geoobjekte beziehen und auf Internernetseiten verlinken.
-%h4 Wie?
-%p
+
+%simple-slider.carousel{ "transition-property" => "opacity", "start-value" => "0", "visible-value" => "1", "end-value" => "0", "auto-play" => "false", change: "{{actualslide}}" }
+  .slide
+    %h1 Herzlich Willkommen
+    %p
+      Auf dieser Webseite findest du Informationen über Initativen und Aktionen im Rahmen des kommenden
+      %a{ target: "_blank", href: "http://gemeinsam-nachhaltig.uni-muenster.de/muensterland/tag-nachhaltigkeit/" } Nachhaltigkeitstages 2015
+      in Münster stattfinden werden.
+      %br
+      Du kannst suchen, weitere Aktionen eintragen, kommentieren oder dir einfach nur einen Überblick verschaffen.
+      %br
+      Bacon ipsum dolor sit amet aliqua capicola sed short ribs boudin culpa.
+  .slide{ ng_init: "showVideo = false"}
+    .video-container{ ng_show: "showVideo !== false" }
+      %video{ ng_src: "{{showVideo}}", autoplay: true, loop: true }
+      %a{ ng_click: "showVideo = false" } zurück
+    .text{ ng_hide: "showSortNFilter === false" }
+      %h1 Wie wird diese Seite benutzt?
+      %p Wenn du schonmal eine Internetseite mit Karte benutzt hast, wirst du dich direkt heimisch fühlen. Hier sind noch ein paar kleine Videos, die die Grundfunktionen erklären.
+      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Antwort verfassen
+      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Thema anlegen
+      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Registrieren/Einloggen
+      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Beiträge filtern/sortieren
+  .slide
+    %script
+      var link = document.getElementById('support-adress')
+      var email = link.innerHTML;
+      link.innerHTML = '<a href="mailto:'+email.split('').reverse().join('')+'" rel="nofollow">'+email+'</a>'
+    %h1 Alles klar, ich will loslegen!
+    %p
+      Diese Webseite wurde im Rahmen einer Masterarbeit programmiert. Es kann deswegen sein, dass sich hier und dort Fehler eingeschlichen haben. Sollte euch ein technischer Fehler aufgefallen sein, bitte schreibt doch eine kurze Mail mit Fehlerbeschreibung an
+      %br
+      %span#support-adress oi.epapdlareg@pamgolaid
+    %a.toggle{ ng_click: "toggleShowIntroOnStartup()", href: "" }
+      Diese Nachricht beim Start {{ showIntroOnStartup() == 'true' ? 'nicht mehr' : '' }} anzeigen
+.controls{ ng_hide: "showVideo !== false" }
+  %span.prev{ ng_click: "actualslide = ( actualslide-1 ) % 3" }
+    %i.fa.fa-angle-left.pointer{ title: "zurück"}
+  %span.next.pointer{ ng_click: "closeThisDialog()", ng_show: "actualslide === 2" }
+    los gehts!
+    %i.fa.fa-angle-right
+  %span.next.pointer{ ng_click: "actualslide = (actualslide + 1) % 3", ng_show: "actualslide !== 2" }
+    weiter
+    %i.fa.fa-angle-right
+
+%p.footprint Diese Webseite verwendet Cookies, um einige Funktionen bereitzustellen. Durch die Benutzung stimmen Sie der Verwendung von Cookies auf dieser Seite zu.
+
+
+-# %h2 Hilfe
+-# %h4 Was?
+-# %p
+-#   Die DialogMap ist eine speziell auf räumliche Dialoge ausgelegte, interaktive Diskussionsplatform. Sie erlaubt es, Objekte mit räumlicher Ausprägung in einer Karte zu verzeichnen, um den Inhalt eines Diskussionsbeitrages eindeutiger zu machen. Antworten können neue Geoobjekte in den Dialog einfließen zu lassen und sich auf andere Geoobjekte beziehen und auf Internernetseiten verlinken.
+-# %h4 Wie?

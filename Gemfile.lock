@@ -315,6 +315,8 @@ GEM
       railties (= 4.1.4)
       sprockets-rails (~> 2.0)
     rails-assets-angular (1.2.18)
+    rails-assets-angular-cookies (1.2.18)
+      rails-assets-angular (= 1.2.18)
     rails-assets-angular-devise (0.3.0)
       rails-assets-angular (~> 1.2.0)
     rails-assets-angular-moment (0.7.1)
@@ -323,6 +325,8 @@ GEM
     rails-assets-angular-perfect-scrollbar (0.1.3)
       rails-assets-jquery (>= 1.10.0)
       rails-assets-perfect-scrollbar (>= 0.4.0)
+    rails-assets-angular-simple-slider (0.1.0)
+      rails-assets-angular (>= 1.0.0)
     rails-assets-angular-ui-router (0.2.10)
       rails-assets-angular (>= 1.0.8)
     rails-assets-angular-ui-select2 (0.0.5)
@@ -477,9 +481,11 @@ DEPENDENCIES
   pg
   pry-rails
   rails (= 4.1.4)
+  rails-assets-angular-cookies
   rails-assets-angular-devise
   rails-assets-angular-moment
   rails-assets-angular-perfect-scrollbar
+  rails-assets-angular-simple-slider
   rails-assets-angular-ui-router
   rails-assets-angular-ui-select2
   rails-assets-ng-flow

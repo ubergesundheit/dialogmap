@@ -13,7 +13,7 @@
       = image_tag("loading.gif", class: "loading", loading: true)
       .sidebar-top
         #help
-          %a{ ng_dialog: "help_modal.html", ng_dialog_class: "ngdialog-theme-default help-modal", ng_dialog_close_previous: true }
+          %a{ ng_click: "showHelpModal(1)" }
             %i.fa.fa-question
             Hilfe
         #user
