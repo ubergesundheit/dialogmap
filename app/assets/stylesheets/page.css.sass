@@ -539,3 +539,18 @@ a
   padding-right: 16px
   .sort-select
     width: 155px
+
+#title_box
+  position: absolute
+  +user-select(none)
+  cursor: default
+  width: calc(100% - 450px)
+  text-align: center
+  .title
+    +background(linear-gradient(to bottom, $sidebar-background, rgba(lighten($sidebar-background, 10), 0.4)))
+    font-size: 34px
+    position: relative
+    +border-radius(0px 0px 5px 5px)
+    padding: 10px
+    font-weight: 700
+    top: 10px
