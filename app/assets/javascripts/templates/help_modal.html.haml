@@ -1,19 +1,17 @@
 %simple-slider.carousel{ "transition-property" => "opacity", "start-value" => "0", "visible-value" => "1", "end-value" => "0", "auto-play" => "false", change: "{{actualslide}}" }
   .slide
-    %h1 Herzlich Willkommen
+    %h1
+      Herzlich Willkommen auf der
+      %span.nobreak „Nachhaltigkeitslandkarte Münster“!
     %p
-      Auf dieser Webseite findest du Informationen über Initativen und Aktionen im Rahmen des kommenden
-      %a{ target: "_blank", href: "http://gemeinsam-nachhaltig.uni-muenster.de/muensterland/tag-nachhaltigkeit/" } Nachhaltigkeitstages 2015
-      in Münster stattfinden werden.
-      %br
-      Du kannst suchen, weitere Aktionen eintragen, kommentieren oder dir einfach nur einen Überblick verschaffen.
-      %br
-      Bacon ipsum dolor sit amet aliqua capicola sed short ribs boudin culpa.
+      Diese Seite bietet einen Überblick über bestehende Initiativen, Aktionen und Projekte zum Thema Nachhaltigkeit in und um Münster. Durch Transparenz, so die Überlegung, kann die Grundlage für eine breitere Beteiligung Münsteraner Bürgerinnen und Bürger, aber auch eine verstärkte Kooperation zwischen den Projekten selbst gelegt werden. Bürger und Bürgerinnen können Vorschläge machen und diskutieren, was zu tun wäre, um Münster nachhaltiger zu gestalten und somit direkt zu einer nachhaltigen Stadtentwicklung in Münster beitragen.
+    %p
+      Die Karte lebt von der Beteiligung der Münsteraner Bürgerinnen und Bürger, die hiermit eingeladen und aufgefordert sind sich an der Gestaltung ihres eigenen Viertels und der Stadt Münster im Allgemeinen zu beteiligen!
   .slide{ ng_init: "showVideo = false"}
     .video-container{ ng_show: "showVideo !== false" }
-      %video{ ng_src: "{{ showVideo !== false ? showVideo : ''}}", autoplay: true, loop: true }
+      %video{ ng_src: "{{ showVideo !== false ? showVideo : ''}}", autoplay: true, loop: true, controls: true }
       %a{ ng_click: "showVideo = false" } zurück
-    .text{ ng_hide: "showSortNFilter === false" }
+    .text{ ng_show: "showVideo === false" }
       %h1 Wie wird diese Seite benutzt?
       %p Wenn du schonmal eine Internetseite mit Karte benutzt hast, wirst du dich direkt heimisch fühlen. Hier sind noch ein paar kleine Videos, die die Grundfunktionen erklären.
       %a.fa.fa-angle-double-right.video-link{ href:"", ng_click: "showVideo = 'login.webm'" } Registrieren/Einloggen
@@ -28,20 +26,27 @@
       var link = document.getElementById('support-adress')
       var email = link.innerHTML;
       link.innerHTML = '<a href="mailto:'+email.split('').reverse().join('')+'" rel="nofollow">'+email+'</a>'
-    %h1 Alles klar, ich will loslegen!
+    %h1 Entstehung und Kontext
+    %p
+      Diese Homepage entstand aus einer Kooperation zwischen dem Institut für Geoinformatik und dem Institut für Soziologie der Universität Münster.
+    %p
+      Auf einer durch das Institut für Soziologie organisierten
+      %a{ href: "http://gemeinsam-nachhaltig.uni-muenster.de/tagung/", target: "_blank" } Tagung zur nachhaltigen Stadtentwicklung
+      wurde deutlich, dass bereits zahlreiche Initiativen existieren, die sich für ein nachhaltiges Münstereinsetzen. Immer wieder wurde der Bedarf geäußert die bestehenden Nachhaltigkeitsinitiativen sichtbar zu machen, um daraus ein Gesamtbild der Projekte und Kooperationen zeichnen zu können. Daraus entwickelte sich die Idee im Sommer 2015 einen
+      %a{href: "http://gemeinsam-nachhaltig.uni-muenster.de/muensterland/tag-nachhaltigkeit/", target: "_blank" } Tag der Nachhaltigkeit
+      in Münster zuveranstalten zu dem diese Nachhaltigkeitslandkarte einen wichtigen Beitrag leistet.
     %p
       Diese Webseite wurde im Rahmen einer Masterarbeit programmiert. Es kann deswegen sein, dass sich hier und dort Fehler eingeschlichen haben. Sollte euch ein technischer Fehler aufgefallen sein, bitte schreibt doch eine kurze Mail mit Fehlerbeschreibung an
-      %br
       %span#support-adress oi.epapdlareg@pamgolaid
     %a.toggle{ ng_click: "toggleShowIntroOnStartup()", href: "" }
       Diese Nachricht beim Start {{ showIntroOnStartup() == 'true' ? 'nicht mehr' : '' }} anzeigen
 .controls{ ng_hide: "showVideo !== false" }
-  %span.prev{ ng_click: "actualslide = ( actualslide-1 ) % 3" }
+  %span.prev{ ng_click: "actualslide = ( actualslide-1 ) % 4" }
     %i.fa.fa-angle-left.pointer{ title: "zurück"}
-  %span.next.pointer{ ng_click: "closeThisDialog()", ng_show: "actualslide === 2" }
-    los gehts!
+  %span.next.pointer{ ng_click: "closeThisDialog()", ng_show: "actualslide === 3" }
+    Alles klar, ich will loslegen!
     %i.fa.fa-angle-right
-  %span.next.pointer{ ng_click: "actualslide = (actualslide + 1) % 3", ng_show: "actualslide !== 2" }
+  %span.next.pointer{ ng_click: "actualslide = (actualslide + 1) % 4", ng_show: "actualslide !== 3" }
     weiter
     %i.fa.fa-angle-right
 

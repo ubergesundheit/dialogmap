@@ -394,18 +394,28 @@ a
     color: $darker-grey
 
 .help-modal
+  padding: 30px 0px 0px 0px !important
+  p, .video-link
+    font-size: 17px
+    line-height: 25px
+    text-align: justify
+    margin: 10px auto
+    width: 600px
   .ngdialog-content
     width: 50% !important
   .prev, .next
     font-size: 25px
     +transition(color .4s)
+<<<<<<< HEAD
     +user-select(none)
+=======
+>>>>>>> include texts
     &:hover
       color: $blue
   .next
     float: right
   .carousel
-    height: 350px
+    height: 460px
     .slide
       width: 100%
       .video-container
@@ -422,10 +432,13 @@ a
     h1
       text-align: center
       margin: 10px 0px
+      line-height: 30px
+      .nobreak
+        white-space: nowrap
     .video-link
       display: block
       text-align: left
-      padding-left: 10px
+      padding-left: 20px
     #support-adress
       unicode-bidi: bidi-override
       direction: rtl
@@ -434,6 +447,7 @@ a
     line-height: 12px
     color: $middle-grey
     margin-top: 0px
+<<<<<<< HEAD
   table
     +user-select(none)
     width: 600px
@@ -466,6 +480,8 @@ a
   #details
     width: 600px
     margin: auto
+=======
+>>>>>>> include texts
 
 .submit-button-container
   display: block
