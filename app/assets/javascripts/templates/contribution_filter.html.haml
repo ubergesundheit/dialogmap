@@ -10,7 +10,7 @@
       Akteure
       %a.reset_filter{ href: "", ng_hide: "filterCount.categories === 0", ng_click: "selected_categories = {}" } Filter zurücksetzen
     .filter-checkboxes
-      .checkbox{ ng_repeat: "category in categories", title: "{{category.id}}" }
+      .checkbox{ ng_repeat: "category in filterItems.categories", title: "{{category.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_categories[category.id]' }
           .category-color{ ng_style: "{'background-color': category.color}"}
           {{ category.id }}
@@ -19,7 +19,7 @@
       Funktionen
       %a.reset_filter{ href: "", ng_hide: "filterCount.activities === 0", ng_click: "selected_activities = {}" } Filter zurücksetzen
     .filter-checkboxes
-      .checkbox{ ng_repeat: "activity in activities", title: "{{activity.id}}" }
+      .checkbox{ ng_repeat: "activity in filterItems.activities", title: "{{activity.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_activities[activity.id]' }
           .maki-icon{ class: "{{activity.icon}}"}
           {{ activity.id }}
@@ -28,7 +28,7 @@
       Inhalte
       %a.reset_filter{ href: "", ng_hide: "filterCount.contents === 0", ng_click: "selected_contents = {}" } Filter zurücksetzen
     .filter-checkboxes
-      .checkbox{ ng_repeat: "content in contents", title: "{{content.id}}" }
+      .checkbox{ ng_repeat: "content in filterItems.contents", title: "{{content.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_contents[content.id]' }
           {{ content.id }}
   .filter_section

@@ -90,6 +90,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
           $compile(angular.element('div#content.category_input'))($scope)
           return
         # fetch items from server
+        # TODO use filterItems service. Attach "contribution start event to it to update.."
         $http.get('/api/contributions/filter_items').then(compileAndInitCategoryActivityContent, compileAndInitCategoryActivityContent)
         return
       startNewTopic: ->

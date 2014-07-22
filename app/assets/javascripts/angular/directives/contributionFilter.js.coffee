@@ -2,7 +2,8 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
   'contributionFilterService'
   'Contribution'
   '$http'
-  (contributionFilterService, Contribution, $http) ->
+  'filterItems'
+  (contributionFilterService, Contribution, $http, filterItems) ->
     restrict: 'AE'
     scope: true
     templateUrl: 'contribution_filter.html'
@@ -12,19 +13,9 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
       $scope.selected_contents = {}
       $scope.selected_time = false
       $scope.filter_query = ''
-      $scope.fetchFilterItems = ->
-        $http.get('/api/contributions/filter_items').then (response) ->
-          $scope.categories = response.data.categories
-          $scope.activities = response.data.activities
-          $scope.contents = response.data.contents
-          return
-        return
-      # $scope.fetchFilterItems()
+      $scope.filterItems = filterItems
       return
     link: (scope, element, attr, controller) ->
-
-      scope.$on '$stateChangeSuccess', scope.fetchFilterItems
-      scope.$on 'Contribution.submitted', scope.fetchFilterItems
 
       setAndApplyFilter = (value, oldvalue, scope) ->
         categories = (k for k,v of scope.selected_categories when v == true)
