@@ -4,7 +4,7 @@ lock '3.2.1'
 set :application, 'dialog_map'
 set :repo_url, 'git@github.com:ubergesundheit/dialogmap.git'
 
-set :branch, 'master'
+set :branch, 'nachhaltigkeitslandkarte'
 
 set :deploy_to, '/home/apps/dialog-map'
 
