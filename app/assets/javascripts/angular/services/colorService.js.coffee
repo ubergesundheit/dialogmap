@@ -17,7 +17,7 @@ angular.module('DialogMapApp').service "colorService", ->
 
   @lightenColor = (input) ->
     if input?
-      Spectra(input).desaturate(10).lighten(35).rgbaString()
+      Spectra(input).desaturate(10).lighten(30).rgbaString()
 
   @highlightColor = (input) ->
     if input?
