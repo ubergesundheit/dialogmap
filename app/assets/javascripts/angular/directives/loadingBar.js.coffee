@@ -8,9 +8,9 @@ angular.module("DialogMapApp").directive "loading", [
 
       scope.$watch scope.isLoading, (v) ->
         if v
-          elm.css('background-position-y', '0px')
+          elm.css('background-position', '0px 0px')
         else
-          elm.css('background-position-y', '-5px')
+          elm.css('background-position', '0px -5px')
         return
 
       return
