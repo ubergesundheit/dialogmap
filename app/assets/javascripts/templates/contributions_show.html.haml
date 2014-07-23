@@ -8,7 +8,7 @@
     %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
     .contribution-info
       von
-      {{ contribution.user.email }}
+      {{ contribution.user.name }}
       am
       {{ contribution.createdAt | amCalendar}}
     .contribution-category-container

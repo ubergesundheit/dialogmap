@@ -3,7 +3,7 @@
     %h2 {{ Contribution.currentContribution.title }}
     .contribution-info
       von
-      {{ Contribution.currentContribution.user.email }}
+      {{ Contribution.currentContribution.user.name }}
       am
       {{ Contribution.currentContribution.createdAt | amCalendar}}
     .contribution-category-container
@@ -54,7 +54,7 @@
           %i.fa.fa-ban.fa-stack-2x.ban-stack-adjust{ ng_show: "contribution.favoredByCurrentUser" }
 
       .contribution-info
-        {{ contribution.user.email }}
+        {{ contribution.user.name }}
         schrieb
         {{ contribution.createdAt | amCalendar }}
       .thumbnail{ ng_show: "contribution.imageUrl" }
