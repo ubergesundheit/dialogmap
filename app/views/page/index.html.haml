@@ -41,3 +41,5 @@
         ng_hide: "Contribution.composing && $state.is('contributions')",
         ng_class: "{'scroller-tall': $state.is('contribution')}" }
         .view{ ui_view: true }
+      #legend-toggler
+        %a.fa.fa-angle-double-right{ ng_click: "showHelpModal(2)" } Zeichenerklärung

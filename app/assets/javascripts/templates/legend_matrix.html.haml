@@ -1,0 +1,19 @@
+%table
+  %tr
+    %td.indicators
+      .category-indicator
+        Akteur
+        %i.fa.fa-angle-right
+      .activity-indicator
+        Aktivität
+        %i.fa.fa-angle-down
+    %td{ ng_repeat: "category in filterItems.categories", title: "Akteur {{category.id}}", ng_mouseover: "setDetails(category.id)" } {{ category.id }}
+  %tr{ ng_repeat: "activity in filterItems.activities" }
+    %td{ title: "Aktivität {{activity.id}}", ng_mouseover: "setDetails(activity.id)" } {{ activity.id }}
+    %td{ title: "Akteur {{cat.id}} mit Aktivität {{activity.id}}", ng_repeat: "cat in filterItems.categories", ng_mouseover: "setDetails(cat.id, activity.id)", ng_style: "{'background': lightenColor(cat.color) +' url('+ getMarkerUrl(activity.icon, cat.color)+ ') no-repeat center 0px' }" }
+
+#details
+  %h3 {{details[0].title}}
+  %p {{details[0].text}}
+  %h3 {{details[1].title}}
+  %p {{details[1].text}}
