@@ -1,13 +1,13 @@
 #above-description-buttons.contributions-buttons
   %a#create-marker.button.marker.btn{ href: "", title: "Punkt markieren", ng_click: "clickMarker('bar')" }
-  %a#create-polygon.button.polygon.btn{ href: "", title: "Fläche markieren", ng_click: "clickPolygon('bar')" }
+  -# %a#create-polygon.button.polygon.btn{ href: "", title: "Fläche markieren", ng_click: "clickPolygon('bar')" }
   .divider
   %a#create-feature-reference.button.feature-reference.btn{ href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference('bar')" }
   %a#create-url-reference.button.url-reference.btn{ href: "", title: "Link einfügen", ng_click: "clickUrlReference('bar')" }
 %div{ id: "contribution_description_text", contenteditable: "true", :"strip-br" => "true", class: "contribution_descriptioninput", ng_model: "internal.description", placeholder: "Beschreibung" }
 #floating-buttons.contributions-buttons
   %a{ id: "create-marker", class: "button marker", href: "", title: "Punkt markieren", ng_click: "clickMarker()" }
-  %a{ id: "create-polygon", class: "button polygon", href: "", title: "Fläche markieren", ng_click: "clickPolygon()" }
+  -# %a{ id: "create-polygon", class: "button polygon", href: "", title: "Fläche markieren", ng_click: "clickPolygon()" }
   .divider
   %a{ id: "create-feature-reference", class: "button feature-reference", href: "", title: "Auf Geoobjekt verweisen", ng_click: "clickFeatureReference()" }
   %a{ id: "create-url-reference", class: "button url-reference", href: "", title: "Link einfügen", ng_click: "clickUrlReference()" }
