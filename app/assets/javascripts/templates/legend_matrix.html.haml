@@ -10,7 +10,7 @@
     %td{ ng_repeat: "category in filterItems.categories", title: "Akteur {{category.id}}", ng_mouseover: "setDetails(category.id)" } {{ category.id }}
   %tr{ ng_repeat: "activity in filterItems.activities" }
     %td{ title: "Aktivität {{activity.id}}", ng_mouseover: "setDetails(activity.id)" } {{ activity.id }}
-    %td{ title: "Akteur {{cat.id}} mit Aktivität {{activity.id}}", ng_repeat: "cat in filterItems.categories", ng_mouseover: "setDetails(cat.id, activity.id)", ng_style: "{'background': lightenColor(cat.color) +' url('+ getMarkerUrl(activity.icon, cat.color)+ ') no-repeat center 0px' }" }
+    %td{ title: "Akteur {{cat.id}} mit Aktivität {{activity.id}}", ng_repeat: "cat in filterItems.categories", ng_mouseover: "setDetails(cat.id, activity.id)", ng_style: "{'background': getBackgroundCSS(activity.icon, cat.color)}" }
 
 #details
   %h3 {{details[0].title}}

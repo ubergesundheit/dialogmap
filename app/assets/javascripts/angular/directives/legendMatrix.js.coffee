@@ -5,7 +5,6 @@ angular.module("DialogMapApp").directive 'legendMatrix', [
     restrict: 'A'
     templateUrl: 'legend_matrix.html'
     controller: ($scope, $element) ->
-      angular.extend $scope, colorService
       detailTexts =
         "Bürger- und Zivilgesellschaft": "Die informellen und formellen Vereinigungen von Bürgerinnen und Bürger (Vereine, Stiftungen, Aktionsbündnisse verschiedenen Akteursgruppen"
         "Bildung und Wissenschaft": "Universität, Hochschulen, Schulen und andere öffentliche Bildungseinrichtungen"
@@ -17,8 +16,8 @@ angular.module("DialogMapApp").directive 'legendMatrix', [
         "Vorschlagen": "Ideen und Vorschläge zur Gestaltung Münsters und seiner Viertel"
       angular.extend $scope,
         filterItems: filterItems
-        getMarkerUrl: (icon, color) ->
-          "//a.tiles.mapbox.com/v3/marker/pin-m-#{icon}+#{color.slice(1)}.png"
+        getBackgroundCSS: (icon, color) ->
+          "#{colorService.lightenColor(color)}  url(//a.tiles.mapbox.com/v3/marker/pin-m-#{icon}+#{color.slice(1)}.png) no-repeat center 0px"
         setDetails: (cat,act) ->
           $scope.details[0] =
             title: cat
