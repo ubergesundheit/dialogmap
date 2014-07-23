@@ -34,7 +34,9 @@ h3
   top: 0px
   left: calc(100% - #{$sidebar-width})
   height: 100%
-  background-color: rgba($sidebar-background, 0.8)
+  background: rgba(232, 232, 232, 0.8) asset-url('loading.gif') no-repeat 0px 0px
+  background-size: 100% 5px
+  +transition(background .2s)
   #user, #help
     font-size: 13px
   #user
@@ -112,21 +114,13 @@ a
   margin-top: 4px
   color: firebrick
 
-.loading_container
-  margin-top: 200px
-  margin-bottom: 200px
-
 .loading
   position: absolute
-  top: 0
+  top: 50%
   left: 0
   right: 0
-  bottom: 0
   margin: auto
-  background-color: #CCC
-  padding: 3px
-  +border-radius(6px)
-  +single-box-shadow(rgba(40, 40, 40, 0.1), 0px, 0px, 2px, 2px)
+  width: 280px
 
 #contributions-scroller
   overflow: hidden

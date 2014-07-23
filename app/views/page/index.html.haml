@@ -9,8 +9,7 @@
       %span.text zurück
     = fa_icon "info", id: 'app_info_button', ng_dialog: "app_info_modal.html", ng_dialog_class: "ngdialog-theme-default", ng_dialog_close_previous: true
 
-    #sidebar
-      = image_tag("loading.gif", class: "loading", loading: true)
+    #sidebar{ loading: true }
       .sidebar-top
         #help
           %a{ ng_click: "showHelpModal(1)" }
