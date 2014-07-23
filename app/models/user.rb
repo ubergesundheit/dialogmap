@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   has_many :contributions
 
   validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
+  validates :name, presence: true
+  validates_uniqueness_of :name, :case_sensitive => false
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
 

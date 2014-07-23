@@ -5,13 +5,17 @@
       #error_explanation
         Fehler:
         - current_user.errors.full_messages.each do |msg|
-          = msg
+          %p
+            = msg
     %p.help-block Leider wird bei der Authentifizierung mit Twitter keine E-Mail Adresse mitgeschickt. Bitte vervollständige sie an dieser Stelle, damit andere Benutzer dich eindeutig identifizieren können.
-    = current_user.name
-    #form-group
+    .form-group
+      = f.label :name, "Benutzername (mindestens 4 Zeichen)"
+      .controls
+        = f.text_field :name, :autofocus => true, :value => current_user.name, class: 'form-control', required: true, pattern: ".{4,}"
+    .form-group
       = f.label :email
-      #controls
-        = f.text_field :email, :autofocus => true, :value => '', class: 'form-control', placeholder: 'adresse@provider.de'
+      .controls
+        = f.text_field :email, :autofocus => true, :value => '', class: 'form-control', placeholder: 'adresse@provider.de', required: true, type: "email"
         %p.no-spam Es wird kein Spam versendet!
     #actions
       = f.submit 'Speichern und Fortfahren'

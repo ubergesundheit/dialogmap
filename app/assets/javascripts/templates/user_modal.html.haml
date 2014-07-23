@@ -17,6 +17,18 @@
           %span{ ng_show: "errors.email", ng_repeat: "error in errors.email"} {{ error }}
           %span{ ng_show: "register_form.email.$error.email" } muss eine E-Mail Adresse sein
       .field_label_container
+        .field_label Benutzername
+      %input#email.username{ name: "name",
+              ng_class: "{error: register_form.name.$dirty && register_form.name.$invalid}",
+              ng_model: "registerCredentials.name",
+              type: "text",
+              required: true,
+              ng_minlength: 4  }
+      .field_error_container
+        .field_error{ ng_show: "register_form.name.$dirty && register_form.name.$invalid || errors.name" }
+          %span{ ng_show: "errors.name", ng_repeat: "error in errors.name"} {{ error }}
+          %span{ ng_show: "register_form.name.$error.minlength" } muss mindestens 4 Zeichen enthalten
+      .field_label_container
         .field_label Passwort
       %input#password.password{ name: "password",
               ng_class: "{error: register_form.password.$dirty && register_form.password.$invalid}",
@@ -46,7 +58,7 @@
       .submit-button-container
         %i.fa.fa-check.pointer.submit-button{ ng_click: "!register_form.$invalid && performRegister()", ng_disabled: "register_form.$invalid" } Registrieren
   %div{ ng_show: "needConfirmation" }
-    Danke für deine Registrierung.<br />Bitte schau in dein Postfach für die Adresse {{user.email}} und folge den Anweisungen, um deinen Account freizuschalten.
+    Danke für deine Registrierung.<br />Bitte schau in dein Postfach für die von dir angegebene Adresse und folge den Anweisungen, um deinen Account freizuschalten.
     .submit-button-container
       %i.fa.fa-check.pointer.submit-button{ ng_click: "needConfirmation = false; showLoginTab = false" } zurück zum Login
 
@@ -68,6 +80,76 @@
       %i.fa.fa-check.pointer.submit-button{ ng_click: "performLogin()" } Anmelden
 
 #modal_user{ ng_show: "authenticated" }
-  %h3 Eingeloggt als
-  %p.user-email {{ user.email }}
-  %i.fa.fa-power-off.submit-button.pointer.logout-link{ ng_click: "performLogout()" } Ausloggen
+  %div{ ng_hide: "showUserEdit" }
+    %h3 Eingeloggt als
+    %p.user-name
+      {{ user.name }}
+      %i.fa.fa-pencil.pointer{ ng_click: "startUserEdit()" }
+    %p.user-email
+      {{ user.email }}
+      %i.fa.fa-pencil.pointer{ ng_click: "startUserEdit()" }
+    %i.fa.fa-power-off.submit-button.pointer.logout-link{ ng_click: "performLogout()" } Ausloggen
+  %div{ ng_show: "showUserEdit" }
+    %h3 Benutzer bearbeiten
+    %i.fa.fa-times.pointer.submit-button.logout-link{ ng_click: "stopUserEdit()" } Abbrechen
+    %form{ id: "edit_form", name: "edit_form", novalidate: true }
+      .field_label_container
+        .field_label E-Mail
+      %input#email.username{ name: "email",
+              ng_class: "{error: edit_form.email.$dirty && edit_form.email.$invalid}",
+              ng_model: "editCredentials.email",
+              type: "email",
+              required: true }
+      .field_error_container
+        .field_error{ ng_show: "edit_form.email.$dirty && edit_form.email.$invalid || errors.email" }
+          %span{ ng_show: "errors.email", ng_repeat: "error in errors.email"} {{ error }}
+          %span{ ng_show: "edit_form.email.$error.email" } muss eine E-Mail Adresse sein
+      .field_label_container
+        .field_label Benutzername
+      %input#email.username{ name: "name",
+              ng_class: "{error: edit_form.name.$dirty && edit_form.name.$invalid}",
+              ng_model: "editCredentials.name",
+              type: "text",
+              required: true,
+              ng_minlength: 4  }
+      .field_error_container
+        .field_error{ ng_show: "edit_form.name.$dirty && edit_form.name.$invalid || errors.name" }
+          %span{ ng_show: "errors.name", ng_repeat: "error in errors.name"} {{ error }}
+          %span{ ng_show: "edit_form.name.$error.minlength" } muss mindestens 4 Zeichen enthalten
+      %div{ ng_if: "!user.external_auth" }
+        .field_label_container
+          .field_label Neues Passwort
+        %input#edit-password.password{ name: "password",
+                ng_class: "{error: edit_form.password.$dirty && edit_form.password.$invalid}",
+                ng_model: "editCredentials.password",
+                type: "password",
+                title: "muss mindestens 6 Zeichen enthalten",
+                ng_minlength: 6 }
+        .field_error_container
+          .field_error{ ng_show: "edit_form.password.$dirty && edit_form.password.$invalid || errors.password" }
+            %span{ ng_show: "errors.password", ng_repeat: "error in errors.password"} {{ error }}
+            %span{ ng_show: "edit_form.password.$error.minlength" } muss mindestens 6 Zeichen enthalten
+        .field_label_container
+          .field_label Passwortwiederholung
+        %input#password_confirmation.password{ name: "password_confirmation",
+                ng_class: "{error: edit_form.password_confirmation.$dirty && edit_form.password_confirmation.$invalid}",
+                ng_model: "editCredentials.password_confirmation",
+                type: "password",
+                password_match: "edit-password",
+                ng_minlength: 6}
+        .field_error_container
+          .field_error{ ng_show: "edit_form.password_confirmation.$dirty && edit_form.password_confirmation.$invalid || edit_form.password_confirmation.$error.pwmatch || errors.password_confirmation" }
+            %span{ ng_show: "edit_form.password_confirmation.$error.pwmatch" } stimmt nicht mit der Bestätigung überein
+            %span{ ng_show: "errors.password_confirmation", ng_repeat: "error in errors.password_confirmation"} {{ error }}
+        %hr
+        .field_label_container
+          .field_label Aktuelles Passwort
+        %input#password.password{ name: "current_password",
+                ng_class: "{error: edit_form.current_password.$dirty && edit_form.current_password.$invalid}",
+                ng_model: "editCredentials.current_password",
+                type: "password"}
+        .field_error_container
+          .field_error{ ng_show: "edit_form.current_password.$dirty && edit_form.current_password.$invalid || errors.current_password" }
+            %span{ ng_show: "errors.current_password", ng_repeat: "error in errors.current_password"} {{ error }}
+      .submit-button-container
+        %i.fa.fa-check.pointer.submit-button{ ng_click: "!edit_form.$invalid && performUpdate()", ng_disabled: "edit_form.$invalid" } Änderungen speichern

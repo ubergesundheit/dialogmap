@@ -27,19 +27,32 @@
     font-size: 11px
     font-style: italic
 
-  .user-email
-    font-style: italic
-    margin: 10px 0px
-
   .logout-link
     display: block
+    text-align: center
     &:hover
       color: firebrick
     &:before
       margin: 0px 4px
 
-  .user-email, .logout-link
+  .user-email, .user-name
     text-align: center
+    font-style: italic
+    margin: 10px 0px
+    &:before
+      font-style: normal
+      font-weight: 700
+      font-variant: small-caps
+
+  .user-email:before
+    content: "E-Mail: "
+
+  .user-name:before
+    content: "Benutzername: "
+
+  .edit-button
+    text-align: center
+    display: block
 
 .social-login-button
   cursor: pointer

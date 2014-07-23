@@ -23,7 +23,8 @@ angular.module('DialogMapApp')
   'ngDialog'
   '$rootScope'
   '$timeout'
-  (Auth, ngDialog, $rootScope, $timeout) ->
+  '$http'
+  (Auth, ngDialog, $rootScope, $timeout, $http) ->
     _user = {}
 
     _user.isAuthenticated = Auth.isAuthenticated
@@ -47,8 +48,10 @@ angular.module('DialogMapApp')
       scope.loading = false
       if user.confirmed is true
         scope.user =
+          name: user.name
           email: user.email
           id: user.id
+          external_auth: user.external_auth
         _user.user = scope.user
       else
         scope.needConfirmation = true
@@ -61,6 +64,11 @@ angular.module('DialogMapApp')
       scope.loading = false
       return
 
+    handleUserEdit = ->
+      scope.stopUserEdit()
+      scope.performLogout()
+      return
+
     # everything inside this scope are actions and variables for the modal
     angular.extend scope,
       loginCredentials: {}
@@ -69,6 +77,7 @@ angular.module('DialogMapApp')
         scope.loading = true
         Auth.register
           email: @registerCredentials.email
+          name: @registerCredentials.name
           password: @registerCredentials.password
           password_confirmation: @registerCredentials.password_confirmation
         .then handleUser, handleErrors
@@ -105,6 +114,27 @@ angular.module('DialogMapApp')
             $timeout(checkLoginWindowClosed,500)
           return)()
         return
+      performUpdate: ->
+        scope.loading = true
+        $http.put '/api/users',
+          user:
+            email: scope.editCredentials.email
+            name: scope.editCredentials.name
+            current_password: scope.editCredentials.current_password
+            password: scope.editCredentials.password
+            password_confirmation: scope.editCredentials.password_confirmation
+        .then handleUserEdit, handleErrors
+        return
+      startUserEdit: ->
+        scope.editCredentials =
+          email: scope.user.email
+          name: scope.user.name
+        scope.showUserEdit = true
+        return
+      stopUserEdit: ->
+        scope.editCredentials = {}
+        scope.showUserEdit = false
+        return
 
     # show the User Modal (Login/Register/User signout)
     _user.showUserModal = ->
@@ -126,6 +156,7 @@ angular.module('DialogMapApp')
       scope.loginCredentials = {}
       scope.registerCredentials = {}
       scope.needConfirmation = false
+      scope.stopUserEdit()
       return
 
     scope.$on 'ngDialog.opened', (e, $dialog) ->

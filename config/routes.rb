@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   root 'page#index'
-  devise_for :users, path: "api/users", defaults: { format: :json }, :controllers => { omniauth_callbacks: 'omniauth_callbacks' }, skip: [:confirmations]
+  devise_for :users, path: "api/users", defaults: { format: :json }, :controllers => { omniauth_callbacks: 'omniauth_callbacks', registrations: 'registrations' }, skip: [:confirmations]
 
   as :user do
     get   '/users/confirm', to: 'confirmations#show',   as: 'user_confirmation'

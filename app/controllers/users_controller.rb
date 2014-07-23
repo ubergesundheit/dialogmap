@@ -2,13 +2,14 @@ class UsersController < ApplicationController
   before_action :set_user, :finish_signup
 
   def finish_signup
-    if request.patch? && params[:user] #&& params[:user][:email]
+    if request.patch? && params[:user] && params[:user][:email] && params[:user][:name]
       current_user.skip_reconfirmation!
       if current_user.update(user_params)
         sign_in(current_user, :bypass => true)
         redirect_to '/finish_signin.html'
       else
         @show_errors = true
+        render :layout => 'application_without_angular'
       end
     elsif request.get? && current_user.email.match(User::TEMP_EMAIL_REGEX).nil?
       redirect_to '/finish_signin.html'
