@@ -1,12 +1,20 @@
 source 'https://rubygems.org'
 source 'https://rails-assets.org'
 
+# Backend
 ruby '2.1.2'
 gem 'rails', '4.1.4'
 
 gem 'rails-i18n'
 
 gem 'pg'
+gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
+gem 'activerecord-postgis-adapter'
+gem 'rgeo'
+gem 'rgeo-geojson'
+
+gem "active_model_serializers"
+
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
@@ -18,8 +26,22 @@ gem 'compass-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'haml'
-gem 'font-awesome-rails'
 
+gem 'color'
+gem 'carrierwave'
+
+gem 'jbuilder', '~> 2.0'
+
+gem 'sdoc', '~> 0.4.0',          group: :doc
+
+gem 'spring',        group: :development
+
+gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
+
+gem 'activeadmin', github: 'gregbell/active_admin'
+
+# Frontend
+gem 'font-awesome-rails'
 gem 'ngannotate-rails'
 gem 'angularjs-rails'
 gem 'angularjs-rails-resource'
@@ -36,30 +58,7 @@ gem 'rails-assets-angular-perfect-scrollbar'
 gem 'rails-assets-ng-flow'
 gem 'rails-assets-angular-cookies'
 gem 'rails-assets-angular-simple-slider'
-
-gem 'color'
-
-gem 'carrierwave'
-
 gem 'jquery-rails'
-gem 'jbuilder', '~> 2.0'
-
-gem 'sdoc', '~> 0.4.0',          group: :doc
-
-gem 'spring',        group: :development
-
-gem 'activerecord-postgis-adapter'#, github: 'barelyknown/activerecord-postgis-adapter', branch: 'rails-4-1'
-
-gem 'rgeo'
-gem 'rgeo-geojson'
-
-gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
-
-gem "active_model_serializers"
-
-gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
-
-gem 'activeadmin', github: 'gregbell/active_admin'
 
 group :development do
   gem 'pry-rails'
@@ -73,15 +72,3 @@ group :deployment do
   gem 'capistrano-rails'
   gem 'capistrano-bundler'
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
