@@ -349,6 +349,10 @@ a
     position: relative
     bottom: 12px
     padding-left: 7px
+    opacity: 0
+    +transition(opacity .4s)
+  &:hover span.text
+    opacity: 1
 
 .visible_back_flag
   margin-right: -50px !important
