@@ -1,7 +1,6 @@
 <% if Rails.env.production? %>
 var _trackJs = {
-  customer: 'f4a5383ac12d4f3e977a880245fd95a1',
-  trackAjaxFail: false
+  token: 'f4a5383ac12d4f3e977a880245fd95a1'
 };
 // COPYRIGHT (c) 2014 TrackJS LLC ALL RIGHTS RESERVED
 (function(h,n){"use awesome";if(h.trackJs)h.console&&h.console.warn&&h.console.warn("TrackJS global conflict");else{var k=function(a,b,c,d,e){this.util=a;this.onError=b;this.onFault=c;this.options=e;e.enabled&&this.initialize(d)};k.prototype={initialize:function(a){a.addEventListener&&(this.wrapAndCatch(a.Element.prototype,"addEventListener",1),this.wrapAndCatch(a.XMLHttpRequest.prototype,"addEventListener",1),this.wrapRemoveEventListener(a.Element.prototype),this.wrapRemoveEventListener(a.XMLHttpRequest.prototype));
