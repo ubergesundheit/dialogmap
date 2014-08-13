@@ -16,10 +16,13 @@
     .text{ ng_hide: "showSortNFilter === false" }
       %h1 Wie wird diese Seite benutzt?
       %p Wenn du schonmal eine Internetseite mit Karte benutzt hast, wirst du dich direkt heimisch fühlen. Hier sind noch ein paar kleine Videos, die die Grundfunktionen erklären.
-      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Antwort verfassen
-      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Thema anlegen
-      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Registrieren/Einloggen
-      %a.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Beiträge filtern/sortieren
+      %a.fa.fa-angle-double-right.video-link{ href:"", ng_click: "showVideo = 'login.webm'" } Registrieren/Einloggen
+      %a.fa.fa-angle-double-right.video-link{ href:"", ng_click: "showVideo = 'new_topic.webm'" } Thema anlegen
+      %a.fa.fa-angle-double-right.video-link{ href:"", ng_click: "showVideo = 'reply.webm'" } Antwort verfassen
+      %a.fa.fa-angle-double-right.video-link{ href:"", ng_click: "showVideo = 'sortNfilter.webm'" } Beiträge filtern/sortieren
+  .slide
+    %h1 Zeichenerklärung
+    %div{ "legend-matrix" => true }
   .slide
     %script
       var link = document.getElementById('support-adress')
