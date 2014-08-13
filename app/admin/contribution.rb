@@ -13,7 +13,7 @@ ActiveAdmin.register Contribution do
     column :delete_reason
     column :start_date
     column :end_date
-    column :user
+    column :user, :sortable => :user_id
     column :category do |color|
       raw("<span class=\"status_tag\" style=\"color: black;border:1px solid black;background:#{color.category_color};\">#{color.category}</span>")
     end
