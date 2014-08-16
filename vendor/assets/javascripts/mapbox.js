@@ -9650,7 +9650,7 @@ L.PosAnimation = L.Class.extend({
 
 		this.fire('start');
 
-		el.style[L.DomUtil.TRANSITION] = 'all ' + (duration || 0.25) +
+		el.style[L.DomUtil.TRANSITION] = 'all ' + (duration || 1) +
 		        's cubic-bezier(0,0,' + (easeLinearity || 0.5) + ',1)';
 
 		L.DomEvent.on(el, L.DomUtil.TRANSITION_END, this._onTransitionEnd, this);
@@ -9798,7 +9798,7 @@ L.Map.include({
 			L.DomUtil.addClass(this._mapPane, 'leaflet-pan-anim');
 
 			var newPos = this._getMapPanePos().subtract(offset);
-			this._panAnim.run(this._mapPane, newPos, options.duration || 0.25, options.easeLinearity);
+			this._panAnim.run(this._mapPane, newPos, options.duration || 1, options.easeLinearity);
 		} else {
 			this._rawPanBy(offset);
 			this.fire('move').fire('moveend');
@@ -9842,7 +9842,7 @@ L.PosAnimation = L.DomUtil.TRANSITION ? L.PosAnimation : L.PosAnimation.extend({
 
 		this._el = el;
 		this._inProgress = true;
-		this._duration = duration || 0.25;
+		this._duration = duration || 1;
 		this._easeOutPower = 1 / Math.max(easeLinearity || 0.5, 0.2);
 
 		this._startPos = L.DomUtil.getPosition(el);

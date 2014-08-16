@@ -75,6 +75,7 @@ angular.module("DialogMapApp").controller "MapController", [
         onEachFeature: (feature, layer) ->
           layer.bindPopup L.mapbox.marker.createPopup(feature),
             closeButton: false
+            autoPanPadding: [200,200]
           layer.on 'mouseover', $scope.highlightFeature
           layer.on 'mouseout', $scope.clearHighlights
           layer.on 'click', (evt) ->
