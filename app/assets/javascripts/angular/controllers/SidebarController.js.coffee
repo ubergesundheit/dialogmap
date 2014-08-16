@@ -158,6 +158,7 @@ angular.module("DialogMapApp").controller "SidebarController", [
       contribution = angular.element(".contribution[contribution-id=#{data.contribution_id}]")
       contribution.addClass('contribution-hover')
       if !data.dontScroll and contribution? and contribution.position? and contribution.position()?
+        angular.element('#contributions-scroller').scrollTop(0)
         angular.element('#contributions-scroller').scrollTop(contribution.position().top)
 
       return
