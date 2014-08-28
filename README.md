@@ -1,6 +1,7 @@
 # DialogMap - Spatially enhanced dialogues
 
 [![Code Climate](https://codeclimate.com/github/ubergesundheit/dialogmap/badges/gpa.svg)](https://codeclimate.com/github/ubergesundheit/dialogmap)
+[![Dependency Status](https://gemnasium.com/ubergesundheit/dialogmap.svg)](https://gemnasium.com/ubergesundheit/dialogmap)
 
 This repository contains a Rails/Angular single-page application to support dialogues with spatial references. It allows users to reference spatial features to parts of their contributions. Other users can write answers with own spatial references. It was developed in the context of a masters thesis with the title "Supporting public deliberation through spatially enhanced dialogues" by [Gerald Pape](http://geraldpape.io). The aim of the thesis is to study the benefits applying dialogues on a map to public deliberation.
 You can find a small demonstration video [here](https://www.youtube.com/watch?v=lwWGbaIyn4k).
