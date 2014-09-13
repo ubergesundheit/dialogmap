@@ -81,5 +81,5 @@ angular.module "DialogMapApp", [
     # so that you can access them from any scope within your applications
     $rootScope.$state = $state
     $rootScope.$stateParams = $stateParams
-    amMoment.changeLanguage('de')
+    amMoment.changeLocale('de')
   ]

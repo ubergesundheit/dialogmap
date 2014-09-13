@@ -1,0 +1,1 @@
+Rails.application.config.assets.precompile += %w( select2/select2.png select2/select2-spinner.gif select2/select2x2.png )

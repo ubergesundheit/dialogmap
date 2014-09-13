@@ -25,7 +25,7 @@
 //= require keypress
 //= require ngDialog
 //= require moment
-//= require moment/lang/de
+//= require moment/locale/de
 //= require angular-moment
 //= require angular-ui-select2
 //= require ngQuickDate
