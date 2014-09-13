@@ -3,7 +3,7 @@ source 'https://rails-assets.org'
 
 # Backend
 ruby '2.1.2'
-gem 'rails', '4.1.5'
+gem 'rails', '4.1.6'
 
 gem 'rails-i18n'
 
