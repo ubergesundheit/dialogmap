@@ -1,0 +1,43 @@
+@import compass/reset
+@import compass
+
+*,
+*:before,
+*:after
+  +box-sizing(border-box)
+
+@import base
+
+html, body
+  height: 100%
+
+#header
+  height: 150px
+  margin: 0px 30px
+  background: asset-url('color_bar.png') repeat-x 0% 100% #fff
+
+#logo
+  position: relative
+  top: 25px
+  left: 20px
+  height: 69px
+  background: asset-url('logo-buergerstiftung.jpg') no-repeat
+
+ul#menue
+  height: 40px
+  text-align: center
+  font-weight: bold
+  color: #999
+  li
+    line-height: 40px
+    display: inline
+    list-style-type: none
+    padding-right: 5%
+
+#content
+  height: calc(100% - 200px)
+
+iframe
+  width: 100%
+  padding: 0px 30px
+  height: 100%
