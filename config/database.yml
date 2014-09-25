@@ -27,7 +27,7 @@ default: &default
 
 development:
   <<: *default
-  database: dialog_map_development
+  database: dialog_map_wirmachenmit
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

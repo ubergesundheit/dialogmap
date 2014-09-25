@@ -66,7 +66,7 @@ angular.module("DialogMapApp").controller "MapController", [
           enable: ['moveend','draw:created','click','popupopen']
           logic: 'emit'
       tiles:
-        url: '/tiles/{z}/{x}/{y}.png'
+        url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
       # contains all geofeatures
       geojson:
         data: { "type": "FeatureCollection", "features": [] }
