@@ -345,10 +345,11 @@ a
   background-color: $sidebar-background
   border-radius: 25px 0px 0px 25px
   background-image: linear-gradient(to right, darken($sidebar-background, 10), $sidebar-background 40%)
-  +transition(margin-right .4s)
+  +transition(margin-right .4s, opacity .4s)
   white-space: nowrap
   top: 32px
   +user-select(none)
+  opacity: 0
   margin-right: -90px
   .icon
     font-size: 50px
@@ -364,6 +365,7 @@ a
     opacity: 1
 
 .visible_back_flag
+  opacity: 1 !important
   margin-right: -50px !important
   &:hover
     margin-right: 0px !important
