@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  comfy_route :cms_admin, :path => '/cms'
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  root 'page#index'
-  get 'wirmachenmit', to: 'page#wirmachenmit'
+  #root 'page#index'
+  #get 'wirmachenmit', to: 'page#wirmachenmit'
+  get 'map', to: 'page#index'
   devise_for :users, path: "api/users", defaults: { format: :json }, :controllers => { omniauth_callbacks: 'omniauth_callbacks', registrations: 'registrations' }, skip: [:confirmations]
 
   as :user do
@@ -21,6 +24,9 @@ Rails.application.routes.draw do
   end
 
   match '/finish_signup/:id' => 'users#finish_signup', via: [:get, :patch], as: :finish_signup
+
+  # Make sure this routeset is defined last
+  comfy_route :cms, :path => '/', :sitemap => false
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

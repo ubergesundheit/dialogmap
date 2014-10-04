@@ -7,6 +7,8 @@ gem 'rails', '4.1.6'
 
 gem 'rails-i18n'
 
+gem 'comfortable_mexican_sofa', '~> 1.12.0'
+
 gem 'pg'
 gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
 gem 'activerecord-postgis-adapter'
