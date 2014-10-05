@@ -8,36 +8,436 @@
 
 @import base
 
+
+@-webkit-viewport
+  width: device-width
+
+
+@-moz-viewport
+  width: device-width
+
+
+@-ms-viewport
+  width: device-width
+
+
+@-o-viewport
+  width: device-width
+
+
+@viewport
+  width: device-width
+
 html, body
-  height: 100%
+  font-family: $default-font-family
 
-#header
-  height: 150px
-  margin: 0px 30px
-  background: asset-url('color_bar.png') repeat-x 0% 100% #fff
+.container
+  margin-right: auto
+  margin-left: auto
+  padding-left: 15px
+  padding-right: 15px
 
-#logo
+.row
+  margin-left: -15px
+  margin-right: -15px
+
+.col-xs-12, .col-sm-12, .col-md-12
   position: relative
-  top: 25px
-  left: 20px
-  height: 69px
-  background: asset-url('logo-buergerstiftung.jpg') no-repeat
+  min-height: 1px
+  padding-left: 15px
+  padding-right: 15px
 
-ul#menue
-  height: 40px
-  text-align: center
-  font-weight: bold
-  color: #999
-  li
-    line-height: 40px
-    display: inline
-    list-style-type: none
-    padding-right: 5%
-
-#content
-  height: calc(100% - 200px)
-
-iframe
+.col-xs-12
+  float: left
   width: 100%
-  padding: 0px 30px
-  height: 100%
+
+.nav
+  margin-bottom: 0
+  padding-left: 0
+  list-style: none
+  > li
+    position: relative
+    display: block
+    > a
+      position: relative
+      display: block
+      padding: 10px 15px
+      &:hover, &:focus
+        text-decoration: none
+        background-color: #eeeeee
+
+.navbar-collapse
+  max-height: 340px
+  overflow-x: visible
+  padding-right: 15px
+  padding-left: 15px
+  border-top: 1px solid transparent
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1)
+  -webkit-overflow-scrolling: touch
+
+.navbar-collapse
+  width: auto
+  border-top: 0
+  box-shadow: none
+  &.collapse
+    display: block !important
+    height: auto !important
+    padding-bottom: 0
+    overflow: visible !important
+
+.container >
+  .navbar-header, .navbar-collapse
+    margin-right: 0
+    margin-left: 0
+
+.navbar-toggle
+  position: relative
+  float: right
+  margin-right: 15px
+  padding: 9px 10px
+  margin-top: 8px
+  margin-bottom: 8px
+  background-color: transparent
+  background-image: none
+  border: 1px solid transparent
+  border-radius: 4px
+  &:focus
+    outline: none
+
+.navbar-nav
+  margin: 7.5px -15px
+  > li > a
+    padding-top: 10px
+    padding-bottom: 10px
+    line-height: 20px
+
+.navbar-nav
+  float: left
+  margin: 0
+  > li
+    float: left
+    > a
+      padding-top: 15px
+      padding-bottom: 15px
+
+.navbar-default
+  background-color: #f8f8f8
+  border-color: #e7e7e7
+  .navbar-nav >
+    li > a
+      color: #777777
+      &:hover, &:focus
+        color: #333333
+        background-color: rgba(0, 0, 0, 0)
+    .active > a
+      color: #555555
+      background-color: #e7e7e7
+      &:hover, &:focus
+        color: #555555
+        background-color: #e7e7e7
+  .navbar-toggle
+    border-color: #dddddd
+    &:hover, &:focus
+      background-color: #dddddd
+  .navbar-collapse
+    border-color: #e7e7e7
+
+.alert
+  padding: 15px
+  margin-bottom: 20px
+  border: 1px solid transparent
+  border-radius: 4px
+  h4
+    margin-top: 0
+    color: inherit
+
+.close
+  float: right
+  font-size: 21px
+  font-weight: bold
+  line-height: 1
+  color: #000000
+  text-shadow: 0 1px 0 #ffffff
+  opacity: 0.2
+  filter: alpha(opacity = 20)
+  &:hover, &:focus
+    color: #000000
+    text-decoration: none
+    cursor: pointer
+    opacity: 0.5
+    filter: alpha(opacity = 50)
+
+.clearfix
+  &:before, &:after
+    content: " "
+    display: table
+
+.container
+  &:before, &:after
+    content: " "
+    display: table
+
+.row
+  &:before, &:after
+    content: " "
+    display: table
+
+.nav
+  &:before, &:after
+    content: " "
+    display: table
+
+.navbar
+  &:before, &:after
+    content: " "
+    display: table
+
+.navbar-header
+  &:before, &:after
+    content: " "
+    display: table
+
+.navbar-collapse
+  &:before, &:after
+    content: " "
+    display: table
+
+.clearfix:after, .container:after, .row:after, .nav:after, .navbar:after, .navbar-header:after, .navbar-collapse:after
+  clear: both
+
+button
+  font-family: inherit
+  font-size: inherit
+  line-height: inherit
+
+a
+  color: #428bca
+  text-decoration: none
+  &:hover
+    color: #2a6496
+    text-decoration: underline
+  &:focus
+    color: #2a6496
+    text-decoration: underline
+    outline: thin dotted
+    outline: 5px auto -webkit-focus-ring-color
+    outline-offset: -2px
+
+img
+  vertical-align: middle
+
+.wrap
+  width: auto
+  clear: both
+
+h1, h2, h4
+  font-weight: 500
+  line-height: 1.1
+  color: inherit
+
+h1, h2
+  margin-top: 20px
+  margin-bottom: 10px
+
+h4
+  margin-top: 10px
+  margin-bottom: 10px
+
+h1
+  font-size: 36px
+
+h2
+  font-size: 30px
+
+h4
+  font-size: 18px
+
+p
+  margin: 0 0 10px
+
+small
+  font-size: 85%
+
+ul
+  margin-top: 0
+  margin-bottom: 10px
+
+@media (min-width: 768px)
+  .navbar-toggle
+    display: none
+
+.navbar-nav
+  margin: 7.5px -15px
+
+@media (min-width: 768px)
+  .navbar-nav
+    margin: 0
+
+.navbar-default
+  background-color: #f8f8f8
+  border-color: #e7e7e7
+  .navbar-nav >
+    li > a
+      color: #777777
+      &:hover, &:focus
+        color: #333333
+        background-color: rgba(0, 0, 0, 0)
+    .active > a
+      color: #555555
+      background-color: #e7e7e7
+      &:hover, &:focus
+        color: #555555
+        background-color: #e7e7e7
+  .navbar-toggle
+    border-color: #dddddd
+    &:hover, &:focus
+      background-color: #dddddd
+  .navbar-collapse
+    border-color: #e7e7e7
+
+.t3-mainnav
+  border-left: 0
+  border-right: 0
+  margin-bottom: 0
+  border-radius: 0
+  .t3-navbar
+    padding-left: 0
+    padding-right: 0
+  .t3-navbar-collapse .navbar-nav
+    margin: 0 -15px
+    > li
+      > a
+        border-top: 1px solid #e7e7e7
+      &:first-child > a
+        border-top: 0
+
+.article-content img
+  display: block
+  max-width: 100%
+  height: auto
+
+.alert-notice
+  background-color: #d9edf7
+  border-color: #bce8f1
+  color: #3a87ad
+
+.alert h4
+  color: inherit
+
+.t3-header
+  padding-top: 20px
+  padding-bottom: 20px
+  background: url(colorful_line.png) repeat-x bottom
+
+.logo
+  text-align: left
+  a
+    display: inline-block
+    line-height: 1
+    margin: 0
+
+.logo-image
+  span, small
+    display: none
+
+.t3-sl
+  padding-bottom: 60px
+  padding-top: 60px
+
+.t3-mainbody
+  background: #ffe3aa
+
+.t3-content
+  padding-top: 50px
+  padding-bottom: 15px
+
+.t3-footer
+  border-top: 1px solid #eeeeee
+  background: #f8f8f8
+  color: #555555
+  &:before
+    content: " "
+    display: table
+  &:after
+    content: " "
+    display: table
+    clear: both
+  small
+    display: block
+    font-size: 100%
+
+.t3-copyright
+  border-top: 1px solid #eeeeee
+  font-size: 12px
+  padding: 40px 0 80px
+  &:before
+    content: " "
+    display: table
+  &:after
+    content: " "
+    display: table
+    clear: both
+  small
+    margin-bottom: 5px
+
+.copyright
+  margin-bottom: 20px
+
+.buergerpreismodule
+  background: #fbb900
+  height: 110px
+
+#startseite
+  margin: -15px
+  margin-top: -50px
+
+.home
+  h1
+    line-height: 1
+  h2
+    font-size: 21px
+  .t3-sl-1
+    padding: 0
+    background: #ffffff
+    color: #333333
+
+h2.header-title
+  color: #004a9c
+  font-weight: 700
+
+h3.header-title-smaller
+  margin-top: 0px
+
+// html, body
+//   height: 100%
+
+// #header
+//   height: 150px
+//   margin: 0px 30px
+//   background: asset-url('color_bar.png') repeat-x 0% 100% #fff
+
+// #logo
+//   position: relative
+//   top: 25px
+//   left: 20px
+//   height: 69px
+//   background: asset-url('logo-buergerstiftung.jpg') no-repeat
+
+// ul#menue
+//   height: 40px
+//   text-align: center
+//   font-weight: bold
+//   color: #999
+//   li
+//     line-height: 40px
+//     display: inline
+//     list-style-type: none
+//     padding-right: 5%
+
+// #content
+//   height: calc(100% - 200px)
+
+// iframe
+//   width: 100%
+//   padding: 0px 30px
+//   height: 100%
