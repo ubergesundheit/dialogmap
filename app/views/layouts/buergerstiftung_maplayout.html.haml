@@ -1,0 +1,61 @@
+!!! 5
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "content-type"}/
+    %title
+      = html_title
+    %link{:href => "favicon.ico", :rel => "shortcut icon", :type => "image/vnd.microsoft.icon"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    = stylesheet_link_tag "buergerstiftung", media: "all"
+    :css
+      html, body {
+        height: 100%;
+      }
+
+      .home {
+        height: calc(100% - 180px);
+      }
+    / = javascript_include_tag "application"
+    = csrf_meta_tags
+    :javascript
+      //<![CDATA[
+      if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+          var msViewportStyle = document.createElement("style");
+          msViewportStyle.appendChild(
+              document.createTextNode("@-ms-viewport{width:auto!important}")
+          );
+          document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+      }
+      //]]>
+    %meta{:content => "true", :name => "HandheldFriendly"}/
+    %meta{:content => "YES", :name => "apple-mobile-web-app-capable"}/
+    / Le HTML5 shim and media query for IE8 support
+    /[if lt IE 9]
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  %body
+    %header#t3-header.container.t3-header
+      .row
+        .col-xs-12.col-sm-12.logo
+          .logo-image
+            = link_to "/", title: "Wir machen mit" do
+              = image_tag("logo_buergerstiftung.png", class: "logo-img")
+              %span Wir machen mit
+    %nav#t3-mainnav.wrap.navbar.navbar-default.t3-mainnav
+      .container
+        .t3-navbar.navbar-collapse.collapse
+          .t3-megamenu.animate.slide
+            %ul.nav.navbar-nav.level0
+              = menu_items
+    .home
+      / .wrap.t3-sl.t3-sl-1
+      /   .custom.container.buergerpreismodule
+      /     %h2.header-title Wir machen mit
+      /     %h3.header-title-smaller 1000 Stunden für Münster
+      %iframe{ src: "/map" }
+      / #t3-mainbody.container.t3-mainbody
+      /   .row
+      /     #t3-content.t3-content.col-xs-12
+      /       .item-page.clearfix
+      /         %article
+      /           = yield
