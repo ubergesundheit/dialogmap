@@ -16,7 +16,7 @@ set :rbenv_ruby, '2.1.3'
 set :rbenv_custom_path, '/opt/rbenv'
 
 set :linked_files, %w{.rbenv-vars}
-set :linked_dirs, %w{public/static_images}
+set :linked_dirs, %w{public/static_images public/system/comfy}
 # Default value for :format is :pretty
 # set :format, :pretty
 

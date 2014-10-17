@@ -21,10 +21,10 @@ angular.module("DialogMapApp").controller "MainController", [
         $cookies.showIntroOnStartup = if $cookies.showIntroOnStartup is 'true' then false else true
         return
 
-    if !$cookies.showIntroOnStartup?
-      $cookies.showIntroOnStartup = "true"
+    # if !$cookies.showIntroOnStartup?
+    #   $cookies.showIntroOnStartup = "true"
 
-    if $cookies.showIntroOnStartup is "true"
-      $scope.showHelpModal()
+    # if $cookies.showIntroOnStartup is "true"
+    #   $scope.showHelpModal()
     return
 ]
