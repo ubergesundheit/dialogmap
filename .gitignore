@@ -21,3 +21,4 @@ infrastructure/nodes/localhost.json
 # Ignore .rbenv-vars containing oauth secrets.. n' stuff
 .rbenv-vars
 public/static_images
+public/system
