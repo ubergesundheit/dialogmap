@@ -3,6 +3,10 @@ module ApplicationHelper
     "#{@cms_page.try(:label)} | Wir machen mit" || 'Wir machen mit'
   end
 
+  def in_page_title
+    "#{@cms_page.try(:label)}" || '1000 Stunden für Münster'
+  end
+
   def active_menu_item_class(label)
     "active" if label == @cms_page.label
   end
