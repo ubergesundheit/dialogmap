@@ -23,6 +23,8 @@ class Contribution < ActiveRecord::Base
 
   after_save :update_category_activity_content
 
+  after_save :create_update_page
+
   default_scope { includes(:child_contributions).includes(:features).includes(:references).order('created_at ASC') }
 
   scope :within, -> (bbox_string) {
@@ -103,6 +105,21 @@ class Contribution < ActiveRecord::Base
   end
 
   private
+
+    def create_update_page
+      if User.find(self.user_id).name == "buergerstiftung"
+        parent = Comfy::Cms::Page.find_by(label: "25 Angebote")
+        layout = Comfy::Cms::Layout.find_by(app_layout: "buergerstiftung_einzelnes_angebot")
+        page = Comfy::Cms::Page.find_by(slug: self.title_was.parameterize)
+        page = Comfy::Cms::Page.new if page == nil
+        page.layout = layout
+        page.parent = parent
+        page.site_id = 1 # Only one "site"
+        page.slug = "#{self.title.parameterize}-#{self.id}"
+        page.label = self.title
+        page.save
+      end
+    end
 
     def about_to_be_deleted?
       self.deleted
