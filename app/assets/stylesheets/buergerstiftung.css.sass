@@ -8,6 +8,10 @@
 
 @import base
 
+$buergerstiftung-yellow: #E9B11D
+$buergerstiftung-red: #ae1c25
+$page-width: 950px
+$buergerstiftung-font-family: 'PT Sans', sans-serif
 
 @-webkit-viewport
   width: device-width
@@ -29,14 +33,14 @@
   width: device-width
 
 html, body
-  font-family: $default-font-family
+  font-family: $buergerstiftung-font-family
 
 .container
   margin-right: auto
   margin-left: auto
   padding-left: 15px
   padding-right: 15px
-  width: 900px
+  width: $page-width
 
 .row
   margin-left: -15px
@@ -256,7 +260,8 @@ h4
 
 p
   margin: 0 0 10px
-  font-weight: 300
+  color: $darker-grey
+  line-height: 1.2
 
 small
   font-size: 85%
@@ -330,7 +335,9 @@ ul
 .t3-header
   padding-top: 20px
   padding-bottom: 20px
-  background: asset-url('colorful_line.png') repeat-x bottom
+  background-image: asset-url('1000stunden_red.png'), asset-url('colorful_line.png')
+  background-repeat: no-repeat, repeat-x
+  background-position: right, bottom
 
 .logo
   text-align: left
@@ -338,10 +345,17 @@ ul
     display: inline-block
     line-height: 1
     margin: 0
+    &:hover
+      text-decoration: none
 
-.logo-image
-  span, small
-    display: none
+.logo-image, .tagline
+  display: inline
+
+.tagline
+  font-weight: 700
+  letter-spacing: 1px
+  font-size: 30px
+  color: $buergerstiftung-yellow
 
 .t3-sl
   padding-bottom: 60px
@@ -394,6 +408,7 @@ ul
   margin-top: -50px
 
 .home
+  background: asset-url('spinner-small.gif') no-repeat center
   h1
     line-height: 1
   h2
@@ -407,12 +422,14 @@ h2.header-title
   color: #004a9c
   font-weight: 700
   font-size: 27px
-  margin-top: 4px
+  margin-top: 0px
+  margin-bottom: 2px
+  text-transform: uppercase
 
 h3.header-title-smaller
   margin-top: 14px
   font-size: 14px
-  margin-bottom: 12px
+  margin-bottom: 10px
 
 // html, body
 //   height: 100%
@@ -447,3 +464,65 @@ iframe
   width: 100%
   padding: 0px 30px
   height: 100%
+
+strong
+  font-weight: 700
+
+em
+  font-style: italic
+
+.angebote-container
+  a:hover
+    text-decoration: none
+  .angebot-img-container
+    cursor: pointer
+    width: 184px
+    height: 94px
+    overflow: hidden
+    img
+      max-width: 184px
+      top: -50%
+      position: relative
+    &:hover > img
+      +transform(scale3d(1.05,1.05,1))
+    &:hover > .angebot-label
+      color: darken($buergerstiftung-red, 20)
+    .angebot-label
+      font-weight: 700
+      z-index: 1
+      position: relative
+      top: 70px
+      left: 5px
+      color: $buergerstiftung-red
+      background-color: rgba($buergerstiftung-yellow, 0.8)
+      +border-radius(2px)
+      padding: 3px
+
+
+.angebot
+  .left
+    float: left
+    width: 360px
+    margin-right: 15px
+    img
+      max-width: 100%
+      max-height: 100%
+      margin-bottom: 10px
+  .right
+    width: 585px
+    display: inline
+  .wwww, .contact
+    margin-bottom: 20px
+    font-size: 18px
+    span
+      font-weight: 700
+      color: $buergerstiftung-red
+      text-transform: uppercase
+      font-size: 120%
+
+.angebot-links > a
+  font-weight: 700
+  font-size: 18px
+
+.angebot-back-link
+  float: right

@@ -50,7 +50,8 @@
           .logo-image
             = link_to "/", title: "Wir machen mit" do
               = image_tag("logo_buergerstiftung.png", class: "logo-img")
-              %span Wir machen mit
+              .tagline
+                25 IDEEN ZUM SELBST MITMACHEN
     %nav#t3-mainnav.wrap.navbar.navbar-default.t3-mainnav
       .container
         .t3-navbar.navbar-collapse.collapse
@@ -58,14 +59,4 @@
             %ul.nav.navbar-nav.level0
               = menu_items
     .home
-      / .wrap.t3-sl.t3-sl-1
-      /   .custom.container.buergerpreismodule
-      /     %h2.header-title Wir machen mit
-      /     %h3.header-title-smaller 1000 Stunden für Münster
       %iframe{ src: "/map" }
-      / #t3-mainbody.container.t3-mainbody
-      /   .row
-      /     #t3-content.t3-content.col-xs-12
-      /       .item-page.clearfix
-      /         %article
-      /           = yield

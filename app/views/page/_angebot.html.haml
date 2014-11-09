@@ -1,0 +1,28 @@
+.angebot
+  .left
+    = image_tag(@contrib.image, class: 'angebot_img')
+    .contact
+      %strong
+        = @contrib.page_actor
+      %br
+      = @contrib.page_contact.html_safe
+  .right
+    %h2
+      = @contrib.title
+    .wwww
+      = @contrib.page_description.html_safe
+    .wwww
+      %span Wer?
+      = @contrib.page_who.html_safe
+    .wwww
+      %span Wie?
+      = @contrib.page_how.html_safe
+    .wwww
+      %span Wann?
+      = @contrib.page_when.html_safe
+    .wwww
+      %span Wo?
+      = @contrib.page_where.html_safe
+.angebot-links
+  = link_to('auf Karte zeigen', '/karte')
+  = link_to('zurück', '/25-angebote', class: "angebot-back-link")
