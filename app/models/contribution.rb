@@ -65,12 +65,23 @@ class Contribution < ActiveRecord::Base
     }.flatten.uniq
   }
 
+  scope :angebote, -> (buergerstiftung_user) {
+    unscoped.where(user_id: buergerstiftung_user)
+  }
+
   hstore_accessor :properties,
     category: :string,
     category_color: :string,
     activity: :string,
     activity_icon: :string,
-    content: :array
+    content: :array,
+    page_description: :string,
+    page_who: :string,
+    page_where: :string,
+    page_how: :string,
+    page_when: :string,
+    page_contact: :string,
+    page_actor: :string
 
   def user
     User.find(self.user_id)

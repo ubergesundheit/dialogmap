@@ -1,6 +1,7 @@
 ActiveAdmin.register Contribution do
 
-  permit_params :title, :description, :deleted, :delete_reason, :properties, :category_color, :activity_icon
+  permit_params :title, :description, :deleted, :delete_reason, :properties, :category_color, :activity_icon,
+    :page_description, :page_who, :page_when, :page_how, :page_where, :page_contact, :page_actor
 
   index do
     selectable_column
@@ -35,6 +36,13 @@ ActiveAdmin.register Contribution do
       f.input :category_color, input_html: { type: 'color' }
       f.input :activity, input_html: { disabled: true }
       f.input :activity_icon
+      f.input :page_actor
+      f.input :page_description
+      f.input :page_who
+      f.input :page_when
+      f.input :page_how
+      f.input :page_where
+      f.input :page_contact
     end
     f.actions
   end
