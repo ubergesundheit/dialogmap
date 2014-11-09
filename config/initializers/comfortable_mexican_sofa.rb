@@ -87,14 +87,23 @@ ComfortableMexicanSofa.configure do |config|
   # Default is false.
   #   config.reveal_cms_partials = false
   module CmsDeviseAuth
-  def authenticate
-    unless current_admin_user
-      redirect_to '/admin/login'
+    def authenticate
+      unless current_admin_user
+        redirect_to '/admin/login'
+      end
     end
   end
-end
 
-config.admin_auth = 'CmsDeviseAuth'
+  module CmsPagesAuth
+    def authenticate
+      authenticate_or_request_with_http_basic do |username, password|
+        username == ENV["BASIC_AUTH_USER"] && password == ENV["BASIC_AUTH_PASS"]
+      end
+    end
+  end
+
+  config.public_auth = 'CmsPagesAuth'
+  config.admin_auth = 'CmsDeviseAuth'
 
 end
 
