@@ -15,6 +15,8 @@ angular.module("DialogMapApp").controller "SidebarController", [
       User: User
       sort: (child) ->
         switch $scope.sortingOrder
+          when 'ctAlphabetical'
+            return child.title
           when 'ctNewer'
             return -moment(child.createdAt).format('X')
           when 'ctReplys'

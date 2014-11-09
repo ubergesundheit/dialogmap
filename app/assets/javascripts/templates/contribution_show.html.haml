@@ -1,33 +1,33 @@
 .contribution.cursor-default{ ng_show: "Contribution.currentContribution", ng_style: "{'border-top': '10px solid '+ lightenColor(Contribution.currentContribution.category.color)}" }
   #parent-contribution
     %h2 {{ Contribution.currentContribution.title }}
-    .contribution-info
-      von
-      {{ Contribution.currentContribution.user.name }}
-      am
-      {{ Contribution.currentContribution.createdAt | amCalendar}}
-    .contribution-category-container
-      .category-columns
-        %div.category-column
-          %span{ title: "Akteur: {{Contribution.currentContribution.category.id}}" }
-            %span.category-title Akteur:
-            .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}"}
-            %span.category-value {{Contribution.currentContribution.category.id }}
-        %div.category-column
-          %span{ title: "Aktivität: {{Contribution.currentContribution.activity.id}}"}
-            %span.category-title Aktivität:
-            .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
-            %span.category-value {{ Contribution.currentContribution.activity.id }}
-        %span.category-title.content-title Inhalte:
-        %span{ ng_repeat: "c in Contribution.currentContribution.content" }
-          %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
-      .time-limit{ ng_show: "Contribution.currentContribution.startDate && Contribution.currentContribution.endDate" }
-        %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
-        Beginn <span am-time-ago="Contribution.currentContribution.startDate"></span>, Ende <span am-time-ago="Contribution.currentContribution.endDate"></span>
+    / .contribution-info
+    /   von
+    /   {{ Contribution.currentContribution.user.name }}
+    /   am
+    /   {{ Contribution.currentContribution.createdAt | amCalendar}}
+    / .contribution-category-container
+    /   .category-columns
+    /     %div.category-column
+    /       %span{ title: "Akteur: {{Contribution.currentContribution.category.id}}" }
+    /         %span.category-title Akteur:
+    /         .category-color{ ng_style: "{'background-color': Contribution.currentContribution.category.color}"}
+    /         %span.category-value {{Contribution.currentContribution.category.id }}
+    /     %div.category-column
+    /       %span{ title: "Aktivität: {{Contribution.currentContribution.activity.id}}"}
+    /         %span.category-title Aktivität:
+    /         .maki-icon{ class: "{{Contribution.currentContribution.activity.icon}}" }
+    /         %span.category-value {{ Contribution.currentContribution.activity.id }}
+    /     %span.category-title.content-title Inhalte:
+    /     %span{ ng_repeat: "c in Contribution.currentContribution.content" }
+    /       %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
+    /   .time-limit{ ng_show: "Contribution.currentContribution.startDate && Contribution.currentContribution.endDate" }
+    /     %i.fa.fa-clock-o{ title: "Start: {{ Contribution.currentContribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ Contribution.currentContribution.endDate | amDateFormat: 'L LT' }}"}
+    /     Beginn <span am-time-ago="Contribution.currentContribution.startDate"></span>, Ende <span am-time-ago="Contribution.currentContribution.endDate"></span>
 
     .delete-edit-links.parent-delete-edit-link
       %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(Contribution.currentContribution.id)", title: "Beitrag bearbeiten", ng_show: "Contribution.currentContribution.user.id === User.user.id && !Contribution.composing" }
-      %span.fa-stack.delete-edit-icon.pointer{ title: "Beitrag {{ Contribution.currentContribution.favoredByCurrentUser === true ? 'nicht mehr' : '' }} favorisieren", ng_click: "Contribution.toggleFavorite(Contribution.currentContribution.id)", ng_hide: "Contribution.currentContribution.user.id === User.user.id || Contribution.composing" }
+      %span.fa-stack.delete-edit-icon.pointer{ title: "Angebot {{ Contribution.currentContribution.favoredByCurrentUser === true ? 'nicht mehr' : '' }} favorisieren", ng_click: "Contribution.toggleFavorite(Contribution.currentContribution.id)", ng_hide: "Contribution.currentContribution.user.id === User.user.id || Contribution.composing" }
         %i.fa.fa-heart.fa-stack-1x.heart-stack-adjust
         %i.fa.fa-ban.fa-stack-2x.ban-stack-adjust{ ng_show: "Contribution.currentContribution.favoredByCurrentUser" }
     .thumbnail{ ng_show: "Contribution.currentContribution.imageUrl" }
@@ -38,18 +38,18 @@
       .favorites-container{ title: "{{ (Contribution.currentContribution.favoredByCurrentUser) === true ? 'Von mir und '+(Contribution.currentContribution.favorites.length-1)+' anderen favorisiert.'  : Contribution.currentContribution.favorites.length+' mal favorisiert.' }}"}
         {{Contribution.currentContribution.favorites.length}}&times;
         .i.fa.favorites-circle{ ng_class: "{'fa-heart': (Contribution.currentContribution.favoredByCurrentUser) === true, 'fa-heart-o': (Contribution.currentContribution.favoredByCurrentUser) === false}"}
-      .floated-right{ title: "{{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? 'bearbeitet am' : '' ) }} {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? Contribution.currentContribution.updatedAt : '') | amCalendar }}"}
-        {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? 'bearbeitet am' : '' ) }} {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? Contribution.currentContribution.updatedAt : '') | amCalendar }}
+      / .floated-right{ title: "{{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? 'bearbeitet am' : '' ) }} {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? Contribution.currentContribution.updatedAt : '') | amCalendar }}"}
+      /   {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? 'bearbeitet am' : '' ) }} {{ (Contribution.currentContribution.createdAt !== Contribution.currentContribution.updatedAt ? Contribution.currentContribution.updatedAt : '') | amCalendar }}
 
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", type: "edit", ng_show: "currentlyEditing === Contribution.currentContribution.id" }
-    %h4 Thema bearbeiten
+    %h4 Angebot bearbeiten
 
   .children-contributions{ ng_repeat: "contribution in Contribution.currentContribution.childContributions", ng_show: "Contribution.currentContribution.childContributions" }
     .contribution.cursor-default{ ng_hide: "contribution.deleting", ng_class: "{deleted: contribution.deleted}", favorited: "10" }
       .delete-edit-links
-        %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(contribution.id)", title: "Beitrag bearbeiten", ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
-        %i.fa.fa-trash-o.pointer.delete-edit-icon{ ng_click: "contribution.deleting = true", title: "Beitrag löschen", ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
-        %span.fa-stack.delete-edit-icon.pointer{ title: "Beitrag {{ contribution.favoredByCurrentUser === true ? 'nicht mehr' : '' }} favorisieren", ng_click: "Contribution.toggleFavorite(contribution.id)", ng_hide: "contribution.user.id === User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
+        %i.fa.fa-pencil.pointer.delete-edit-icon{ ng_click: "startContributionEdit(contribution.id)", title: "Meinung bearbeiten", ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
+        %i.fa.fa-trash-o.pointer.delete-edit-icon{ ng_click: "contribution.deleting = true", title: "Meinung löschen", ng_hide: "contribution.user.id !== User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
+        %span.fa-stack.delete-edit-icon.pointer{ title: "Meinung {{ contribution.favoredByCurrentUser === true ? 'nicht mehr' : '' }} favorisieren", ng_click: "Contribution.toggleFavorite(contribution.id)", ng_hide: "contribution.user.id === User.user.id || Contribution.composing || contribution.deleted || contribution.deleting" }
           %i.fa.fa-heart.fa-stack-1x.heart-stack-adjust
           %i.fa.fa-ban.fa-stack-2x.ban-stack-adjust{ ng_show: "contribution.favoredByCurrentUser" }
 
@@ -64,31 +64,31 @@
         .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
           {{contribution.favorites.length}}&times;
           .i.fa{ ng_class: "{'fa-heart': contribution.favoredByCurrentUser === true, 'fa-heart-o': contribution.favoredByCurrentUser === false}" }
-        .floated-right{ title: "{{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}"}
-          {{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}
-          %span{ ng_show: "contribution.deleteReason" }
-            Grund: {{ contribution.deleteReason }}
+        / .floated-right{ title: "{{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}"}
+        /   {{ (contribution.createdAt !== contribution.updatedAt ? (contribution.deleted ? 'gelöscht am' : 'bearbeitet am' ) : '' ) }} {{ (contribution.createdAt !== contribution.updatedAt ? contribution.updatedAt : '') | amCalendar }}
+        /   %span{ ng_show: "contribution.deleteReason" }
+        /     Grund: {{ contribution.deleteReason }}
 
       .contribution_input_replace{ :"data-id" => "{{contribution.id}}", type: "edit", ng_show: "currentlyEditing === contribution.id" }
-        %h4 Beitrag bearbeiten
+        %h4 Meinung bearbeiten
 
     .contribution.delete{ ng_show: "contribution.deleting" }
       %h3
         %i.fa.fa-exclamation-triangle
-        Beitrag wirklich löschen?
+        Meinung wirklich löschen?
       %i.fa.fa-times.pointer.abort-submission-button{ ng_click: "contribution.deleting = false; contribution.delete_reason_draft = undefined", title: "Abbrechen"  }
       %input.delete-reason-input{ ng_model: "contribution.delete_reason_draft", placeholder: "Grund (max. 30 Zeichen)", maxlength: "30" }
-      %i.fa.fa-check.submit-button.pointer{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja, Beitrag löschen!
+      %i.fa.fa-check.submit-button.pointer{ ng_click: "Contribution.disable(contribution.id, contribution.delete_reason_draft)" } Ja, Meinung löschen!
 
   %span{ ng_hide: "Contribution.currentContribution.childContributions.length != 0" }
-    Noch keine Antworten &hellip;
+    Noch keine Meinungen &hellip;
   .contribution_input_replace{ :"data-id" => "{{Contribution.currentContribution.id}}", ng_show: "currentlyEditing === 'new'" }
-    %h4 Antwort verfassen
+    %h4 Meinung verfassen
   .contribution-links{ ng_hide: "Contribution.composing" }
     .inline-block
     %a.floated-right{ ng_hide: "Contribution.composing", ng_click: "startAnswer(Contribution.currentContribution.id)" }
       %i.fa.fa-angle-double-right.reply-arrow
-      Antwort verfassen
+      Meinung verfassen
 .contribution{ ng_show: "!Contribution.currentContribution" }
   Dieser Beitrag wurde nicht gefunden :(
   %a.contribution-links{ ui_sref: "contributions" }

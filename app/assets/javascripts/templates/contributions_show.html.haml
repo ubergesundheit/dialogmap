@@ -4,39 +4,41 @@
     ng_mouseleave: "resetHighlight()",
     :"contribution-id" => "{{contribution.id}}",
     ng_style: "{'background-color': lightenColor(contribution.category.color)}"}
-    %h3.contribution-title{ ng_class: "{'expanded-title': contribution.showDescription}"} {{ contribution.title }}
-    %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
-    .contribution-info
-      von
-      {{ contribution.user.name }}
-      am
-      {{ contribution.createdAt | amCalendar}}
-    .contribution-category-container
-      .category-columns
-        %div.category-column
-          %span{ title: "Akteur: {{contribution.category.id}}" }
-            %span.category-title Akteur:
-            .category-color{ ng_style: "{'background-color': contribution.category.color}"}
-            %span.category-value {{contribution.category.id }}
-        %div.category-column
-          %span{ title: "Aktivität: {{contribution.activity.id}}"}
-            %span.category-title Aktivität:
-            .maki-icon{ class: "{{contribution.activity.icon}}" }
-            %span.category-value {{ contribution.activity.id }}
-        %span.category-title.content-title Inhalte:
-        %span{ ng_repeat: "c in contribution.content" }
-          %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
-      .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
-        %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
-        Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
-    .thumbnail{ ng_show: "contribution.imageUrl && contribution.showDescription" }
+    %h3.contribution-title.expanded-title {{ contribution.title }}
+    / %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
+    / .contribution-info
+    /   von
+    /   {{ contribution.user.name }}
+    /   am
+    /   {{ contribution.createdAt | amCalendar}}
+    / .contribution-category-container
+    /   .category-columns
+    /     %div.category-column
+    /       %span{ title: "Akteur: {{contribution.category.id}}" }
+    /         %span.category-title Akteur:
+    /         .category-color{ ng_style: "{'background-color': contribution.category.color}"}
+    /         %span.category-value {{contribution.category.id }}
+    /     %div.category-column
+    /       %span{ title: "Aktivität: {{contribution.activity.id}}"}
+    /         %span.category-title Aktivität:
+    /         .maki-icon{ class: "{{contribution.activity.icon}}" }
+    /         %span.category-value {{ contribution.activity.id }}
+    /     %span.category-title.content-title Inhalte:
+    /     %span{ ng_repeat: "c in contribution.content" }
+    /       %span.category-value {{ c.id }}{{ !$last == true ? ', ' : ''}}
+    /   .time-limit{ ng_show: "contribution.startDate && contribution.endDate" }
+    /     %i.fa.fa-clock-o{ title: "Start: {{ contribution.startDate | amDateFormat: 'L LT' }}, Ende: {{ contribution.endDate | amDateFormat: 'L LT' }}"}
+    /     Beginn <span am-time-ago="contribution.startDate"></span>, Ende <span am-time-ago="contribution.endDate"></span>
+    .thumbnail{ ng_show: "contribution.imageUrl" }
       %img{ ng_src: "{{contribution.imageUrl}}", ng_click: "$event.stopPropagation();", ng_dialog: "image_modal.html", ng_dialog_class: "ngdialog-theme-default image-modal", ng_dialog_close_previous: true, ng_dialog_data: '{{contribution.imageUrl}}' }
-    .contribution-description{ contribution_description: "contribution.description", ng_show: "contribution.showDescription", ng_class: "{'with-image': contribution.imageUrl}" }
+    .contribution-description{ contribution_description: "contribution.description", ng_class: "{'with-image': contribution.imageUrl}" }
     .contribution-links
-      .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
-        {{contribution.favorites.length}}&times;
-        .i.fa{ ng_class: "{'fa-heart': contribution.favoredByCurrentUser === true, 'fa-heart-o': contribution.favoredByCurrentUser === false}"}
+      .favorites-container
+        &nbsp;
+      / .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
+      /   {{contribution.favorites.length}}&times;
+      /   .i.fa{ ng_class: "{'fa-heart': contribution.favoredByCurrentUser === true, 'fa-heart-o': contribution.favoredByCurrentUser === false}"}
       %a.floated-right{ :"ui-sref" => "contribution({ id: contribution.id })", ng_click: "$event.stopPropagation();" }
         %i.fa.fa-angle-double-right.reply-arrow
-          Antworten
-          %span{ ng_show: "contribution.childContributions.length > 0" } anzeigen ({{contribution.childContributions.length}})
+          Meinung abgeben
+          %span{ ng_show: "contribution.childContributions.length > 0" } ({{contribution.childContributions.length}})

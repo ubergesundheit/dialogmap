@@ -22,16 +22,17 @@
             %i.fa.fa-user
             {{ User.user.email || "Einloggen/Registrieren" }}
 
-      .contribution#new-topic-initiator{ ng_hide: "$state.is('contribution')" }
+      .contribution#new-topic-initiator{ ng_hide: "$state.is('contribution') || User.user.name != 'buergerstiftung'" }
         %h3 Neues Thema erstellen
         %input{ type:"text", placeholder: "Titel", ng_focus: "startNewTopic()", ng_hide: "Contribution.composing" }
         #new-topic-container
       .contribution#filter{ ng_hide: "$state.is('contribution') || Contribution.composing" }
-        %h3 Beiträge filtern
+        %h3 Angebote filtern
         %div{ contribution_filter: true }
-      .sorter{ ng_hide: "Contribution.composing || $state.is('contribution')" }
-        Themen sortieren nach:
-        %select.sort-select{ "ui-select2" => "{minimumResultsForSearch: -1}", ng_init: "sortingOrder = 'ctNewer'", ng_model: "sortingOrder" }
+      .sorter{ ng_hide: "true" }
+        Angebote sortieren nach:
+        %select.sort-select{ "ui-select2" => "{minimumResultsForSearch: -1}", ng_init: "sortingOrder = 'ctAlphabetical'", ng_model: "sortingOrder" }
+          %option{ value: "ctAlphabetical" } Alphabetisch
           %option{ value: "ctReplys" } meiste Antworten
           %option{ value: "ctNewer"} neueste zuerst
           %option{ value: "ctFav" } meist favorisiert
