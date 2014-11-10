@@ -108,9 +108,13 @@ class Contribution < ActiveRecord::Base
 
     def create_update_page
       if User.find(self.user_id).name == "buergerstiftung"
+        title_was = self.title_was
+        if title_was == nil
+          title_was = self.title
+        end
         parent = Comfy::Cms::Page.find_by(label: "25 Angebote")
         layout = Comfy::Cms::Layout.find_by(app_layout: "buergerstiftung_einzelnes_angebot")
-        page = Comfy::Cms::Page.find_by(slug: self.title_was.parameterize)
+        page = Comfy::Cms::Page.find_by(slug: title_was.parameterize)
         page = Comfy::Cms::Page.new if page == nil
         page.layout = layout
         page.parent = parent
