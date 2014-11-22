@@ -45,7 +45,7 @@ module ApplicationHelper
 
   def menu_items
     @cms_site.pages.map do |page|
-      unless page.label == "Startseite" or page.parent_id != 1
+      unless page.label == "Startseite" or page.parent_id != 1 or page.label == "Impressum"
         content_tag('li', class: active_menu_item_class(page.label)) do
           link_to page.label, page.full_path
         end
