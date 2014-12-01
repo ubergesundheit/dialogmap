@@ -7,9 +7,9 @@
             .angebote-container
               = angebote
           - elsif @cms_page.slug == 'aktuelles'
-            - news = @cms_page.children.reject { |c| c.categories.first.label != 'aktuelle_meldungen' }
-            - stories = @cms_page.children.reject { |c| c.categories.first.label != 'geschichten' }
-            - press = @cms_page.children.reject { |c| c.categories.first.label != 'presseberichte' }
+            - news = @cms_page.children.reject { |c| c.categories.first == nil or c.categories.first.label != 'aktuelle_meldungen' }
+            - stories = @cms_page.children.reject { |c| c.categories.first == nil or c.categories.first.label != 'geschichten' }
+            - press = @cms_page.children.reject { |c| c.categories.first == nil or c.categories.first.label != 'presseberichte' }
             .containers-tripple
               .container3
                 %h4 Aktuelle Meldungen
