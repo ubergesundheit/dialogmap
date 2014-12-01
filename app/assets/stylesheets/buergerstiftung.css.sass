@@ -216,18 +216,13 @@ button
   line-height: inherit
 
 a
-  color: #428bca
+  color: $buergerstiftung-red
   text-decoration: none
-  font-weight: 400
   &:hover
-    color: #2a6496
+    color: darken($buergerstiftung-red, 20)
     text-decoration: underline
   &:focus
-    color: #2a6496
-    text-decoration: underline
-    outline: thin dotted
-    outline: 5px auto -webkit-focus-ring-color
-    outline-offset: -2px
+    outline: 0
 
 img
   vertical-align: middle
@@ -333,29 +328,29 @@ ul
   color: inherit
 
 .t3-header
-  padding-top: 20px
-  padding-bottom: 20px
-  background-image: asset-url('1000stunden_red.png'), asset-url('colorful_line.png')
-  background-repeat: no-repeat, repeat-x
-  background-position: right, bottom
+  height: 103px
+  line-height: 103px
+  background-image: asset-url('logo_buergerstiftung.png'), asset-url('1000stunden_red.png'), asset-url('colorful_line.png')
+  background-repeat: no-repeat, no-repeat, repeat-x
+  background-position: left center, right top, center bottom
 
 .logo
-  text-align: left
+  text-align: center
   a
     display: inline-block
     line-height: 1
     margin: 0
-    &:hover
+    width: $page-width
+    &:hover, &:focus
       text-decoration: none
+      outline: 0
 
-.logo-image, .tagline
-  display: inline
-
-.tagline
+.tagline > p
   font-weight: 700
   letter-spacing: 1px
   font-size: 30px
   color: $buergerstiftung-yellow
+  text-transform: uppercase
 
 .t3-sl
   padding-bottom: 60px
@@ -400,8 +395,8 @@ ul
   margin-bottom: 20px
 
 .buergerpreismodule
-  background: #fbb900
-  height: 95px
+  background: $buergerstiftung-yellow
+  height: 75px
 
 #startseite
   margin: -15px
@@ -419,7 +414,7 @@ ul
     color: #333333
 
 h2.header-title
-  color: #004a9c
+  color: $buergerstiftung-red
   font-weight: 700
   font-size: 27px
   margin-top: 0px
@@ -431,35 +426,6 @@ h3.header-title-smaller
   font-size: 14px
   margin-bottom: 10px
 
-// html, body
-//   height: 100%
-
-// #header
-//   height: 150px
-//   margin: 0px 30px
-//   background: asset-url('color_bar.png') repeat-x 0% 100% #fff
-
-// #logo
-//   position: relative
-//   top: 25px
-//   left: 20px
-//   height: 69px
-//   background: asset-url('logo-buergerstiftung.jpg') no-repeat
-
-// ul#menue
-//   height: 40px
-//   text-align: center
-//   font-weight: bold
-//   color: #999
-//   li
-//     line-height: 40px
-//     display: inline
-//     list-style-type: none
-//     padding-right: 5%
-
-// #content
-//   height: calc(100% - 200px)
-
 iframe
   width: 100%
   padding: 0px 30px
@@ -467,6 +433,7 @@ iframe
 
 strong
   font-weight: 700
+  color: $buergerstiftung-red
 
 em
   font-style: italic
@@ -484,19 +451,30 @@ em
       top: -50%
       position: relative
     &:hover > img
-      +transform(scale3d(1.05,1.05,1))
-    &:hover > .angebot-label
-      color: darken($buergerstiftung-red, 20)
-    .angebot-label
+      +transform(scale3d(1.03,1.03,1))
+    .angebot-actor, .angebot-label
       font-weight: 700
       z-index: 1
-      position: relative
-      top: 70px
-      left: 5px
+      position: absolute
       color: $buergerstiftung-red
       background-color: rgba($buergerstiftung-yellow, 0.8)
-      +border-radius(2px)
       padding: 3px
+      text-overflow: ellipsis
+      white-space: nowrap
+      overflow: hidden
+      text-align: center
+      color: $buergerstiftung-red
+      width: 184px
+    .angebot-actor
+      top: 61%
+    .angebot-label
+      top: 40%
+      visibility: hidden
+    &:hover > .angebot-label
+      visibility: visible
+      color: darken($buergerstiftung-red, 20)
+    &:hover > .angebot-actor
+      color: darken($buergerstiftung-red, 20)
 
 
 .angebot
@@ -511,6 +489,8 @@ em
   .right
     width: 585px
     display: inline
+  .wwww, .angebot-links
+    margin-left: 375px
   .wwww, .contact
     margin-bottom: 20px
     font-size: 18px
@@ -527,19 +507,44 @@ em
 .angebot-back-link
   float: right
 
-.geschichten-container
-  overflow: hidden
-  cursor: pointer
-  height: 250px
-  img
-    max-height: 250px
-    max-width: 250px
-    margin-bottom: 10px
-    &:hover
-      +transform(scale3d(1.05,1.05,1))
-
 .startseite > p
   color: $buergerstiftung-red
   font-size: 19px
   font-weight: 700
   margin-bottom: 13px
+
+.containers-tripple
+  width: 920px
+  text-align: center
+  margin-top: 10px
+
+.container3
+  float: left
+  width: 33%
+  text-align: center
+  h4
+    color: $buergerstiftung-red
+
+.aktuelles_page_img
+  float: left
+  margin-right: 10px
+  max-height: 300px
+  max-width: 300px
+
+.aktuelles_container
+  overflow: hidden
+  margin-bottom: 5px
+  height: 125px
+  .aktuelles_img_container
+    height: 100px
+    overflow: hidden
+    margin-bottom: 5px
+  img
+    max-height: 240px
+    max-width: 240px
+  a
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+    &:hover > .aktuelles_img_container > img
+      +transform(scale3d(1.05,1.05,1))

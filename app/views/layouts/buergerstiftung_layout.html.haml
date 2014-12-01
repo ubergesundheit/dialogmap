@@ -8,7 +8,6 @@
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
     = stylesheet_link_tag "buergerstiftung", media: "all"
-    / = javascript_include_tag "application"
     = csrf_meta_tags
     :javascript
       //<![CDATA[
@@ -26,41 +25,10 @@
     /[if lt IE 9]
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 
-    :javascript
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-49033468-3', 'auto');
-      ga('require', 'linkid', 'linkid.js');
-      ga('send', 'pageview');
+    = render partial: '/layouts/ganalytics'
   %body
-    %header#t3-header.container.t3-header
-      .row
-        .col-xs-12.col-sm-12.logo
-          .logo-image
-            = link_to "/", title: "Wir machen mit" do
-              = image_tag("logo_buergerstiftung.png", class: "logo-img")
-              .tagline
-                25 IDEEN ZUM SELBST MITMACHEN
-    %nav#t3-mainnav.wrap.navbar.navbar-default.t3-mainnav
-      .container
-        .t3-navbar.navbar-collapse.collapse
-          .t3-megamenu.animate.slide
-            %ul.nav.navbar-nav.level0
-              = menu_items
+    = render partial: '/layouts/header'
     .home
-      .wrap.t3-sl.t3-sl-1
-        .custom.container.buergerpreismodule
-          %h3.header-title-smaller 1000 Stunden für Münster
-          %h2.header-title
-            = in_page_title
-          %h3.header-submenu
-            = header_submenu
-      #t3-mainbody.container.t3-mainbody
-        .row
-          #t3-content.t3-content.col-xs-12
-            .item-page.clearfix
-              %article
-                = yield
+      = render partial: '/layouts/title_strip'
+      = render partial: '/layouts/content'
+    = render partial: '/layouts/impressum'

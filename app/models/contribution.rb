@@ -113,12 +113,12 @@ class Contribution < ActiveRecord::Base
           title_was = self.title
         end
         parent = Comfy::Cms::Page.find_by(label: "25 Angebote")
-        layout = Comfy::Cms::Layout.find_by(app_layout: "buergerstiftung_einzelnes_angebot")
+        layout = Comfy::Cms::Layout.find_by(app_layout: "buergerstiftung_layout")
         page = Comfy::Cms::Page.find_by(slug: title_was.parameterize)
         page = Comfy::Cms::Page.new if page == nil
         page.layout = layout
         page.parent = parent
-        page.site_id = 1 # Only one "site"
+        page.site_id = 1 # Only one "site", sites are the highest elements in cms hierarchy
         page.slug = "#{self.title.parameterize}-#{self.id}"
         page.label = self.title
         page.save

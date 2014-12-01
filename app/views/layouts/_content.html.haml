@@ -1,0 +1,30 @@
+#t3-mainbody.container.t3-mainbody
+  .row
+    #t3-content.t3-content.col-xs-12
+      .item-page.clearfix
+        %article
+          - if @cms_page.slug == '25-angebote'
+            .angebote-container
+              = angebote
+          - elsif @cms_page.slug == 'aktuelles'
+            - news = @cms_page.children.reject { |c| c.categories.first.label != 'aktuelle_meldungen' }
+            - stories = @cms_page.children.reject { |c| c.categories.first.label != 'geschichten' }
+            - press = @cms_page.children.reject { |c| c.categories.first.label != 'presseberichte' }
+            .containers-tripple
+              .container3
+                %h4 Aktuelle Meldungen
+                = aktuelles_items(news, 'Meldungen')
+              .container3
+                %h4 Geschichten
+                = aktuelles_items(stories, 'Geschichten')
+              .container3
+                %h4 Presseberichte
+                = aktuelles_items(press, 'Presseberichte')
+          - elsif @cms_page.full_path.start_with?('/25-angebote/')
+            = angebot
+          - elsif @cms_page.full_path.start_with?('/aktuelles/')
+            = image_tag(cms_block_content(:aktuelles_img), class: "aktuelles_page_img")
+            = cms_block_content(:aktuelles_text).html_safe
+            = link_to('zurück zu Aktuelles', '/aktuelles')
+          - else
+            = yield

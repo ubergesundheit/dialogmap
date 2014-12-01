@@ -7,6 +7,25 @@ module ApplicationHelper
     "#{@cms_page.try(:label)}" || '1000 Stunden für Münster'
   end
 
+  def aktuelles_items(items, label)
+    if items.none?
+      content_tag(:div, class: 'aktuelles_container') do
+        "Noch keine #{label} vorhanden"
+      end
+    else
+      items.map do |c|
+        content_tag(:div, class: 'aktuelles_container') do
+          link_to(c.full_path) do
+            content_tag(:div, class: 'aktuelles_img_container') do
+              image_tag(cms_block_content(:aktuelles_img, c))
+            end +
+            c.label
+          end
+        end
+      end.join.html_safe
+    end
+  end
+
   def angebot
     @contrib = Contribution.find(@cms_page.slug.split("-").last)
     render(:partial => 'page/angebot')
@@ -21,6 +40,7 @@ module ApplicationHelper
               link_to("/25-angebote/#{con.title.parameterize}-#{con.id}") do
                 content_tag('div', class: 'angebot-img-container') do
                   content_tag('span', con.title, class: "angebot-label") +
+                  content_tag('span', con.page_actor, class: "angebot-actor") +
                   image_tag(con.image)
                 end
               end unless con == nil

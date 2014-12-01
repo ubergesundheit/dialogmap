@@ -1,0 +1,12 @@
+%header.t3-header.container
+  .row
+    .col-xs-12.col-sm-12.logo
+      = link_to "/", title: "Startseite" do
+        .tagline
+          = cms_snippet_content(:tagline).html_safe
+%nav#t3-mainnav.wrap.navbar.navbar-default.t3-mainnav
+  .container
+    .t3-navbar.navbar-collapse.collapse
+      .t3-megamenu.animate.slide
+        %ul.nav.navbar-nav.level0
+          = menu_items
