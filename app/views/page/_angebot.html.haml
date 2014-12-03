@@ -24,5 +24,5 @@
       %span Wo?
       = @contrib.page_where.html_safe
 .angebot-links
-  = link_to('auf Karte zeigen', '/karte')
+  = link_to('auf Karte zeigen', "/karte/##{@contrib.id}")
   = link_to('zurück', '/25-angebote', class: "angebot-back-link")

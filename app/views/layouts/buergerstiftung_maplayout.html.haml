@@ -16,7 +16,6 @@
       .home {
         height: calc(100% - 180px);
       }
-    / = javascript_include_tag "application"
     = csrf_meta_tags
     :javascript
       //<![CDATA[
@@ -38,4 +37,10 @@
   %body
     = render partial: '/layouts/header'
     .home
-      %iframe{ src: "/map" }
+      %iframe{ id: "map_iframe", src: "" }
+    :javascript
+      var hash = window.location.hash;
+      var iframe = document.getElementById('map_iframe');
+      if (iframe) {
+        iframe.src = "/map/"+hash;
+      }
