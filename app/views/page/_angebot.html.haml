@@ -5,24 +5,24 @@
       %strong
         = @contrib.page_actor
       %br
-      = @contrib.page_contact.html_safe
+      = @contrib.page_contact.html_safe unless @contrib.page_contact == nil
   .right
     %h2
       = @contrib.title
     .wwww
-      = @contrib.page_description.html_safe
+      = @contrib.page_description.html_safe unless @contrib.page_description == nil
     .wwww
       %span Wer?
-      = @contrib.page_who.html_safe
+      = @contrib.page_who.html_safe unless @contrib.page_who == nil
     .wwww
       %span Wie?
-      = @contrib.page_how.html_safe
+      = @contrib.page_how.html_safe unless @contrib.page_how == nil
     .wwww
       %span Wann?
-      = @contrib.page_when.html_safe
+      = @contrib.page_when.html_safe unless @contrib.page_when == nil
     .wwww
       %span Wo?
-      = @contrib.page_where.html_safe
+      = @contrib.page_where.html_safe unless @contrib.page_where == nil
 .angebot-links
   = link_to('auf Karte zeigen', "/karte/##{@contrib.id}")
   = link_to('zurück', '/25-angebote', class: "angebot-back-link")
