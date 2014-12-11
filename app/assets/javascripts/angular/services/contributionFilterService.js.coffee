@@ -11,6 +11,31 @@ angular.module('DialogMapApp').service "contributionFilterService",[
       features: [ { properties: { title: true } } ]
       references: [ { title: true } ]
 
+    stripContribution: (contribution, props) ->
+      # prepare a reduced contribution with only the searchable properties
+      wanted_keys = Object.keys(props)
+      stripped = []
+      for prop of contribution
+        if contribution.hasOwnProperty(prop) and prop in wanted_keys
+          if angular.isString(contribution[prop])
+            stripped.push contribution[prop]
+          else
+            stripped.push @stripContribution(contribution[prop], props[prop])
+      stripped
+    concatenateProperties: (contribution) ->
+      getPropertyValue = (previousValue, currentValue, index, array) ->
+        propertyValue = ""
+        if angular.isString(currentValue) is true
+          propertyValue = currentValue.trim()
+        else if angular.isArray currentValue
+          propertyValue = currentValue.reduce getPropertyValue, ""
+
+        previousValue + propertyValue
+
+      # prepare a reduced contribution with only the searchable properties
+      c = @stripContribution(contribution, @_queryableProperties)
+
+      c.reduce getPropertyValue, ""
     resetFilter: ->
       @_categories = undefined
       @_activities = undefined
@@ -56,41 +81,9 @@ angular.module('DialogMapApp').service "contributionFilterService",[
         if @_query?
           regex = RegExp(@_query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"), 'i')
           for c in contributions
-            contribution_summary = ''
-            traversePathAndAppend = (target, path, key) ->
-              for section in path
-                if angular.isArray(target)
-                  path.shift()
-                  traversePathAndAppend(t, path, key) for t in target
-                  return
-                else
-                  target = target[section]
-
-              if angular.isArray(target)
-                contribution_summary += str[key] for str in target
-              else
-                contribution_summary += target[key]
-              return
-            appendProperty = (targetObj, obj, path) ->
-              for key of obj
-                if obj.hasOwnProperty key
-                  if obj[key] is true
-                    traversePathAndAppend(targetObj, path, key)
-                  else if angular.isArray obj[key]
-                    newPath = path
-                    newPath.push key
-                    appendProperty targetObj, item, newPath for item in obj[key]
-                  else
-                    newPath = path
-                    newPath.push key
-                    appendProperty targetObj, obj[key], newPath
-                  path = []
-              return
-            # summarize parent
-            appendProperty c, @_queryableProperties, []
-            # summarize children
-            appendProperty child, @_queryableProperties, [] for child in c.childContributions
-            # console.log contribution_summary
+            contribution_summary = @concatenateProperties c
+            for child in c.childContributions
+              contribution_summary += @concatenateProperties child
 
             if c not in augmented_contributions and regex.test(contribution_summary)
               augmented_contributions.push c
