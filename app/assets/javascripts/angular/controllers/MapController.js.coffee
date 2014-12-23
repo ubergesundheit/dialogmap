@@ -4,7 +4,8 @@ angular.module("DialogMapApp").controller "MapController", [
   "Contribution"
   "$rootScope"
   "$timeout"
-  ($scope, leafletData, Contribution, $rootScope, $timeout) ->
+  "Analytics"
+  ($scope, leafletData, Contribution, $rootScope, $timeout, Analytics) ->
     # use of L.activearea plugin in order to set the vieport to the visible area
     leafletData.getMap('map_main').then (map) ->
       map.setActiveArea
@@ -79,12 +80,23 @@ angular.module("DialogMapApp").controller "MapController", [
           layer.on 'mouseover', $scope.highlightFeature
           layer.on 'mouseout', $scope.clearHighlights
           layer.on 'click', (evt) ->
+            actionResult = 'nothing'
             if Contribution.addingFeatureReference == true
               feature = evt.target.feature
               Contribution.addFeatureReference feature
+              actionResult = 'addingFeatureReference'
             else if $scope.$state.is 'contributions'
+              actionResult = "navigate to #{evt.target.feature.properties.contributionId}"
               $scope.$state.go 'contribution',
                 id: evt.target.feature.properties.contributionId
+
+            currMap =
+              zoom: evt.target._map.getZoom()
+              bounds:
+                sw: evt.target._map.getBounds()._southWest
+                ne: evt.target._map.getBounds()._northEast
+
+            Analytics.trackEvent('marker', 'click', "{ 'feature': #{JSON.stringify(evt.target.feature)}, 'map': #{JSON.stringify(currMap)}, 'actionResult': #{actionResult} }")
             return
           return
       _dataFresh: true

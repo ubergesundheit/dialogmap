@@ -17,6 +17,7 @@
 //= require spectrajs
 //= require perfect-scrollbar
 //= require flow
+//= require fingerprint
 //= require angular
 //= require angular-sanitize
 //= require angularjs/rails/resource

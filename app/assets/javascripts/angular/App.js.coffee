@@ -47,12 +47,14 @@ angular.module "DialogMapApp", [
             "Contribution"
             "leafletData"
             "$rootScope"
-            (Contribution, leafletData, $rootScope) ->
+            "Analytics"
+            (Contribution, leafletData, $rootScope, Analytics) ->
               Contribution.abort()
               Contribution.currentContribution = undefined
               Contribution.getContribution()
               $rootScope.$broadcast 'resetHighlight'
               angular.element('#contributions-scroller').scrollTop(0)
+              Analytics.trackPageView('/map')
               return
             ]
 
@@ -64,10 +66,12 @@ angular.module "DialogMapApp", [
             "Contribution"
             "$stateParams"
             "$rootScope"
-            (Contribution, $stateParams, $rootScope) ->
+            "Analytics"
+            (Contribution, $stateParams, $rootScope, Analytics) ->
               Contribution.fetchAndSetCurrentContribution($stateParams.id)
               $rootScope.$broadcast 'resetHighlight'
               angular.element('#contributions-scroller').scrollTop(0)
+              Analytics.trackPageView("/map/#{$stateParams.id}")
               return
             ]
 ] #<leaflet center='muenster' controls='controls' event-broadcast='events' geojson='geojson' id='map_main' tiles='tiles'></leaflet>
@@ -82,4 +86,30 @@ angular.module "DialogMapApp", [
     $rootScope.$state = $state
     $rootScope.$stateParams = $stateParams
     amMoment.changeLocale('de')
+
+    $rootScope.browserFingerprintForGa = new Fingerprint({screen_resolution: true, canvas: true}).get()
+    ((i, s, o, g, r, a, m) ->
+      i["GoogleAnalyticsObject"] = r
+      i[r] = i[r] or ->
+        (i[r].q = i[r].q or []).push arguments
+        return
+
+      i[r].l = 1 * new Date()
+
+      a = s.createElement(o)
+      m = s.getElementsByTagName(o)[0]
+
+      a.async = 1
+      a.src = g
+      m.parentNode.insertBefore a, m
+      return
+    ) window, document, "script", "//www.google-analytics.com/analytics.js", "ga"
+    ga "create", "UA-49033468-5",
+      cookieDomain: "none"
+
+    ga "require", "linkid", "linkid.js"
+    ga "require", "displayfeatures"
+    ga "set", "&uid", $rootScope.browserFingerprintForGa
+
+    return
   ]

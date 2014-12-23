@@ -61,6 +61,7 @@ gem 'rails-assets-ng-flow'
 gem 'rails-assets-angular-cookies'
 gem 'rails-assets-angular-simple-slider'
 gem 'jquery-rails'
+gem 'fingerprintjs-rails'
 
 group :development do
   gem 'pry-rails'
