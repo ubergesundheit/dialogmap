@@ -33,20 +33,28 @@ module ApplicationHelper
 
   def angebote
     content_tag('table') do
-      Contribution.angebote(5).in_groups_of(5).map do |contribs|
+      Contribution.angebote(5).map do |category, contributions|
         content_tag('tr') do
-          contribs.map do |con|
-            content_tag('td') do
-              link_to("/25-angebote/#{con.title.parameterize}-#{con.id}") do
-                content_tag('div', class: 'angebot-img-container') do
-                  content_tag('span', con.title, class: "angebot-label") +
-                  content_tag('span', con.page_actor, class: "angebot-actor") +
-                  image_tag(con.image)
-                end
-              end unless con == nil
-            end
-          end.join.html_safe
-        end
+          content_tag('td', { colspan: 6, class: "angebot-category-header", style: "background-color: #{contributions.first.properties['category_color']}" }) do
+            content_tag('div', "", { class: "maki-icon #{contributions.first.properties['activity_icon']}" }) +
+            category
+          end
+        end +
+        contributions.in_groups_of(6).map do |contribs|
+          content_tag('tr') do
+            contribs.map do |con|
+              content_tag('td') do
+                link_to("/25-angebote/#{con.title.parameterize}-#{con.id}") do
+                  content_tag('div', class: 'angebot-img-container') do
+                    content_tag('span', con.title, class: "angebot-label") +
+                    content_tag('span', con.page_actor, class: "angebot-actor") +
+                    image_tag(con.image)
+                  end
+                end unless con == nil
+              end
+            end.join.html_safe
+          end
+        end.join.html_safe
       end.join.html_safe
     end.html_safe
   end
