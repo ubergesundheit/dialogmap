@@ -68,12 +68,7 @@ class Contribution < ActiveRecord::Base
   }
 
   scope :angebote, -> (buergerstiftung_user) {
-    cats = {}
-    unscoped.where(user_id: buergerstiftung_user).order("(properties -> 'category')").each do |c|
-      cats[c.category] = [] if cats[c.category] == nil
-      cats[c.category] << c
-    end
-    cats
+    unscoped.where(user_id: buergerstiftung_user).order("(properties -> 'category'), (properties -> 'page_actor')")
   }
 
   hstore_accessor :properties,

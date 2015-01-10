@@ -447,9 +447,6 @@ $angebot-width: 153px
 .angebote-container
   a:hover
     text-decoration: none
-  .angebot-category-header
-    font-size: 20px
-    padding: 5px
   .maki-icon
     margin-right: 5px
   .angebot-img-container
@@ -464,29 +461,34 @@ $angebot-width: 153px
       position: relative
     &:hover > img
       +transform(scale3d(1.03,1.03,1))
-    .angebot-actor, .angebot-label
+    .angebot-actor, .angebot-label, .angebot-category-header
       font-weight: 700
       z-index: 1
       position: absolute
-      color: $buergerstiftung-red
       background-color: rgba($buergerstiftung-yellow, 0.8)
       padding: 3px
       text-overflow: ellipsis
-      white-space: nowrap
+      // white-space: nowrap;
       overflow: hidden
       text-align: center
-      color: $buergerstiftung-red
+      color: $light-grey
       width: $angebot-width
     .angebot-actor
       top: 61%
+      white-space: normal
     .angebot-label
-      top: 40%
+      top: 25%
       visibility: hidden
+    .angebot-category-header
+      padding: 5px
+      white-space: nowrap
     &:hover > .angebot-label
       visibility: visible
-      color: darken($buergerstiftung-red, 20)
+      color: $lighter-grey
     &:hover > .angebot-actor
-      color: darken($buergerstiftung-red, 20)
+      color: $lighter-grey
+    &:hover > .angebot-category-header
+      color: $lighter-grey
 
 
 .angebot
