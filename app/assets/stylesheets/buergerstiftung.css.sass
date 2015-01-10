@@ -441,18 +441,20 @@ strong
 em
   font-style: italic
 
+$angebot-width: 153px
+
 .angebote-container
   a:hover
     text-decoration: none
   .angebot-img-container
     cursor: pointer
-    width: 184px
-    height: 94px
+    width: $angebot-width
+    height: $angebot-width
     overflow: hidden
     position: relative // thx @chk1
     img
-      max-width: 184px
-      top: -50%
+      max-width: $angebot-width
+      // top: -50%
       position: relative
     &:hover > img
       +transform(scale3d(1.03,1.03,1))
@@ -468,7 +470,7 @@ em
       overflow: hidden
       text-align: center
       color: $buergerstiftung-red
-      width: 184px
+      width: $angebot-width
     .angebot-actor
       top: 61%
     .angebot-label
