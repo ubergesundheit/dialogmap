@@ -16,6 +16,15 @@ angular.module("DialogMapApp").directive 'legendMatrix', [
         "Vorschlagen": "Ideen und Vorschläge zur Gestaltung Münsters und seiner Viertel"
       angular.extend $scope,
         filterItems: filterItems
+        items:[
+          { id: 'International', icon: 'embassy', color: '#006BB6'},
+          { id: 'Kultur', icon: 'theatre', color: '#231F20'},
+          { id: 'Umwelt und Nachhaltigkeit', icon: 'park2', color: '#00884B'},
+          { id: 'Sport', icon: 'pitch', color: '#00AEEF'},
+          { id: 'Soziales', icon: 'hospital', color: '#7E5038'},
+          { id: 'Senioren', icon: 'toilets', color: '#F0543A'},
+          { id: 'Kinder und Jugendliche', icon: 'school', color: '#ED028C'}
+        ]
         getBackgroundCSS: (icon, color) ->
           "#{colorService.lightenColor(color)}  url(//a.tiles.mapbox.com/v3/marker/pin-m-#{icon}+#{color.slice(1)}.png) no-repeat center 0px"
         setDetails: (cat,act) ->
