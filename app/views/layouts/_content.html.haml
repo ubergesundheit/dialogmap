@@ -8,7 +8,6 @@
               = angebote
           - elsif @cms_page.slug == 'aktuelles'
             - news = @cms_page.children.reject { |c| c.categories.first == nil or c.categories.first.label != 'aktuelle_meldungen' }
-            %h4 Aktuelle Meldungen
             = aktuelles_items(news, 'Meldungen')
           - elsif @cms_page.full_path.start_with?('/25-angebote/')
             = angebot

@@ -16,10 +16,10 @@ module ApplicationHelper
       items.map do |c|
         content_tag(:div, class: 'aktuelles_container') do
           link_to(c.full_path) do
+            content_tag(:span, c.label) +
             content_tag(:div, class: 'aktuelles_img_container') do
               image_tag(cms_block_content(:aktuelles_img, c))
-            end +
-            c.label
+            end
           end
         end
       end.join.html_safe
