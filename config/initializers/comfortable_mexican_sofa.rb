@@ -94,15 +94,15 @@ ComfortableMexicanSofa.configure do |config|
     end
   end
 
-  module CmsPagesAuth
-    def authenticate
-      authenticate_or_request_with_http_basic do |username, password|
-        username == ENV["BASIC_AUTH_USER"] && password == ENV["BASIC_AUTH_PASS"]
-      end
-    end
-  end
+  # module CmsPagesAuth
+  #   def authenticate
+  #     authenticate_or_request_with_http_basic do |username, password|
+  #       username == ENV["BASIC_AUTH_USER"] && password == ENV["BASIC_AUTH_PASS"]
+  #     end
+  #   end
+  # end
 
-  config.public_auth = 'CmsPagesAuth'
+  # config.public_auth = 'CmsPagesAuth'
   config.admin_auth = 'CmsDeviseAuth'
 
 end
