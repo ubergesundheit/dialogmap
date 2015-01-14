@@ -1,18 +1,18 @@
-%a#more-filter-options{ ng_click: "filterVisible = !filterVisible" }
+%a#more-filter-options{ ng_click: "filterVisible = !filterVisible;track('sidebar:clickToggleFilter')" }
   {{ (filterCount.all > 0 ? '('+filterCount.all+')': '')}} Filter {{ filterVisible === true ? 'ausblenden' : 'einblenden' }}
 {{ Contribution.display_contributions.length === Contribution.parent_contributions.length ? 'alle' : Contribution.display_contributions.length + ' von ' + Contribution.parent_contributions.length }} Angebote{{ Contribution.display_contributions.length !== Contribution.parent_contributions.length ? 'n' : '' }} angezeigt
 .filter-query-container
   %input{ type:"text", placeholder: "Suchbegriff", ng_model: "filter_query" }
-  %i.fa.fa-times.pointer.reset-filter-query{ ng_hide: "filter_query.trim() === ''", ng_click: "filter_query = ''", title: "Suchbegriff zurücksetzen" }
+  %i.fa.fa-times.pointer.reset-filter-query{ ng_hide: "filter_query.trim() === ''", ng_click: "filter_query = '';track('sidebar:clickResetFilterQuery')", title: "Suchbegriff zurücksetzen" }
 #contribution-filter{ ng_show: "filterVisible" }
   .filter_section
     %h4
       Kategorien
-      %a.reset_filter{ href: "", ng_hide: "filterCount.categories === 0", ng_click: "selected_categories = {}" } Filter zurücksetzen
+      %a.reset_filter{ href: "", ng_hide: "filterCount.categories === 0", ng_click: "selected_categories = {};track('sidebar:clickResetFilterCategories')" } Filter zurücksetzen
     .filter-checkboxes
       .checkbox{ ng_repeat: "category in filterItems.categories", title: "{{category.id}}" }
         %input{ type: 'checkbox', ng_model: 'selected_categories[category.id]' }
           .category-color{ ng_style: "{'background-color': category.color}"}
           {{ category.id }}
   #reset-all-filters
-    %a{ ng_click: "resetAllFilters()" } {{ filterCount.all > 0 ? 'Alle Filter zurücksetzen' : '&nbsp;' }}
+    %a{ ng_click: "resetAllFilters();track('sidebar:clickResetFilterAll')" } {{ filterCount.all > 0 ? 'Alle Filter zurücksetzen' : '&nbsp;' }}

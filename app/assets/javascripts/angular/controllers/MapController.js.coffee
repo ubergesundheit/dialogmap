@@ -38,11 +38,13 @@ angular.module("DialogMapApp").controller "MapController", [
         # event is a leaflet Event
         leafletData.getMap('map_main').then (map) ->
           if !data?
+            Analytics.trackEvent('marker:mouseover', { "feature": evt.target.feature })
             highlightFeature = evt.target
             # also send an event to highlight the corresponding description tag
             $rootScope.$broadcast 'highlightFeature', { feature_id: highlightFeature.feature.id, contribution_id: highlightFeature.feature.properties.contributionId }
           else # event is a angular event
             # find the layer to highlight..
+            # Analytics.trackEvent('contribution', 'mouseover', { "data": data })
             (highlightFeature = f; break) for f in map.geojson_layer.getLayers() when f.feature.id is data.feature_id
 
           if highlightFeature instanceof L.Polygon
@@ -90,13 +92,7 @@ angular.module("DialogMapApp").controller "MapController", [
               $scope.$state.go 'contribution',
                 id: evt.target.feature.properties.contributionId
 
-            currMap =
-              zoom: evt.target._map.getZoom()
-              bounds:
-                sw: evt.target._map.getBounds()._southWest
-                ne: evt.target._map.getBounds()._northEast
-
-            Analytics.trackEvent('marker', 'click', "{ 'feature': #{JSON.stringify(evt.target.feature)}, 'map': #{JSON.stringify(currMap)}, 'actionResult': #{actionResult} }")
+            Analytics.trackEvent('marker:click', { "feature": evt.target.feature, "actionResult": actionResult })
             return
           return
       _dataFresh: true
@@ -156,6 +152,7 @@ angular.module("DialogMapApp").controller "MapController", [
       return
 
     $scope.$on 'leafletDirectiveMap.moveend', (evt, leafletEvent) ->
+      Analytics.trackEvent('map:extentchange')
       if $scope.$state.is 'contributions'
         bbox_string = leafletEvent.leafletEvent.target.getBounds().pad(1.005).toBBoxString()
         Contribution.query({bbox: bbox_string})

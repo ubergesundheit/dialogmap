@@ -2,7 +2,8 @@ angular.module("DialogMapApp").controller "MainController", [
   "$scope"
   "ngDialog"
   "$cookies"
-  ($scope, ngDialog, $cookies) ->
+  "Analytics"
+  ($scope, ngDialog, $cookies, Analytics) ->
     angular.extend $scope,
       showIntroOnStartup:  -> $cookies.showIntroOnStartup
       showHelpModal: (slide) ->
@@ -19,6 +20,9 @@ angular.module("DialogMapApp").controller "MainController", [
         return
       toggleShowIntroOnStartup: ->
         $cookies.showIntroOnStartup = if $cookies.showIntroOnStartup is 'true' then false else true
+        return
+      track: (action, data) ->
+        Analytics.trackEvent(action, data)
         return
 
     # if !$cookies.showIntroOnStartup?

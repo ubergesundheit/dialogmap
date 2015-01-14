@@ -5,6 +5,7 @@
     %title
       = html_title
     %link{:href => "favicon.ico", :rel => "shortcut icon", :type => "image/vnd.microsoft.icon"}/
+    %script{:type => "text/javascript", :src  => "fingerprint.js"}
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
     = stylesheet_link_tag "buergerstiftung", media: "all"
@@ -32,3 +33,16 @@
       = render partial: '/layouts/title_strip'
       = render partial: '/layouts/content'
     = render partial: '/layouts/impressum'
+    :javascript
+      var request = new XMLHttpRequest();
+      var project_id = "54b6884e96773d36ffcb1d4a";
+      var url = "https://api.keen.io/3.0/projects/"+project_id+"/events/tracking?api_key=31adb1ece004f241d3420bf26ae3e344f9813ade5f4544035a6eed1689bb72a67ae75ba01ebe4c6b044cb0f69c60f8731a3c7f575a1c742cb9baae9f77cee1b171bd8fe938496906f99de0faa3e2dd452631e6632d36943882f347027cc460789a206fba330294a9b91db7ebc4798621";
+      var data = function () {
+        return {"fingerprint":new Fingerprint({screen_resolution: true,canvas: true}).get(),"timestamp":Date.now(),"action":"loadPage","url":window.location.href};
+      }();
+      request.open('POST', url, true);
+      request.onreadystatechange = function() {};
+      request.setRequestHeader("Content-type", "application/json");
+      // request.setRequestHeader("Content-length", params.length);
+      request.setRequestHeader("Connection", "close");
+      request.send(JSON.stringify(data));

@@ -3,7 +3,8 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
   'Contribution'
   '$http'
   'filterItems'
-  (contributionFilterService, Contribution, $http, filterItems) ->
+  'Analytics'
+  (contributionFilterService, Contribution, $http, filterItems, Analytics) ->
     restrict: 'AE'
     scope: true
     templateUrl: 'contribution_filter.html'
@@ -24,6 +25,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         time = scope.selected_time
         query = scope.filter_query.trim()
         if categories.length isnt 0 or activities.length isnt 0 or contents.length isnt 0 #or time isnt false
+          Analytics.trackEvent('sidebar:filterCategories', { categories: categories })
           contributionFilterService.setFilter
             categories: categories
             activities: activities
@@ -35,6 +37,7 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
             contents: contents
             time: time
         else if query isnt ''
+          Analytics.trackEvent('sidebar:typeFilter', { query: query })
           contributionFilterService.setFilter
             query: query
         else
@@ -78,6 +81,10 @@ angular.module("DialogMapApp").directive 'contributionFilter', [
         scope.selected_contents = {}
         scope.selected_time = false
         scope.filter_query = ''
+        return
+
+      scope.track = (action, data) ->
+        Analytics.trackEvent(action, data)
         return
 
       return

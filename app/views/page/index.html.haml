@@ -6,7 +6,7 @@
     / #title_box
     /   %span.title
     /     Nachhaltigkeitslandkarte Münster
-    #back_flag.pointer{ title: "zurück", ng_class: "{visible_back_flag: $state.is('contribution') || loading === false}", ui_sref: "contributions" }
+    #back_flag.pointer{ title: "zurück", ng_class: "{visible_back_flag: $state.is('contribution') || loading === false}", ui_sref: "contributions", ng_click: "track('sidebar:clickBack')" }
       = fa_icon "angle-left", class: "icon"
       %span.text zurück
     = fa_icon "info", id: 'app_info_button', ng_dialog: "app_info_modal.html", ng_dialog_class: "ngdialog-theme-default", ng_dialog_close_previous: true
@@ -14,11 +14,11 @@
     #sidebar{ loading: true }
       .sidebar-top
         #help
-          %a{ ng_click: "showHelpModal(0)" }
+          %a{ ng_click: "showHelpModal(0);track('sidebar:clickHelp')" }
             %i.fa.fa-question
             Hilfe
         #user
-          %a{ href: "", ng_click: "User.showUserModal()" }
+          %a{ href: "", ng_click: "User.showUserModal();track('sidebar:clickUserLink')" }
             %i.fa.fa-user
             {{ User.user.email || "Einloggen/Registrieren" }}
 
@@ -45,4 +45,4 @@
         ng_class: "{'scroller-tall': $state.is('contribution')}" }
         .view{ ui_view: true }
       #legend-toggler
-        %a.fa.fa-angle-double-right{ ng_click: "showHelpModal(1)" } Zeichenerklärung
+        %a.fa.fa-angle-double-right{ ng_click: "showHelpModal(1);track('sidebar:clickLegend')" } Zeichenerklärung

@@ -8,9 +8,13 @@ angular.module("DialogMapApp").controller "SidebarController", [
   "$http"
   "colorService"
   "$timeout"
-  ($scope, Contribution, User, $compile, $state, $rootScope, $http, colorService, $timeout) ->
+  "Analytics"
+  ($scope, Contribution, User, $compile, $state, $rootScope, $http, colorService, $timeout, Analytics) ->
     angular.extend $scope, colorService
     angular.extend $scope,
+      track: (action, event) ->
+        Analytics.trackEvent(action, event)
+        return
       Contribution: Contribution
       User: User
       sort: (child) ->

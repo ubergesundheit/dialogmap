@@ -1,4 +1,4 @@
-.contribution-description-tag.url_reference_tag.static_tag{ title: "{{tag.title}}" }
+.contribution-description-tag.url_reference_tag.static_tag{ title: "{{tag.title}}", ng_mouseenter: "track('sidebar:mouseoverUrlTag',{ tag: tag })" }
   %span.contribution-icon.reference
   %span.tag-title.static_tag{ title: "{{ tag.url }}" }
     %a{ href: "{{ tag.url }}", target: "_blank" }

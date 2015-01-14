@@ -54,7 +54,7 @@ angular.module "DialogMapApp", [
               Contribution.getContribution()
               $rootScope.$broadcast 'resetHighlight'
               angular.element('#contributions-scroller').scrollTop(0)
-              Analytics.trackPageView('/map')
+              Analytics.trackEvent('navigate', {target: '/map' } )
               return
             ]
 
@@ -71,7 +71,7 @@ angular.module "DialogMapApp", [
               Contribution.fetchAndSetCurrentContribution($stateParams.id)
               $rootScope.$broadcast 'resetHighlight'
               angular.element('#contributions-scroller').scrollTop(0)
-              Analytics.trackPageView("/map/#{$stateParams.id}")
+              Analytics.trackEvent('navigate', {target: "/map/#{$stateParams.id}" })
               return
             ]
 ] #<leaflet center='muenster' controls='controls' event-broadcast='events' geojson='geojson' id='map_main' tiles='tiles'></leaflet>

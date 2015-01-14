@@ -1,9 +1,10 @@
 %div{ ng_repeat: "contribution in Contribution.display_contributions | orderBy:sort"}
   .contribution{ ng_click: "contribution.showDescription = !contribution.showDescription",
     ng_mouseover: "highlightAllRelated(contribution)",
-    ng_mouseleave: "resetHighlight()",
+    ng_mouseleave: "resetHighlight();track('sidebar:contributionMouseLeave', { contribution: contribution.id })",
     :"contribution-id" => "{{contribution.id}}",
-    ng_style: "{'background-color': lightenColor(contribution.category.color)}"}
+    ng_style: "{'background-color': lightenColor(contribution.category.color)}",
+    ng_mouseenter: "track('sidebar:contributionMouseEnter', { contribution: contribution.id })" }
     %h3.contribution-title.expanded-title {{ contribution.title }}
     / %i.fa.description-expand-button{ ng_init: "contribution.showDescription = false", ng_class: "{'fa-sort-desc': !contribution.showDescription, 'fa-sort-asc': contribution.showDescription}"}
     / .contribution-info
@@ -38,7 +39,7 @@
       / .favorites-container{ title: "{{ contribution.favoredByCurrentUser === true ? 'Von mir und '+(contribution.favorites.length-1)+' anderen favorisiert.'  : contribution.favorites.length+' mal favorisiert.' }}"}
       /   {{contribution.favorites.length}}&times;
       /   .i.fa{ ng_class: "{'fa-heart': contribution.favoredByCurrentUser === true, 'fa-heart-o': contribution.favoredByCurrentUser === false}"}
-      %a.floated-right{ :"ui-sref" => "contribution({ id: contribution.id })", ng_click: "$event.stopPropagation();" }
+      %a.floated-right{ :"ui-sref" => "contribution({ id: contribution.id })", ng_click: "$event.stopPropagation();track('sidebar:clickReply', { contribution_id: contribution.id })" }
         %i.fa.fa-angle-double-right.reply-arrow
           Meinung abgeben
           %span{ ng_show: "contribution.childContributions.length > 0" } ({{contribution.childContributions.length}})

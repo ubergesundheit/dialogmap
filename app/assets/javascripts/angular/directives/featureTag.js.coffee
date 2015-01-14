@@ -1,5 +1,6 @@
 angular.module("DialogMapApp").directive 'featureTag', [
-  ->
+  "Analytics"
+  (Analytics) ->
     templateUrl: (elem,attrs) ->
       switch attrs.type
         when "feature" then "feature_tag_static.html"
@@ -20,6 +21,9 @@ angular.module("DialogMapApp").directive 'featureTag', [
           scope.tag =
             title: attrs.title
             url: attrs.url
+      scope.track = (action, data) ->
+        Analytics.trackEvent(action, data)
+        return
       return
 
 ]
