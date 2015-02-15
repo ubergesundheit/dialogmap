@@ -82,6 +82,7 @@ test:
 #
 production:
   <<: *default
+  host: <%= ENV['POSTGIS_PORT_5432_TCP_ADDR'] %>
   database: dialog_map_production
-  username: dialog_map
-  password: <%= ENV['DIALOG_MAP_DATABASE_PASSWORD'] %>
+  username: postgres
+  password: <%= ENV['POSTGIS_ENV_POSTGRES_PASSWORD'] %>

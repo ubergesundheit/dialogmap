@@ -2,13 +2,16 @@ source 'https://rubygems.org'
 source 'https://rails-assets.org'
 
 # Backend
-ruby '2.1.3'
-gem 'rails', '4.1.6'
+ruby '2.2.0'
+gem 'rails', '4.1.9'
 
 gem 'rails-i18n'
 
+gem 'dotenv-rails'
+gem 'puma'
+
 gem 'pg'
-gem 'hstore_accessor' #https://github.com/devmynd/hstore_accessor
+gem 'hstore_accessor', '~> 0.9.0' #https://github.com/devmynd/hstore_accessor
 gem 'activerecord-postgis-adapter'
 gem 'rgeo'
 gem 'rgeo-geojson'
@@ -32,9 +35,9 @@ gem 'carrierwave'
 
 gem 'jbuilder', '~> 2.0'
 
-gem 'sdoc', '~> 0.4.0',          group: :doc
+# gem 'sdoc', '~> 0.4.0',          group: :doc
 
-gem 'spring',        group: :development
+# gem 'spring',        group: :development
 
 gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
 
@@ -60,15 +63,15 @@ gem 'rails-assets-angular-cookies'
 gem 'rails-assets-angular-simple-slider'
 gem 'jquery-rails'
 
-group :development do
-  gem 'pry-rails'
-end
-
-group :deployment do
-  gem 'knife-solo'
-  gem 'berkshelf'
-  gem 'capistrano'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-end
+# group :development do
+#   gem 'pry-rails'
+# end
+#
+# group :deployment do
+#   gem 'knife-solo'
+#   gem 'berkshelf'
+#   gem 'capistrano'
+#   gem 'capistrano-rbenv'
+#   gem 'capistrano-rails'
+#   gem 'capistrano-bundler'
+# end
