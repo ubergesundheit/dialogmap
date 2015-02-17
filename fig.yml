@@ -2,6 +2,8 @@ postgis:
   image: mdillon/postgis:9.4
   environment:
     - POSTGRES_PASSWORD=yoloswag
+  volumes:
+    - ./pg_data:/var/lib/postgresql/data
 
 app:
   build: .
