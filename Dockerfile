@@ -10,4 +10,4 @@ COPY . /usr/src/app
 RUN apt-get update && apt-get install -y nodejs postgresql-client --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 3000
-CMD ["rails", "server", "-b", "127.0.0.1"]
+CMD ["rails", "server", "-b", "0.0.0.0"]
