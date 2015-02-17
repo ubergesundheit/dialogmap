@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
-source 'https://rails-assets.org'
 
-# Backend
 ruby '2.2.0'
+gem 'bundler', '>= 1.7.0'
+# Backend
+
 gem 'rails', '4.1.9'
 
 gem 'rails-i18n'
 
-gem 'dotenv-rails'
 gem 'puma'
 
 gem 'pg'
@@ -35,10 +35,6 @@ gem 'carrierwave'
 
 gem 'jbuilder', '~> 2.0'
 
-# gem 'sdoc', '~> 0.4.0',          group: :doc
-
-# gem 'spring',        group: :development
-
 gem "sentry-raven", :git => "https://github.com/getsentry/raven-ruby.git"
 
 gem 'activeadmin', github: 'gregbell/active_admin'
@@ -50,28 +46,17 @@ gem 'angularjs-rails'
 gem 'angularjs-rails-resource'
 gem 'angular_rails_csrf'
 gem 'angular-rails-templates', github: 'whitehat101/angular-rails-templates'
-gem 'rails-assets-angular-devise'
-gem 'rails-assets-ngDialog'
-gem 'rails-assets-angular-ui-router'
-gem 'rails-assets-angular-moment'
-gem 'rails-assets-angular-ui-select2'
-gem 'rails-assets-ngQuickDate'
-gem 'rails-assets-spectrajs'
-gem 'rails-assets-angular-perfect-scrollbar'
-gem 'rails-assets-ng-flow'
-gem 'rails-assets-angular-cookies'
-gem 'rails-assets-angular-simple-slider'
 gem 'jquery-rails'
-
-# group :development do
-#   gem 'pry-rails'
-# end
-#
-# group :deployment do
-#   gem 'knife-solo'
-#   gem 'berkshelf'
-#   gem 'capistrano'
-#   gem 'capistrano-rbenv'
-#   gem 'capistrano-rails'
-#   gem 'capistrano-bundler'
-# end
+source 'https://rails-assets.org' do
+  gem 'rails-assets-angular-devise'
+  gem 'rails-assets-ngDialog'
+  gem 'rails-assets-angular-ui-router'
+  gem 'rails-assets-angular-moment'
+  gem 'rails-assets-angular-ui-select2'
+  gem 'rails-assets-ngQuickDate'
+  gem 'rails-assets-spectrajs'
+  gem 'rails-assets-angular-perfect-scrollbar'
+  gem 'rails-assets-ng-flow'
+  gem 'rails-assets-angular-cookies'
+  gem 'rails-assets-angular-simple-slider'
+end
