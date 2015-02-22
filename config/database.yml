@@ -22,8 +22,9 @@ default: &default
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: 5
-  username: dialog_map
-  password: dialog_map
+  username: postgres
+  password: <%= ENV['POSTGIS_ENV_POSTGRES_PASSWORD'] %>
+  host: <%= ENV['POSTGIS_PORT_5432_TCP_ADDR'] %>
 
 development:
   <<: *default
@@ -83,5 +84,3 @@ test:
 production:
   <<: *default
   database: dialog_map_production
-  username: dialog_map
-  password: <%= ENV['DIALOG_MAP_DATABASE_PASSWORD'] %>

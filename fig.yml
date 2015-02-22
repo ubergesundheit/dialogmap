@@ -1,0 +1,32 @@
+postgis:
+  image: mdillon/postgis:9.4
+  environment:
+    - POSTGRES_PASSWORD=yoloswag
+  volumes:
+    - ./pg_data:/var/lib/postgresql/data
+
+app:
+  build: .
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "3000:3000"
+  links:
+    - postgis
+  environment:
+    - RAILS_ENV=production
+    - DEVISE_SECRET_KEY=swaghettiYolonaise
+    - SECRET_KEY_BASE=swaghettiYolonaise
+    - OAUTH_FACEBOOK_KEY=swaghettiYolonaise
+    - OAUTH_FACEBOOK_SECRET=swaghettiYolonaise
+    - OAUTH_TWITTER_KEY=swaghettiYolonaise
+    - OAUTH_TWITTER_SECRET=swaghettiYolonaise
+    - OAUTH_GOOGLE_KEY=swaghettiYolonaise
+    - OAUTH_GOOGLE_SECRET=swaghettiYolonaise
+    - HOSTNAME=localhost:3000
+    - SMTP_HOST=smtp.mandrillapp.com
+    - SMTP_PORT=25
+    - SMTP_USER=SOMEUSER
+    - SMTP_PASSWORD=SOMEPASS
+    - EMAIL_FROM=some-email@provider.com
+    - SENTRY_DSN=http://localhost
