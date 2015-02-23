@@ -3,7 +3,8 @@
   * Install Docker and fig
   * Install nginx
   * `fig build`
-  * `fig run app rake db:create`
+  * modify `fig.yml`
+  * `fig run app rake db:create` If this errors, try again
   * `fig run app rake db:migrate`
   * `fig up`
 
@@ -14,19 +15,16 @@ server {
   root /usr/src/app/public; # I assume your app is located at this location
 
   location / {
-    proxy_pass http://172.17.0.177:3000; # match the name of upstream directive which is defined above
+    proxy_pass http://localhost:3000;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   }
 
-  location ~* ^/assets/ {
+  location ~ ^/(assets)/ {
+    gzip_static on;
     # Per RFC2616 - 1 year maximum expiry
     expires 1y;
     add_header Cache-Control public;
-
-    # Some browsers still send conditional-GET requests if there's a
-    # Last-Modified header or an ETag header even if they haven't
-    # reached the expiry date sent in the Expires header.
     add_header Last-Modified "";
     add_header ETag "";
     break;
